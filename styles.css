@@ -1,0 +1,47 @@
+
+
+.phase-wrapper {
+    padding:0 0 20px 0;
+}
+.cycle-wrapper,
+.step-wrapper {
+    padding:20px 0 0 100px;
+}
+
+.phase-wrapper > div.row,
+.cycle-wrapper > div.row,
+.step-wrapper > div.row {
+    border-bottom: 1px solid #efefef;
+}
+
+.phase-container,
+.cycle-container,
+.step-container {
+    padding-top: 20px;
+}
+
+.phase-controls,
+.cycle-controls {
+    float: left;
+    width: 125px;
+    padding-top: 6px;
+}
+.phase-title,
+.cycle-title,
+.step-title {
+    float: left;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.phase-title > span,
+.cycle-title > span,
+.step-title > span {
+    color: #999;
+}
+
+.phase-label {
+    margin-left: 100px;
+    float:left;
+    width: 150px;
+}

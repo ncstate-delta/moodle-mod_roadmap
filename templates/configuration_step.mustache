@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_roadmap/configuration_step
+
+    This template includes ajax functionality, so it cannot be shown in the template library.
+}}
+<div class="step-wrapper">
+    <div class="row">
+        <div class="step-controls">
+            <a class="step-collapse-control" href="">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
+            <a href="">{{# pix }} t/up, core, Up {{/ pix }}</a>
+            <a href="">{{# pix }} t/down, core, Down {{/ pix }}</a>
+            <a href="">{{# pix }} t/delete, core, Down {{/ pix }}</a>
+        </div>
+        <div class="step-title">Step {{ number }}</div>
+    </div>
+    <div id="step-container" class="hide step-container" aria-expanded="true">
+        <div class="form-group row fitem step-icon-container">
+            <div class="col-md-3 col-form-label">Rollover Text</div>
+            <div class="col-md-9 form-inline"><input type="text"></div>
+        </div>
+        <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label step-icon-display"><input name="step-{{ id }}-icon" type="hidden" /></div>
+            <div class="col-md-9 form-inline"><button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector" data-stepid="{{ id }}">Select Icon for Step</button></div>
+        </div>
+        <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label step-icon-display">Completion Tied To:
+                <input id="step-{{ id }}-completion-modules" name="step-{{ id }}-completion-modules" class="completion-modules" data-stepid="{{ id }}" type="hidden" />
+            </div>
+            <div class="col-md-9 form-inline">
+                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector" data-stepid="{{ id }}">Select Activity or Activities</button>
+                <ul id="step-{{ id }}-completion-list"></ul>
+            </div>
+        </div>
+        <div class="form-group row fitem">
+            <div class="col-form-label">
+                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link" name="step-{{ id }}-chk-single-activity-link" value="1">
+                If completion is tied to a single activity, also link to that activity</div>
+        </div>
+        <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label">Link to Page</div>
+            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="single-activity-link" name="step-{{ id }}-single-activity-link" type="text" ></div>
+        </div>
+        <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label">Expected completed on</div>
+            <div class="col-md-9 form-inline"><input type="text"></div>
+        </div>
+    </div>
+</div>
