@@ -21,15 +21,10 @@
 }}
 <div class="row-fluid form-group fitem learningobjective" data-id="{{ id }}">
     <span class="col-md-1">{{ number }})</span>
-    <span class="col-md-7"><input class="learning-objective-name" type="text" value="{{ name }}" /></span>
+    <span class="col-md-7"><input class="learning-objective-name form-control " type="text" value="{{ name }}" /></span>
     <span class="col-md-4">
         <a href="">{{# pix }} t/up, core, Up {{/ pix }}</a>
         <a href="">{{# pix }} t/down, core, Down {{/ pix }}</a>
         <a href="">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
     </span>
 </div>
-{{#js}}
-    require(['jquery'], function($, learningobjective) {
-        
-    });
-{{/js}}

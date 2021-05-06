@@ -27,20 +27,20 @@
             <a href="">{{# pix }} t/down, core, Down {{/ pix }}</a>
             <a href="">{{# pix }} t/delete, core, Down {{/ pix }}</a>
         </div>
-        <div class="cycle-title">Cycle {{ number }}</div>
+        <div class="cycle-header-title">Cycle {{ id }}</div>
     </div>
     <div class="hide cycle-container">
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Cycle Title</div>
-            <div class="col-md-9 form-inline"><input type="text"></div>
+            <div class="col-md-9 form-inline"><input class="cycle-title form-control" type="text" value="{{ title }}"></div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Cycle Subtitle</div>
-            <div class="col-md-9 form-inline"><input type="text"></div>
+            <div class="col-md-9 form-inline"><input class="cycle-subtitle form-control" type="text" value="{{ subtitle }}"></div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Link to Page</div>
-            <div class="col-md-9 form-inline"><input type="text"></div>
+            <div class="col-md-9 form-inline"><input class="cycle-pagelink form-control" type="text" value="{{ pagelink }}"></div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Applicable learning objectives<br />(check all that apply):</div>
@@ -54,5 +54,6 @@
         <div class="step-wrapper">
             <a class="add-cycle-step" href="#" >Add a new step</a>
         </div>
+        <input class="cycle-configuration" type="hidden" value="{{ configuration }}">
     </div>
 </div>

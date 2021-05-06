@@ -1,0 +1,22 @@
+
+{{!
+    @template mod_roadmap/view_step
+
+    Displays the following cycle data:
+    * rollover text
+    * icon
+    * activities to trigger?  -- not shown here
+    * link to page
+    * complete on time (if true, we show the star)
+}}
+
+<div class="roadmap-step {{# incomplete }}incomplete{{/ incomplete }}" title="{{ rollovertext }}" alt="{{ rollovertext }}" data-clickable="0">
+    {{# stepurl }}<a href="{{ stepurl }}">{{/stepurl}}
+        {{# pix }} icons/{{ stepicon }} , mod_roadmap, {{ rollovertext }} {{/ pix }}
+        {{# completedontime }}
+            <svg version="1.1" class="roadmap-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" xml:space="preserve" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: true; position: absolute; top: -8px; right: -6px; width: 20px; height: 20px">
+                <polygon points="4.29 9.3 1.07 6.17 5.51 5.52 7.5 1.5 9.48 5.52 13.93 6.17 10.71 9.3 11.47 13.72 7.5 11.63 3.53 13.72 4.29 9.3" fill="#ff9000" stroke="#fff" -width="1" ;=""></polygon>
+            </svg>
+        {{/completedontime}}
+    {{# stepurl }}</a>{{/stepurl}}
+</div>

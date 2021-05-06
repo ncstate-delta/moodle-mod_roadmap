@@ -22,8 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_contract',
-        'mod_roadmap/learningobjectivesconfig', 'mod_roadmap/step_icon_select', 'mod_roadmap/step_activity_select'],
-    function($, notification, templates, ec, learningobjectives, stepiconselect, stepactivityselect) {
+        'mod_roadmap/learningobjectivesconfig', 'mod_roadmap/step_icon_select', 'mod_roadmap/step_activity_select',
+        'mod_roadmap/step_save', 'mod_roadmap/cycle_save', 'mod_roadmap/phase_save'],
+    function($, notification, templates, ec, learningobjectives, stepiconselect,
+             stepactivityselect, stepsave, cyclesave, phasesave) {
 
         /**
          * Learning objectives config object.
@@ -33,17 +35,53 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             this.inputSelector = inputSelector;
             this.configContainer = $(inputConfig);
 
-            this.showConfig(this);
+            this.initForm();
         };
 
         /**
          * Displays the scale configuration dialogue.
          *
-         * @method showConfig
+         * @method initForm
          */
-        RoadmapConfig.prototype.showConfig = function() {
+        RoadmapConfig.prototype.initForm = function() {
+            console.log('RoadmapConfig.prototype.initForm');
             var self = this;
-            var config = JSON.parse(this.configContainer.val());
+            var inputConfigVal = this.configContainer.val();
+            if (inputConfigVal == '') {
+                inputConfigVal = JSON.stringify({ 'phases':[] });
+                this.configContainer.val(inputConfigVal);
+            }
+            var config = JSON.parse(inputConfigVal);
+
+            console.log(config);
+            var phaseId = 0;
+            var cycleId = 0;
+            var stepId = 0;
+            $.each(config.phases, function(p) {
+                let phase = config.phases[p];
+                phaseId = phaseId + 1;
+                phase.id = phaseId;
+                phase.number = p + 1;
+                phase.index = p;
+                phase.configuration = JSON.stringify(phase);
+
+                $.each(phase.cycles, function(c) {
+                    let cycle = phase.cycles[c];
+                    cycleId = cycleId + 1;
+                    cycle.id = cycleId;
+                    cycle.number = c + 1;
+                    cycle.index = c;
+                    cycle.configuration = JSON.stringify(cycle);
+
+                    $.each(cycle.steps, function(s) {
+                        let step = cycle.steps[s];
+                        stepId = stepId + 1;
+                        step.id = stepId;
+                        step.number = s + 1;
+                        step.index = s;
+                    });
+                });
+            });
 
             // Dish up the form.
             templates.render('mod_roadmap/configuration_phases', config)
@@ -59,17 +97,50 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('.step-collapse-control').click(function(e) { RoadmapConfig.prototype.collapseStep(e); });
 
                     learningobjectives.refresh_checklists();
+
                     stepiconselect.rebind_buttons();
                     stepactivityselect.rebind_buttons();
+
+                    stepsave.rebind_inputs();
+                    cyclesave.rebind_inputs();
+                    phasesave.rebind_inputs();
+
+                    RoadmapConfig.prototype.bindConfigSave();
                 }).fail(notification.exception);
         };
 
+        RoadmapConfig.prototype.bindConfigSave = function() {
+            console.log('RoadmapConfig.prototype.bindConfigSave');
+            $('input.phase-configuration').unbind('change').change(this.configSave.bind(this));
+        };
+
+        RoadmapConfig.prototype.configSave = function() {
+            console.log('RoadmapConfig.prototype.configSave');
+            var phaseContainer = $('#phase-container');
+            var roadmapData = [];
+            let index = 0;
+            $.each(phaseContainer.find('.phase-wrapper .phase-configuration'), function() {
+                let phaseData = $(this).val();
+                if (phaseData == '') { phaseData = '{}'; }
+                let phaseDataObj = JSON.parse(phaseData);
+                phaseDataObj.index = index;
+                index = index + 1;
+                phaseDataObj.id = index;
+                roadmapData.push(phaseDataObj);
+            });
+            $('input[name="roadmapconfiguration"]').val(JSON.stringify({ phases: roadmapData }));
+            console.log('Config Saved');
+            console.log({ phases: roadmapData });
+        };
+
         RoadmapConfig.prototype.addPhase = function(event) {
+            console.log('RoadmapConfig.prototype.addPhase');
             event.preventDefault();
             event.stopPropagation();
+
             var config = JSON.parse($('input[name="roadmapconfiguration"]').val());
             var nextIndex = config.phases.length;
-            var newPhase = {id: -1, index: nextIndex, number: nextIndex+1};
+            var newPhase = {id: nextIndex+1, index: nextIndex, number: nextIndex+1};
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
 
@@ -83,10 +154,16 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('#add-phase').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.addPhase(e); });
 
+                    $('.add-phase-cycle').unbind('click')
+                        .click(function(e) { RoadmapConfig.prototype.addCycle(e); });
+
+                    phasesave.rebind_inputs();
+                    RoadmapConfig.prototype.bindConfigSave();
                 }).fail(notification.exception);
         };
 
         RoadmapConfig.prototype.addCycle = function(event) {
+            console.log('RoadmapConfig.prototype.addCycle');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -94,7 +171,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var cycleContainer = phaseContainer.children('.phase-cycles-container');
 
             var nextCycleIndex = cycleContainer.children('.cycle-wrapper').length;
-            var newCycle = {id: -1, index: nextCycleIndex, number: nextCycleIndex+1};
+            var totalCycles = $('.phase-cycles-container > .cycle-wrapper').length;
+            var newCycle = {id: totalCycles+1, index: nextCycleIndex, number: nextCycleIndex+1};
 
             templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then(function(html, js) {
@@ -107,10 +185,13 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                         .click(function(e) { RoadmapConfig.prototype.addStep(e); });
 
                     learningobjectives.refresh_checklists();
+                    cyclesave.rebind_inputs();
+                    phasesave.rebind_inputs();
                 }).fail(notification.exception);
         };
 
         RoadmapConfig.prototype.addStep = function(event) {
+            console.log('RoadmapConfig.prototype.addStep');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -118,7 +199,19 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var stepsContainer = cycleContainer.children('.cycle-steps-container');
 
             var nextStepIndex = stepsContainer.children('.step-wrapper').length;
-            var newStep = {id: -1, index: nextStepIndex, number: nextStepIndex+1};
+            var totalSteps = $('.step-wrapper').length;
+            var dtpdata = JSON.parse($('input[name="datetimepickerdata"]').val());
+            var newStep = {
+                id: totalSteps+1,
+                index: nextStepIndex,
+                number: nextStepIndex+1,
+                days: dtpdata.days,
+                months: dtpdata.months,
+                years: dtpdata.years,
+                hours: dtpdata.hours,
+                minutes: dtpdata.minutes,
+                stepicon: 'icon-10',
+            };
 
             templates.render('mod_roadmap/configuration_step', newStep)
                 .then(function(html, js) {
@@ -129,10 +222,14 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
                     stepiconselect.rebind_buttons();
                     stepactivityselect.rebind_buttons();
+                    stepsave.rebind_inputs();
+                    cyclesave.rebind_inputs();
+
                 }).fail(notification.exception);
         };
 
         RoadmapConfig.prototype.collapsePhase = function(event) {
+            console.log('RoadmapConfig.prototype.collapsePhase');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -142,6 +239,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.collapseCycle = function(event) {
+            console.log('RoadmapConfig.prototype.collapseCycle');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -151,6 +249,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.collapseStep = function(event) {
+            console.log('RoadmapConfig.prototype.collapseStep');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);

@@ -1,0 +1,8 @@
+<div class="roadmap-phase" style="border-left-color: {{ color }};">
+    <h2 class="roadmap-phase-title" data-state="open" style="color: {{ color }};">{{ title }}</h2>
+    <div class="roadmap-cycle-container">
+        {{# cycles }}
+            {{> mod_roadmap/view_cycle }}
+        {{/ cycles }}
+    </div>
+</div>

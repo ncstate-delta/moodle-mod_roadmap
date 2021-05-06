@@ -1,0 +1,71 @@
+<div class="fdate_time_selector d-flex flex-wrap align-items-center">
+    <div class="form-group fitem" style="">
+        <label class="col-form-label sr-only" for="" style="">Day</label>
+        <span data-fieldtype="select">
+            <select class="completionexpected_day custom-select">
+                {{#days}}
+                    <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
+                {{/days}}
+            </select>
+        </span>
+    </div>
+    &nbsp;
+    <div class="form-group fitem" style="">
+        <label class="col-form-label sr-only" for="" style="">
+            Month
+        </label>
+        <span data-fieldtype="select">
+            <select class="completionexpected_month custom-select">
+                {{#months}}
+                    <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
+                {{/months}}
+            </select>
+        </span>
+    </div>
+    &nbsp;
+    <div class="form-group fitem"  style="">
+        <label class="col-form-label sr-only" for="" style="">
+            Year
+        </label>
+        <span data-fieldtype="select">
+            <select class="completionexpected_year custom-select">
+                {{#years}}
+                    <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
+                {{/years}}
+            </select>
+        </span>
+    </div>
+    &nbsp;
+    <div class="form-group  fitem" style="">
+        <label class="col-form-label sr-only" for="" style="">
+            Hour
+        </label>
+        <span data-fieldtype="select">
+            <select class="completionexpected_hour custom-select">
+                {{#hours}}
+                    <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
+                {{/hours}}
+            </select>
+        </span>
+    </div>
+    &nbsp;
+    <div class="form-group fitem" style="">
+        <label class="col-form-label sr-only" for="" style="">
+            Minute
+        </label>
+        <span data-fieldtype="select">
+            <select class="completionexpected_minute custom-select">
+                {{#minutes}}
+                    <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
+                {{/minutes}}
+            </select>
+        </span>
+    </div>
+    &nbsp;
+    <a href="#" id="" style=""><i class="icon fa fa-calendar fa-fw " title="Calendar" aria-label="Calendar"></i></a>
+    &nbsp;
+    <label class="form-check fitem"  style="">
+        <input type="checkbox" class="form-check-input completionexpected" value="1" {{#expectedcomplete}}checked{{/expectedcomplete}}>
+        Enable
+    </label>
+</div>

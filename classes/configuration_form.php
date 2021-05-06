@@ -46,7 +46,7 @@ class mod_roadmap_configuration_form extends moodleform {
         global $CFG, $OUTPUT, $PAGE, $COURSE;
 
         $mform =& $this->_form;
-
+        $roadmap = $this->_customdata['roadmap'];
 
         $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
 
@@ -56,7 +56,7 @@ class mod_roadmap_configuration_form extends moodleform {
             -1 => 'Custom',
         ];
         $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
-        //$mform->setDefault('phasecolorpattern', ??);
+        $mform->setDefault('phasecolorpattern', $roadmap->colors);
         $mform->setType('phasecolorpattern', PARAM_INT);
 
         $mform->addElement('header', 'header_learningobjectives', get_string('courselearningobjectives', 'roadmap'));
@@ -68,7 +68,7 @@ class mod_roadmap_configuration_form extends moodleform {
             2 => 'Do Not Display CLOs',
         ];
         $mform->addElement('select', 'displayposition', get_string('displayposition', 'roadmap'), $displayposition);
-        //$mform->setDefault('displayposition', ??);
+        $mform->setDefault('displayposition', $roadmap->clodisplayposition);
         $mform->setType('displayposition', PARAM_INT);
 
         
@@ -78,7 +78,7 @@ class mod_roadmap_configuration_form extends moodleform {
             2 => 'Right',
         ];
         $mform->addElement('select', 'cyclealignment', get_string('cyclealignment', 'roadmap'), $cyclealignment);
-        //$mform->setDefault('cyclealignment', ??);
+        $mform->setDefault('cyclealignment', $roadmap->cloalignment);
         $mform->setType('cyclealignment', PARAM_INT);
 
 
@@ -88,26 +88,31 @@ class mod_roadmap_configuration_form extends moodleform {
             2 => 'Bracket',
         ];
         $mform->addElement('select', 'cycledecoration', get_string('cycledecoration', 'roadmap'), $cycledecoration);
-        //$mform->setDefault('cycledecoration', ??);
+        $mform->setDefault('cycledecoration', $roadmap->clodecoration);
         $mform->setType('cycledecoration', PARAM_INT);
 
         
         $mform->addElement('text', 'cloprefix', get_string('cloprefix', 'roadmap'), 'size="48"');
         $mform->setType('cloprefix', PARAM_TEXT);
         $mform->addRule('cloprefix', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
+
+        // Date Time Picker
+        $mform->addElement('hidden', 'datetimepickerdata');
+        $mform->setType('datetimepickerdata', PARAM_RAW);
+        $mform->setDefault('datetimepickerdata', json_encode(roadmap_datetime_picker_options()));
         
         // Learning Objectives
-        $mform->addElement('text', 'learningobjectivesconfiguration', get_string('learningobjectives', 'roadmap'));
+        $mform->addElement('text', 'learningobjectivesconfiguration', get_string('learningobjectives', 'roadmap'), 'style="display:none;"');
         $mform->setType('learningobjectivesconfiguration', PARAM_RAW);
-        $mform->setDefault('learningobjectivesconfiguration', '{"learningobjectives":[{"id":0,"number":1,"name":"Steve"},{"id":1,"number":2,"name":"Krista"},{"id":2,"number":3,"name":"Ryan"},{"id":3,"number":4,"name":"Addison"}]}');
-
+        $mform->setDefault('learningobjectivesconfiguration', $roadmap->learningobjectives);
+        
         $mform->addElement('header', 'header_editroadmap', get_string('editroadmap', 'roadmap'));
 
         // Roadmap Configuration
         $mform->addElement('hidden', 'roadmapconfiguration');
         $mform->setType('roadmapconfiguration', PARAM_RAW);
-        $mform->setDefault('roadmapconfiguration', '{"phases":[{"id":0,"index":0,"number":1,"title":"Steve","cycles":[{"id":0,"index":0,"number":1,"name":"Ryan"},{"id":1,"index":1,"number":2,"name":"Addison","steps":[{"id":0,"index":0,"number":1,"name":"Ryan"},{"id":1,"index":1,"number":2,"name":"Addison"}]}]},{"id":4,"index":1,"number":2,"title":"Krista","cycles":[{"id":2,"index":0,"number":1,"name":"Steve"},{"id":3,"index":1,"number":2,"name":"Addison"}]},{"id":7,"index":2,"number":3,"title":"Ryan"},{"id":13,"index":3,"number":4,"title":"Addison","cycles":[{"id":4,"index":0,"number":1,"name":"Steve"},{"id":5,"index":1,"number":2,"name":"Ryan"}]}]}');
-
+        $mform->setDefault('roadmapconfiguration', roadmap_configuration_edit($roadmap->configuration));
+        
         $mform->addElement('html', '<div id="roadmapconfiguration"></div>', get_string('phases', 'roadmap'));
         
         // Icon Selection
@@ -134,7 +139,6 @@ class mod_roadmap_configuration_form extends moodleform {
      */
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
-
 
         return $errors;
     }

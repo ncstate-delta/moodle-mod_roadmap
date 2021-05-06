@@ -27,38 +27,44 @@
             <a href="">{{# pix }} t/down, core, Down {{/ pix }}</a>
             <a href="">{{# pix }} t/delete, core, Down {{/ pix }}</a>
         </div>
-        <div class="step-title">Step {{ number }}</div>
+        <div class="step-header-title">Step {{ id }}</div>
     </div>
-    <div id="step-container" class="hide step-container" aria-expanded="true">
-        <div class="form-group row fitem step-icon-container">
+    <div class="hide step-container" aria-expanded="true">
+        <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Rollover Text</div>
-            <div class="col-md-9 form-inline"><input type="text"></div>
+            <div class="col-md-9 form-inline"><input class="step-rollovertext form-control" type="text" value="{{ rollovertext }}"></div>
         </div>
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label step-icon-display"><input name="step-{{ id }}-icon" type="hidden" /></div>
-            <div class="col-md-9 form-inline"><button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector" data-stepid="{{ id }}">Select Icon for Step</button></div>
-        </div>
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label step-icon-display">Completion Tied To:
-                <input id="step-{{ id }}-completion-modules" name="step-{{ id }}-completion-modules" class="completion-modules" data-stepid="{{ id }}" type="hidden" />
+        <div class="form-group row fitem step-icon-container">
+            <div class="col-md-3 form-inline">
+                <button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector btn btn-secondary" data-stepid="{{ id }}">Select Icon for Step</button>
             </div>
-            <div class="col-md-9 form-inline">
-                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector" data-stepid="{{ id }}">Select Activity or Activities</button>
-                <ul id="step-{{ id }}-completion-list"></ul>
+            <div class="col-md-9 col-form-label step-icon-display">
+                {{# pix }} icons/{{ stepicon }} , mod_roadmap, {{ stepicon }}  {{/ pix }}
+                <input class="step-icon" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}" />
+            </div>
+        </div>
+        <div class="form-group row fitem step-activity-container">
+            <div class="col-md-3 form-inline">
+                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector btn btn-secondary" data-stepid="{{ id }}">Select Activity or Activities</button>
+            </div>
+            <div class="col-md-9 col-form-label">Completion tied to activities:
+                <ul id="step-{{ id }}-completion-list" class="step-completion-list"></ul>
+                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}" />
             </div>
         </div>
         <div class="form-group row fitem">
             <div class="col-form-label">
-                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link" name="step-{{ id }}-chk-single-activity-link" value="1">
+                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link" value="1">
                 If completion is tied to a single activity, also link to that activity</div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Link to Page</div>
-            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="single-activity-link" name="step-{{ id }}-single-activity-link" type="text" ></div>
+            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control" type="text" value="{{ pagelink }}" ></div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Expected completed on</div>
-            <div class="col-md-9 form-inline"><input type="text"></div>
+            <div class="col-md-9 form-inline datetimepicker_container">{{> mod_roadmap/configuration_datetimepicker }}</div>
         </div>
+        <input class="step-configuration" type="hidden" value="{{ configuration }}">
     </div>
 </div>

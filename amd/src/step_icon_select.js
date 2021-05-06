@@ -28,17 +28,16 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepIconSelector.prototype.rebind_buttons = function() {
+            console.log('StepIconSelector.prototype.rebind_buttons');
             $('.btn_icon_selector').unbind('click').click(this.showConfig.bind(this));
+
         };
 
         StepIconSelector.prototype.showConfig = function(event) {
+            console.log('StepIconSelector.prototype.showConfig');
             var self = this;
             var iconsData = JSON.parse($('input[name="icon_data"]').val());
             self.clickedButton = event.target;
-
-            //let context = {
-            //    icons: iconsData,
-            //};
 
             // Dish up the form.
             templates.render('mod_roadmap/configuration_iconselect', iconsData)
@@ -52,6 +51,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepIconSelector.prototype.initIconConfig = function(popup) {
+            console.log('StepIconSelector.prototype.initIconConfig');
             this.popup = popup;
             var body = $(popup.getContent());
             //if (this.originalscaleid === this.scaleid) {
@@ -61,7 +61,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 let iconContainer = $(e.target).parent('.icon-container');
                 let iconName = iconContainer.data('iconname');
                 let stepId = $(this.clickedButton).data('stepid');
-                $('input[name="step-'+stepId+'-icon"]').val(iconName);
+                $('input[name="step-'+stepId+'-icon"]').val(iconName).trigger('change');
                 $('input[name="step-'+stepId+'-icon"]').parent('.step-icon-display').children('img').remove();
                 $('input[name="step-'+stepId+'-icon"]').parent('.step-icon-display').append($(e.target));
                 popup.close();

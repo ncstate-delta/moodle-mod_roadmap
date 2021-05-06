@@ -35,6 +35,7 @@ require_login($course);
 
 $urlparams = array('id' => $cmid);
 $url = new moodle_url('/mod/roadmap/configuration.php', $urlparams);
+$returnurl = new moodle_url('/course/view.php', array('id' => $course->id));
 
 $title = get_string('roadmapconfiguration', 'mod_roadmap');
 
@@ -45,19 +46,39 @@ $PAGE->set_pagelayout('incourse');
 
 $output = $PAGE->get_renderer('mod_roadmap');
 
-echo $output->header();
+$roadmap = $DB->get_record('roadmap', array('id'=>$cm->instance), '*', MUST_EXIST);
 
-echo $output->heading($title, 3);
-
-//$roadmap_configuration = new \mod_roadmap\output\configuration($course->id, $cmid);
-//$page = $output->render_configuration($roadmap_configuration);
-//echo $page;
-
-$configuration_form = new mod_roadmap_configuration_form('configuration.php', [
+$configuration_form = new mod_roadmap_configuration_form($url->out(false), [
     'course' => $course,
     'cm' => $cm,
+    'roadmap' => $roadmap,
 ], 'post', '', array('id' => 'mformroadmap'));
 
-$configuration_form->display();
+// Form cancelled.
+if ($configuration_form->is_cancelled()) {
+    redirect($returnurl);
+}
 
+// Get form data.
+$data = $configuration_form->get_submitted_data();
+if ($data) {
+    $sql = "UPDATE {roadmap}
+                   SET configuration = ?,
+                       learningobjectives = ?,
+                       colors = ?,
+                       clodisplayposition = ?,
+                       cloalignment = ?,
+                       clodecoration = ?,
+                       cloprefix = ?
+                 WHERE id = ?";
+    $DB->execute($sql, array(roadmap_configuration_save($data->roadmapconfiguration), $data->learningobjectivesconfiguration, 
+        $data->phasecolorpattern, $data->displayposition, $data->cyclealignment, $data->cycledecoration,
+        $data->cloprefix, $roadmap->id));
+
+    redirect($returnurl, 'Configuration Saved Successfully.', null, \core\output\notification::NOTIFY_SUCCESS);
+}
+
+echo $output->header();
+echo $output->heading($title, 3);
+$configuration_form->display();
 echo $output->footer();

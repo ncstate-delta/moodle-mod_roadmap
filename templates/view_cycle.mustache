@@ -1,0 +1,29 @@
+
+{{!
+    @template mod_roadmap/view_cycle
+
+    Displays the following cycle data:
+    * title
+    * subtitle
+    * pagelink
+    * learning objectives
+    * step objectives
+}}
+<div class="roadmap-cycle" data-cycle-pos="0">
+    {{# pagelink }}<a class="roadmap-cycle-title" href="{{ pagelink }}" >{{ title }}</a>{{/ pagelink }}
+    {{^ pagelink }}<span class="roadmap-cycle-title">{{ title }}</span>{{/ pagelink }}
+    <span class="roadmap-cycle-subtitle">{{ subtitle }}</span>
+    <div class="roadmap-step-row">
+        {{# steps }}
+            {{> mod_roadmap/view_step }}
+        {{/steps}}
+    </div>
+{{# learningobjectives }}
+    <div class="roadmap-topic-row">
+        <div class="roadmap-topic-container">
+            <span class="title">CLO:</span>
+            <span class="learningobjectives">{{ learningobjectives }}</span>
+        </div>
+    </div>
+{{/ learningobjectives }}
+</div>

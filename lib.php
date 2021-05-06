@@ -82,25 +82,108 @@ function roadmap_delete_instance($id) {
  * @param object $coursemodule
  * @return cached_cm_info|null
  */
-function roadmap_get_coursemodule_info($coursemodule) {
-    global $DB, $CFG;
 
-    if ($roadmap = $DB->get_record('roadmap', array('id' => $coursemodule->instance), 'id, name, intro, introformat')) {
+function roadmap_cm_info_view(cm_info $cm) {
+    global $DB, $CFG, $OUTPUT, $COURSE;
+    require_once($CFG->libdir . '/completionlib.php');
+    require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
-        $info = new cached_cm_info();
-        // no filtering hre because this info is cached and filtered later
-        $info->content = format_module_intro('roadmap', $roadmap, $coursemodule->id, false);
-
-        $info->content .= 'ROADMAP HERE';
-
-        // Show configuration link if editing is on.
-        if (true) {
-            $info->content .= '<div><a href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $coursemodule->id . '">Configure Roadmap</a></div>';
-        }
-
-        $info->name  = $roadmap->name;
-        return $info;
-    } else {
+    if (!$roadmap = $DB->get_record('roadmap', array('id' => $cm->instance))) {
         return null;
     }
+
+    $context = context_module::instance($cm->id);
+    $content = '';
+
+    if (!empty($roadmap->configuration)) {
+
+        $colorset = roadmap_color_sets($roadmap->colors);
+        $colorcount = count($colorset);
+    
+        $data = json_decode($roadmap->configuration);
+        $completion = new completion_info($COURSE);
+    
+        $colorindex = 0;
+        foreach ($data->phases as $phase) {
+            $phase->color = $colorset[$colorindex];
+    
+            if ($colorindex == $colorcount - 1) {
+                $colorindex = 0;
+            } else {
+                $colorindex += 1;
+            }
+    
+            foreach ($phase->cycles as $cycle) {
+    
+                if (!empty($cycle->learningobjectives)) {
+                    $learningobjectivenumbers = [];
+                    foreach (explode(",", $cycle->learningobjectives) as $loids) {
+                        $learningobjectivenumbers[] = $loids + 1;
+                    }
+                    $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
+                }
+                
+                foreach ($cycle->steps as $step) {
+                    $cmids = explode(',', $step->completionmodules);
+    
+                    $step->completedontime = false;
+                    $step->incomplete = false;
+    
+                    if (!empty($step->completionmodules)) {
+                        $expected_complete_time = strtotime($step->completionexpected_month . '/' .
+                            $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
+                            $step->completionexpected_hour . ':' . $step->completionexpected_minute);
+    
+                        foreach ($cmids as $cmid) {
+                            $cminspect = new stdClass();
+                            $cminspect->id = (int)$cmid;
+                            $completiondata = $completion->get_data($cminspect);
+    
+                            if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
+                                $completiondata->completionstate == COMPLETION_COMPLETE_FAIL) {
+                                $step->incomplete = true;
+                            }
+                        }
+                        $step->completedontime = ($step->expectedcomplete == 1 && !$step->incomplete && $completiondata->timemodified < $expected_complete_time);
+    
+                        // Step-link Logic
+                        if ($step->linksingleactivity == 1 && count($cmids) == 1) {
+                            // Check for linksingleactivity and create link
+                            $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+                        } else if ($step->pagelink != '') {
+                            // Or use provided link if available
+                            $step->stepurl = $step->pagelink;
+                        } else {
+                            // Or don't link at all
+                            $step->stepurl = false;
+                        }
+                    } else {
+                        $step->incomplete = true;
+                    }
+                }
+            }
+        }
+
+        $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
+    }
+
+    // Show configuration link if editing is on.
+    if (has_capability('mod/roadmap:configure', $context)) {
+        $content .= '<div><a href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">Configure Roadmap</a></div>';
+    }
+
+    $cm->set_content($content);
+
+}
+
+function get_activity_url($cmid, $courseid) {
+    $modinfo = get_fast_modinfo($courseid);
+    if (!empty($modinfo->cms)) {
+        $cm = $modinfo->get_cm($cmid);
+
+        if ($cm->visible and $cm->has_view() and $cm->uservisible) {
+            return $cm->url->out(false);
+        }
+    }
+    return '';
 }

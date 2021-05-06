@@ -12,6 +12,13 @@
                 <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
                 <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="configuration" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="learningobjectives" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="colors" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="clodisplayposition" TYPE="char" LENGTH="15" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="cloalignment" TYPE="char" LENGTH="15" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="clodecoration" TYPE="char" LENGTH="15" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="cloprefix" TYPE="char" LENGTH="15" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
