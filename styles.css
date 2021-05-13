@@ -121,6 +121,10 @@
     filter: grayscale(100%);
 }
 
+#roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step.incomplete .roadmap-background-circle {
+     fill:#ccc;
+}
+
 
 
 /* Configuration CSS */

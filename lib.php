@@ -106,59 +106,76 @@ function roadmap_cm_info_view(cm_info $cm) {
         $colorindex = 0;
         foreach ($data->phases as $phase) {
             $phase->color = $colorset[$colorindex];
-    
+
             if ($colorindex == $colorcount - 1) {
                 $colorindex = 0;
             } else {
                 $colorindex += 1;
             }
+
+            if (isset($phase->cycles)) {
+                foreach ($phase->cycles as $cycle) {
     
-            foreach ($phase->cycles as $cycle) {
-    
-                if (!empty($cycle->learningobjectives)) {
-                    $learningobjectivenumbers = [];
-                    foreach (explode(",", $cycle->learningobjectives) as $loids) {
-                        $learningobjectivenumbers[] = $loids + 1;
+                    if (!empty($cycle->learningobjectives)) {
+                        $learningobjectivenumbers = [];
+                        foreach (explode(",", $cycle->learningobjectives) as $loids) {
+                            $learningobjectivenumbers[] = $loids + 1;
+                        }
+                        $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
                     }
-                    $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
-                }
-                
-                foreach ($cycle->steps as $step) {
-                    $cmids = explode(',', $step->completionmodules);
     
-                    $step->completedontime = false;
-                    $step->incomplete = false;
+                    if (isset($cycle->steps)) {
+                        foreach ($cycle->steps as $step) {
+                            if (!isset($step->completionmodules)) {
+                                $step->completionmodules = '';
+                            }
+                            $cmids = explode(',', $step->completionmodules);
     
-                    if (!empty($step->completionmodules)) {
-                        $expected_complete_time = strtotime($step->completionexpected_month . '/' .
-                            $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
-                            $step->completionexpected_hour . ':' . $step->completionexpected_minute);
+                            $step->completedontime = false;
+                            $step->incomplete = false;
     
-                        foreach ($cmids as $cmid) {
-                            $cminspect = new stdClass();
-                            $cminspect->id = (int)$cmid;
-                            $completiondata = $completion->get_data($cminspect);
+                            if (!empty($step->completionmodules)) {
+                                $expected_complete_time = strtotime($step->completionexpected_month . '/' .
+                                    $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
+                                    $step->completionexpected_hour . ':' . $step->completionexpected_minute);
     
-                            if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
-                                $completiondata->completionstate == COMPLETION_COMPLETE_FAIL) {
+                                foreach ($cmids as $cmid) {
+                                    $cminspect = new stdClass();
+                                    $cminspect->id = (int)$cmid;
+                                    $completiondata = $completion->get_data($cminspect);
+    
+                                    if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
+                                        $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
+                                    ) {
+                                        $step->incomplete = true;
+                                    }
+                                }
+                                $step->completedontime = ($step->expectedcomplete == 1 && !$step->incomplete && $completiondata->timemodified < $expected_complete_time);
+    
+                                // Step-link Logic
+                                if ($step->linksingleactivity == 1 && count($cmids) == 1) {
+                                    // Check for linksingleactivity and create link
+                                    $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+                                } else if ($step->pagelink != '') {
+                                    // Or use provided link if available
+                                    $step->stepurl = $step->pagelink;
+                                } else {
+                                    // Or don't link at all
+                                    $step->stepurl = false;
+                                }
+                            } else {
                                 $step->incomplete = true;
                             }
+
+                            if (!empty($step->stepicon)) {
+                                // read icon and grab svg contents
+                                $icon_filename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
+                                if (file_exists($icon_filename)) {
+                                    $icon_filecontents = file_get_contents($icon_filename);
+                                    $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' . $icon_filecontents . '</span>';
+                                }
+                            }
                         }
-                        $step->completedontime = ($step->expectedcomplete == 1 && !$step->incomplete && $completiondata->timemodified < $expected_complete_time);
-    
-                        // Step-link Logic
-                        if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                            // Check for linksingleactivity and create link
-                            $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
-                        } else if ($step->pagelink != '') {
-                            // Or use provided link if available
-                            $step->stepurl = $step->pagelink;
-                        } else {
-                            // Or don't link at all
-                            $step->stepurl = false;
-                        }
-                    } else {
-                        $step->incomplete = true;
                     }
                 }
             }

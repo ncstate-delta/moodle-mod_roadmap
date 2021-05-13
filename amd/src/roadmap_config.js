@@ -79,6 +79,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                         step.id = stepId;
                         step.number = s + 1;
                         step.index = s;
+                        step.configuration = JSON.stringify(step);
                     });
                 });
             });

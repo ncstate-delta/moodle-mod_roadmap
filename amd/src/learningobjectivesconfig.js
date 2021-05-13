@@ -103,6 +103,9 @@ define(['jquery', 'core/notification', 'core/templates'],
                 if (configVal != '') {
                     // get the configuration line from the local hidden field
                     let stepConfig = JSON.parse(configVal);
+                    if (!stepConfig.learningobjectives) {
+                        stepConfig.learningobjectives = '';
+                    }
                     selectedIds = stepConfig.learningobjectives.split(',').map(x => parseInt(x));
                 }
 

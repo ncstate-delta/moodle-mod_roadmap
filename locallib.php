@@ -34,7 +34,13 @@ function roadmap_configuration_edit($config_json) {
         $data->phases = [];
     }
     foreach ($data->phases as $phase) {
+        if (!isset($phase->cycles)) {
+            $phase->cycles = [];
+        }
         foreach ($phase->cycles as $cycle) {
+            if (!isset($cycle->steps)) {
+                $cycle->steps = [];
+            }
             foreach ($cycle->steps as $step) {
                 roadmap_datetime_picker_data($step);
             }
@@ -46,8 +52,17 @@ function roadmap_configuration_edit($config_json) {
 function roadmap_configuration_save($config_json) {
     $data = json_decode($config_json);
 
+    if (!isset($data->phases)) {
+        $data->phases = [];
+    }
     foreach ($data->phases as $phase) {
+        if (!isset($phase->cycles)) {
+            $phase->cycles = [];
+        }
         foreach ($phase->cycles as $cycle) {
+            if (!isset($cycle->steps)) {
+                $cycle->steps = [];
+            }
             foreach ($cycle->steps as $step) {
                 unset($step->days);
                 unset($step->months);
@@ -59,6 +74,7 @@ function roadmap_configuration_save($config_json) {
     }
     return json_encode($data);
 }
+
 function roadmap_datetime_picker_data($step) {
     if (!property_exists($step, 'completionexpected_day')) {
         $step->completionexpected_day = date("d");
@@ -147,7 +163,7 @@ function roadmap_datetime_picker_options() {
 
 function roadmap_color_sets($id = -1) {
     $colors =[
-        0 => ['#4156A1','#427E93','#008473']
+        0 => ['#4156A1','#427E93','#008473', '#6F7D1C', '#D14905'],
     ];
     if ($id >= 0) {
         return $colors[$id];
