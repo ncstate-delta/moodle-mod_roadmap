@@ -207,7 +207,7 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     // Show configuration link if editing is on.
     if (has_capability('mod/roadmap:configure', $context)) {
-        $content .= '<div><a href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">Configure Roadmap</a></div>';
+        $content .= '<div><a class="btn btn-primary" href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">Configure Roadmap</a></div>';
     }
 
     $cm->set_content($content);
