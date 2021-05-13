@@ -95,6 +95,7 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->addElement('text', 'cloprefix', get_string('cloprefix', 'roadmap'), 'size="48"');
         $mform->setType('cloprefix', PARAM_TEXT);
         $mform->addRule('cloprefix', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
+        $mform->setDefault('cycledecoration', $roadmap->cloprefix);
 
         // Date Time Picker
         $mform->addElement('hidden', 'datetimepickerdata');

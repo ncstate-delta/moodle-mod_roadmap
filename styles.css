@@ -104,10 +104,10 @@
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row .roadmap-topic-container .title {
     vertical-align: bottom;
-    font-size: 14px;
+    font-size: 12px;
     color: #990000;
-    background-color: #ffffff;
     padding-right: 3px;
+    font-family: sans-serif;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row .roadmap-topic-container .learningobjectives {
@@ -201,8 +201,16 @@
     list-style: none;
 }
 
+#mformroadmap .step-icon-display .icon {
+    width: 25px;
+    height: 25px;
+}
+
 .icon-container {
-    display: inline;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 6px;
 }
 
 .icon-container img.icon {
@@ -212,8 +220,12 @@
     color: #ff0000;
 }
 
-#mformroadmap .step-icon-display .icon {
-    width: 25px;
-    height: 25px;
+#step-activity-selector {
+    width: 100%;
+    height: 200px;
 }
 
+.scale-buttons {
+    text-align: right;
+    margin-top: 20px;
+}

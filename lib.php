@@ -116,8 +116,8 @@ function roadmap_cm_info_view(cm_info $cm) {
 
             if (isset($phase->cycles)) {
                 foreach ($phase->cycles as $cycle) {
-    
-                    if (!empty($cycle->learningobjectives)) {
+
+                    if (isset($cycle->learningobjectives) && $cycle->learningobjectives !== '') {
                         $learningobjectivenumbers = [];
                         foreach (explode(",", $cycle->learningobjectives) as $loids) {
                             $learningobjectivenumbers[] = $loids + 1;
