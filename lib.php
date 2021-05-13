@@ -94,6 +94,7 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     $context = context_module::instance($cm->id);
     $content = '';
+    $clo_content = '';
 
     if (!empty($roadmap->configuration)) {
 
@@ -181,7 +182,27 @@ function roadmap_cm_info_view(cm_info $cm) {
             }
         }
 
+        if (!empty($roadmap->learningobjectives)) {
+            $clo_data = json_decode($roadmap->learningobjectives);
+
+            if (isset($clo_data->learningobjectives)) {
+                $number = 1;
+                foreach ($clo_data->learningobjectives as $learningobjective) {
+                    $learningobjective->prefix = $roadmap->cloprefix;
+                    $learningobjective->number = $number;
+                    $number += 1;
+                }
+                $clo_content = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clo_data);
+            }
+        }
+
+        if ($roadmap->clodisplayposition == 0) {
+            $content .= $clo_content;
+        }
         $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
+        if ($roadmap->clodisplayposition == 1) {
+            $content .= $clo_content;
+        }
     }
 
     // Show configuration link if editing is on.

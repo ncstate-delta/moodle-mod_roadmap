@@ -1,6 +1,20 @@
 
 /* View CSS */
 
+#roadmap-learningobjective-container {
+    margin: 20px 0;
+}
+
+#roadmap-learningobjective-container .learningobjective {
+    white-space: nowrap;
+    margin: 5px 0;
+}
+
+#roadmap-learningobjective-container .learningobjective .prefix {
+    white-space: nowrap;
+    margin: 0 5px;
+}
+
 /* -- Phase */
 #roadmap-phase-container .roadmap-phase {
     display: block;
@@ -44,6 +58,7 @@
     color: #000000;
     text-decoration: none;
     background-color: transparent;
+    height: 27px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-cycle-subtitle {
@@ -53,6 +68,7 @@
     margin: 0;
     font-size: 14px;
     color: #888;
+    height: 21px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step-row {
@@ -60,6 +76,7 @@
     position: relative;
     padding: 0;
     margin: 10px 0 5px 0;
+    height: 27px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row {
@@ -82,10 +99,11 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: left;
+    height: 22px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row .roadmap-topic-container .title {
-    vertical-align: middle;
+    vertical-align: bottom;
     font-size: 14px;
     color: #990000;
     background-color: #ffffff;
