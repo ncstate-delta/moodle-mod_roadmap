@@ -151,9 +151,15 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $step->incomplete = false;
 
                             if (!empty($step->completionmodules)) {
-                                $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
-                                    $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
-                                    $step->completionexpected_hour . ':' . $step->completionexpected_minute);
+
+                                if (property_exists($step, 'completionexpected_datetime')) {
+                                    $expectedcompletetime = (int)$step->completionexpected_datetime;
+                                } else {
+                                    // Eventually this can be removed.  This is the old bad way.
+                                    $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
+                                        $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
+                                        $step->completionexpected_hour . ':' . $step->completionexpected_minute);
+                                }
 
                                 foreach ($cmids as $cmid) {
                                     $cminspect = new stdClass();
