@@ -28,6 +28,10 @@ $string['pluginname'] = 'Roadmap';
 $string['pluginadministration'] = 'Roadmap administration';
 $string['roadmapconfiguration'] = 'Roadmap Configuration';
 
+$string['roadmap:addinstance'] = 'Add a new roadmap';
+$string['roadmap:view'] = 'View roadmap';
+$string['roadmap:configure'] = 'Configure roadmap';
+
 // Form Strings.
 $string['appearance'] = 'Appearance';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLO)';
