@@ -28,14 +28,12 @@ define(['jquery'],
         };
 
         PhaseSave.prototype.rebind_inputs = function() {
-            console.log('PhaseSave.prototype.rebind_inputs');
             $('.phase-title').unbind('change').change(this.savePhase.bind(this));
             $('.phase-cycles-container .cycle-wrapper .cycle-configuration').unbind('change').change(this.savePhase.bind(this));
             PhaseSave.prototype.savePhase(this);
         };
 
         PhaseSave.prototype.savePhase = function(event) {
-            console.log('PhaseSave.prototype.savePhase');
             var phaseContainer = $(event.target).closest('.phase-container');
             var phaseCycles = [];
             let index = 0;

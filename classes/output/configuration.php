@@ -73,8 +73,6 @@ class configuration implements renderable, templatable {
         $data->courseid = $this->courseid;
         $data->coursemoduleid = $this->coursemoduleid;
 
-
-
         return $data;
     }
 }

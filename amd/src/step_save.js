@@ -28,7 +28,6 @@ define(['jquery'],
         };
 
         StepSave.prototype.rebind_inputs = function() {
-            console.log('StepSave.prototype.rebind_inputs');
             $('.step-rollovertext').unbind('change').change(this.saveStep.bind(this));
             $('.chk-single-activity-link').unbind('change').change(this.saveStep.bind(this));
             $('.step-single-activity-link').unbind('change').change(this.saveStep.bind(this));
@@ -44,7 +43,6 @@ define(['jquery'],
         };
 
         StepSave.prototype.saveStep = function(event) {
-            console.log('StepSave.prototype.saveStep');
             var stepContainer = $(event.target).closest('.step-container');
             var expectedComplete = 0;
             if(stepContainer.find('.completionexpected').prop("checked") == true){

@@ -44,7 +44,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
          * @method initForm
          */
         RoadmapConfig.prototype.initForm = function() {
-            console.log('RoadmapConfig.prototype.initForm');
             var self = this;
             var inputConfigVal = this.configContainer.val();
             if (inputConfigVal == '') {
@@ -53,7 +52,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             }
             var config = JSON.parse(inputConfigVal);
 
-            console.log(config);
             var phaseId = 0;
             var cycleId = 0;
             var stepId = 0;
@@ -111,12 +109,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.bindConfigSave = function() {
-            console.log('RoadmapConfig.prototype.bindConfigSave');
             $('input.phase-configuration').unbind('change').change(this.configSave.bind(this));
         };
 
         RoadmapConfig.prototype.configSave = function() {
-            console.log('RoadmapConfig.prototype.configSave');
             var phaseContainer = $('#phase-container');
             var roadmapData = [];
             let index = 0;
@@ -130,12 +126,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 roadmapData.push(phaseDataObj);
             });
             $('input[name="roadmapconfiguration"]').val(JSON.stringify({ phases: roadmapData }));
-            console.log('Config Saved');
-            console.log({ phases: roadmapData });
         };
 
         RoadmapConfig.prototype.addPhase = function(event) {
-            console.log('RoadmapConfig.prototype.addPhase');
             event.preventDefault();
             event.stopPropagation();
 
@@ -164,7 +157,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.addCycle = function(event) {
-            console.log('RoadmapConfig.prototype.addCycle');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -192,7 +184,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.addStep = function(event) {
-            console.log('RoadmapConfig.prototype.addStep');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -230,7 +221,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.collapsePhase = function(event) {
-            console.log('RoadmapConfig.prototype.collapsePhase');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -240,7 +230,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.collapseCycle = function(event) {
-            console.log('RoadmapConfig.prototype.collapseCycle');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);
@@ -250,7 +239,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         RoadmapConfig.prototype.collapseStep = function(event) {
-            console.log('RoadmapConfig.prototype.collapseStep');
             event.preventDefault();
             event.stopPropagation();
             var thisnode = $(event.currentTarget);

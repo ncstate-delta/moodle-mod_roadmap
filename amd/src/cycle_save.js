@@ -28,7 +28,7 @@ define(['jquery'],
         };
 
         CycleSave.prototype.rebind_inputs = function() {
-            console.log('CycleSave.prototype.rebind_inputs');
+
             $('.cycle-title').unbind('change').change(this.saveCycle.bind(this));
             $('.cycle-subtitle').unbind('change').change(this.saveCycle.bind(this));
             $('.cycle-pagelink').unbind('change').change(this.saveCycle.bind(this));
@@ -38,7 +38,7 @@ define(['jquery'],
         };
 
         CycleSave.prototype.saveCycle = function(event) {
-            console.log('CycleSave.prototype.saveCycle');
+
             var cycleContainer = $(event.target).closest('.cycle-container');
             var cycleLos = [];
             $.each(cycleContainer.find('.chk-learning-objectives input[type="checkbox"]'), function(){
@@ -46,12 +46,14 @@ define(['jquery'],
                     cycleLos.push($(this).val());
                 }
             });
+
             var cycleSteps = [];
             $.each(cycleContainer.find('.cycle-steps-container .step-wrapper .step-configuration'), function() {
                 let stepData = $(this).val();
                 if (stepData == '') { stepData = '{}'; }
                 cycleSteps.push(JSON.parse(stepData));
             });
+
             var cycleData = {
                 title: cycleContainer.find('.fitem input.cycle-title').val(),
                 subtitle: cycleContainer.find('.fitem input.cycle-subtitle').val(),

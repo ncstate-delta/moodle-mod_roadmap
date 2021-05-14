@@ -28,13 +28,11 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepIconSelector.prototype.rebind_buttons = function() {
-            console.log('StepIconSelector.prototype.rebind_buttons');
             $('.btn_icon_selector').unbind('click').click(this.showConfig.bind(this));
 
         };
 
         StepIconSelector.prototype.showConfig = function(event) {
-            console.log('StepIconSelector.prototype.showConfig');
             var self = this;
             var iconsData = JSON.parse($('input[name="icon_data"]').val());
             self.clickedButton = event.target;
@@ -51,7 +49,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepIconSelector.prototype.initIconConfig = function(popup) {
-            console.log('StepIconSelector.prototype.initIconConfig');
             this.popup = popup;
             var body = $(popup.getContent());
             //if (this.originalscaleid === this.scaleid) {

@@ -25,8 +25,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->dirroot/mod/roadmap/lib.php");
 
-function roadmap_configuration_edit($config_json) {
-    $data = json_decode($config_json);
+function roadmap_configuration_edit($configjson) {
+    $data = json_decode($configjson);
     if (empty($data)) {
         $data = new \stdClass();
     }
@@ -49,8 +49,8 @@ function roadmap_configuration_edit($config_json) {
     return json_encode($data);
 }
 
-function roadmap_configuration_save($config_json) {
-    $data = json_decode($config_json);
+function roadmap_configuration_save($configjson) {
+    $data = json_decode($configjson);
 
     if (!isset($data->phases)) {
         $data->phases = [];
@@ -109,10 +109,10 @@ function roadmap_datetime_picker_data($step) {
     $step->months[] = ['val' => 10, 'txt' => 'October', 'sel' => ($step->completionexpected_month == 10)];
     $step->months[] = ['val' => 11, 'txt' => 'November', 'sel' => ($step->completionexpected_month == 11)];
     $step->months[] = ['val' => 12, 'txt' => 'December', 'sel' => ($step->completionexpected_month == 12)];
-    
-    $current_year = date("Y");
+
+    $currentyear = date("Y");
     $step->years = [];
-    for ($i = $current_year; $i <= $current_year + 6; $i++) {
+    for ($i = $currentyear; $i <= $currentyear + 6; $i++) {
         $step->years[] = ['val' => $i, 'txt' => $i, 'sel' => ($step->completionexpected_year == $i)];
     }
     $step->hours = [];
@@ -144,9 +144,9 @@ function roadmap_datetime_picker_options() {
     $month[] = ['val' => 11, 'txt' => 'November'];
     $month[] = ['val' => 12, 'txt' => 'December'];
 
-    $current_year = date("Y");
+    $currentyear = date("Y");
     $year = [];
-    for ($i = $current_year; $i <= $current_year + 6; $i++) {
+    for ($i = $currentyear; $i <= $currentyear + 6; $i++) {
         $year[] = ['val' => $i, 'txt' => $i];
     }
     $hour = [];
@@ -162,8 +162,8 @@ function roadmap_datetime_picker_options() {
 }
 
 function roadmap_color_sets($id = -1) {
-    $colors =[
-        0 => ['#4156A1','#427E93','#008473', '#6F7D1C', '#D14905'],
+    $colors = [
+        0 => ['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905'],
     ];
     if ($id >= 0) {
         return $colors[$id];
@@ -177,16 +177,16 @@ function roadmap_list_icons() {
     global $CFG;
     $result = [];
 
-    $icons_folder = $CFG->dirroot . '/mod/roadmap/pix/icons/';
-    $icons = scandir($icons_folder);
+    $iconsfolder = $CFG->dirroot . '/mod/roadmap/pix/icons/';
+    $icons = scandir($iconsfolder);
 
     foreach ($icons as $icon) {
-        // PHP 8.0:  if (str_ends_with($icon, '.svg')) {
+        // PHP 8.0: we can use the function str_ends_with.
         if (substr($icon, -4) === '.svg') {
             $result[] = ['name' => substr($icon, 0, -4)];
         }
     }
-    
+
     return $result;
 }
 
@@ -199,16 +199,17 @@ function roadmap_list_icons() {
 function roadmap_list_activities($course) {
     $completionoptions = [];
     $index = 0;
-    
+
     // For activity completition we need to generate a list of activities the same way moodle does.
-    // Conditions based on completion
+    // Conditions based on completion.
     $completion = new completion_info($course);
     if ($completion->is_enabled()) {
         $modinfo = get_fast_modinfo($course);
-        foreach($modinfo->cms as $id=>$cm) {
+
+        foreach ($modinfo->cms as $id => $cm) {
             // Add each course-module if it:
-            // (a) has completion turned on
-            // (b) is not the same as current course-module
+            // (a) has completion turned on.
+            // (b) is not the same as current course-module.
             if ($cm->completion && $cm->modname != 'roadmap') {
                 $completionoptions[$index] = ['id' => $index, 'coursemoduleid' => $cm->id, 'name' => $cm->name];
                 $index += 1;

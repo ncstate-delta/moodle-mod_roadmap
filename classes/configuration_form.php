@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -42,7 +41,7 @@ class mod_roadmap_configuration_form extends moodleform {
      *
      * @return void
      */
-    function definition() {
+    public function definition() {
         global $CFG, $OUTPUT, $PAGE, $COURSE;
 
         $mform =& $this->_form;
@@ -50,7 +49,7 @@ class mod_roadmap_configuration_form extends moodleform {
 
         $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
 
-        // Phase color pattern drown selector
+        // Phase color pattern drown selector.
         $colorpatterns = [
             0 => 'All Secondary Brand Colors (Default)',
             -1 => 'Custom',
@@ -61,7 +60,6 @@ class mod_roadmap_configuration_form extends moodleform {
 
         $mform->addElement('header', 'header_learningobjectives', get_string('courselearningobjectives', 'roadmap'));
 
-        
         $displayposition = [
             0 => 'Above Roadmap (Default)',
             1 => 'Below Roadmap',
@@ -71,7 +69,6 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->setDefault('displayposition', $roadmap->clodisplayposition);
         $mform->setType('displayposition', PARAM_INT);
 
-        
         $cyclealignment = [
             0 => 'Center (Default)',
             1 => 'Left',
@@ -80,7 +77,6 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->addElement('select', 'cyclealignment', get_string('cyclealignment', 'roadmap'), $cyclealignment);
         $mform->setDefault('cyclealignment', $roadmap->cloalignment);
         $mform->setType('cyclealignment', PARAM_INT);
-
 
         $cycledecoration = [
             0 => 'None (Default)',
@@ -91,42 +87,47 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->setDefault('cycledecoration', $roadmap->clodecoration);
         $mform->setType('cycledecoration', PARAM_INT);
 
-        
         $mform->addElement('text', 'cloprefix', get_string('cloprefix', 'roadmap'), 'size="48"');
         $mform->setType('cloprefix', PARAM_TEXT);
         $mform->addRule('cloprefix', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
         $mform->setDefault('cloprefix', $roadmap->cloprefix);
 
-        // Date Time Picker
+        // Date Time Picker.
         $mform->addElement('hidden', 'datetimepickerdata');
         $mform->setType('datetimepickerdata', PARAM_RAW);
         $mform->setDefault('datetimepickerdata', json_encode(roadmap_datetime_picker_options()));
-        
-        // Learning Objectives
-        $mform->addElement('text', 'learningobjectivesconfiguration', get_string('learningobjectives', 'roadmap'), 'style="display:none;"');
+
+        // Learning Objectives.
+        $mform->addElement('text', 'learningobjectivesconfiguration',
+            get_string('learningobjectives', 'roadmap'), 'style="display:none;"');
         $mform->setType('learningobjectivesconfiguration', PARAM_RAW);
         $mform->setDefault('learningobjectivesconfiguration', $roadmap->learningobjectives);
-        
+
         $mform->addElement('header', 'header_editroadmap', get_string('editroadmap', 'roadmap'));
 
-        // Roadmap Configuration
+        // Roadmap Configuration.
         $mform->addElement('hidden', 'roadmapconfiguration');
         $mform->setType('roadmapconfiguration', PARAM_RAW);
         $mform->setDefault('roadmapconfiguration', roadmap_configuration_edit($roadmap->configuration));
-        
+
         $mform->addElement('html', '<div id="roadmapconfiguration"></div>', get_string('phases', 'roadmap'));
-        
-        // Icon Selection
+
+        // Icon Selection.
         $mform->addElement('hidden', 'icon_data');
         $mform->setType('icon_data', PARAM_RAW);
         $mform->setDefault('icon_data', json_encode(array('icons' => roadmap_list_icons())));
-        
+
         $mform->addElement('hidden', 'activity_data');
         $mform->setType('activity_data', PARAM_RAW);
         $mform->setDefault('activity_data', json_encode(array('activities' => roadmap_list_activities($COURSE))));
 
         // Add js.
-        $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init', array('#id_learningobjectivesconfiguration', 'input[name="learningobjectivesconfiguration"]', '#roadmapconfiguration', 'input[name="roadmapconfiguration"]'));
+        $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
+            array('#id_learningobjectivesconfiguration',
+                'input[name="learningobjectivesconfiguration"]',
+                '#roadmapconfiguration',
+                'input[name="roadmapconfiguration"]')
+        );
 
         $this->add_action_buttons(true, 'Save Configuration');
     }
@@ -138,7 +139,7 @@ class mod_roadmap_configuration_form extends moodleform {
      * @param array $files files uploaded.
      * @return array of errors.
      */
-    function validation($data, $files) {
+    public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
         return $errors;

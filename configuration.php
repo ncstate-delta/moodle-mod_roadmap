@@ -46,21 +46,21 @@ $PAGE->set_pagelayout('incourse');
 
 $output = $PAGE->get_renderer('mod_roadmap');
 
-$roadmap = $DB->get_record('roadmap', array('id'=>$cm->instance), '*', MUST_EXIST);
+$roadmap = $DB->get_record('roadmap', array('id' => $cm->instance), '*', MUST_EXIST);
 
-$configuration_form = new mod_roadmap_configuration_form($url->out(false), [
+$configurationform = new mod_roadmap_configuration_form($url->out(false), [
     'course' => $course,
     'cm' => $cm,
     'roadmap' => $roadmap,
 ], 'post', '', array('id' => 'mformroadmap'));
 
 // Form cancelled.
-if ($configuration_form->is_cancelled()) {
+if ($configurationform->is_cancelled()) {
     redirect($returnurl);
 }
 
 // Get form data.
-$data = $configuration_form->get_submitted_data();
+$data = $configurationform->get_submitted_data();
 if ($data) {
     $sql = "UPDATE {roadmap}
                    SET configuration = ?,
@@ -71,7 +71,7 @@ if ($data) {
                        clodecoration = ?,
                        cloprefix = ?
                  WHERE id = ?";
-    $DB->execute($sql, array(roadmap_configuration_save($data->roadmapconfiguration), $data->learningobjectivesconfiguration, 
+    $DB->execute($sql, array(roadmap_configuration_save($data->roadmapconfiguration), $data->learningobjectivesconfiguration,
         $data->phasecolorpattern, $data->displayposition, $data->cyclealignment, $data->cycledecoration,
         $data->cloprefix, $roadmap->id));
 
@@ -80,5 +80,5 @@ if ($data) {
 
 echo $output->header();
 echo $output->heading($title, 3);
-$configuration_form->display();
+$configurationform->display();
 echo $output->footer();

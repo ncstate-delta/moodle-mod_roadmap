@@ -29,7 +29,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepActivitySelector.prototype.rebind_checkbox = function() {
-            console.log('StepActivitySelector.prototype.rebind_checkbox');
             $('.chk-single-activity-link').unbind('click').each(function(index, chk) {
                 let stepid = $(chk).data('stepid');
                 $('#step-' + stepid + '-single-activity-link').prop("disabled", $(chk).prop('checked'));
@@ -46,7 +45,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepActivitySelector.prototype.configure_checkbox = function(input) {
-            console.log('StepActivitySelector.prototype.configure_checkbox');
             let stepid = $(input).data('stepid');
             let multipleActivities = ($('#step-' + stepid + '-completion-modules').val().split(',').length > 1);
 
@@ -58,12 +56,10 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepActivitySelector.prototype.rebind_buttons = function() {
-            console.log('StepActivitySelector.prototype.rebind_buttons');
             $('.btn_completion_selector').unbind('click').click(this.showConfig.bind(this));
         };
 
         StepActivitySelector.prototype.showConfig = function(event) {
-            console.log('StepActivitySelector.prototype.showConfig');
             var self = this;
             var activityData = JSON.parse($('input[name="activity_data"]').val());
             self.clickedButton = event.target;
@@ -80,7 +76,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepActivitySelector.prototype.loadList = function() {
-            console.log('StepActivitySelector.prototype.loadList');
             var activityData = JSON.parse($('input[name="activity_data"]').val());
             var listAreas = $('ul.step-completion-list');
 
@@ -92,8 +87,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 var selectedIds = stepCompletionModules.split(',');
 
                 $(e).children('li').remove();
-                console.log(activityData.activities);
-                console.log(activityData.activities[0]);
                 // Use the selected ids to get course module information
                 activityData.activities.forEach(function (activity) {
                     if ($.inArray(activity.coursemoduleid, selectedIds)>=0) {
@@ -111,7 +104,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepActivitySelector.prototype.initActivityConfig = function(popup) {
-            console.log('StepActivitySelector.prototype.initActivityConfig');
             this.popup = popup;
             var body = $(popup.getContent());
 

@@ -28,7 +28,7 @@ $string['pluginname'] = 'Roadmap';
 $string['pluginadministration'] = 'Roadmap administration';
 $string['roadmapconfiguration'] = 'Roadmap Configuration';
 
-// Form Strings
+// Form Strings.
 $string['appearance'] = 'Appearance';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLO)';
 $string['learningobjectives'] = 'Learning Objectives';
@@ -39,8 +39,6 @@ $string['displayposition'] = 'CLO Display Position';
 $string['cyclealignment'] = 'Cycle CLO Alignment';
 $string['cycledecoration'] = 'Cycle CLO Decoration';
 $string['cloprefix'] = 'CLO Prefix';
-
-
 
 $string['addnew'] = 'Add New';
 $string['phase'] = 'Phase';

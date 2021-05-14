@@ -1,7 +1,18 @@
 <?php
-
-
-
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * List of features supported in Roadmap module
@@ -10,16 +21,20 @@
  */
 function roadmap_supports($feature) {
     switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:           return MOD_ARCHETYPE_RESOURCE;
-        case FEATURE_NO_VIEW_LINK:            return true;
-        case FEATURE_MOD_INTRO:               return true;
-        case FEATURE_BACKUP_MOODLE2:          return true;
-        case FEATURE_SHOW_DESCRIPTION:        return true;
-        default: return false;
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_NO_VIEW_LINK:
+            return true;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        default:
+            return false;
     }
 }
-
-
 
 /**
  * Add roadmap instance.
@@ -48,7 +63,7 @@ function roadmap_update_instance($data, $mform) {
     global $DB;
 
     $data->timemodified = time();
-    $data->id           = $data->instance;
+    $data->id = $data->instance;
 
     $DB->update_record('roadmap', $data);
 
@@ -63,7 +78,7 @@ function roadmap_update_instance($data, $mform) {
 function roadmap_delete_instance($id) {
     global $DB;
 
-    if (!$roadmap = $DB->get_record('roadmap', array('id'=>$id))) {
+    if (!$roadmap = $DB->get_record('roadmap', array('id' => $id))) {
         return false;
     }
 
@@ -94,16 +109,16 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     $context = context_module::instance($cm->id);
     $content = '';
-    $clo_content = '';
+    $clocontent = '';
 
     if (!empty($roadmap->configuration)) {
 
         $colorset = roadmap_color_sets($roadmap->colors);
         $colorcount = count($colorset);
-    
+
         $data = json_decode($roadmap->configuration);
         $completion = new completion_info($COURSE);
-    
+
         $colorindex = 0;
         foreach ($data->phases as $phase) {
             $phase->color = $colorset[$colorindex];
@@ -124,44 +139,46 @@ function roadmap_cm_info_view(cm_info $cm) {
                         }
                         $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
                     }
-    
+
                     if (isset($cycle->steps)) {
                         foreach ($cycle->steps as $step) {
                             if (!isset($step->completionmodules)) {
                                 $step->completionmodules = '';
                             }
                             $cmids = explode(',', $step->completionmodules);
-    
+
                             $step->completedontime = false;
                             $step->incomplete = false;
-    
+
                             if (!empty($step->completionmodules)) {
-                                $expected_complete_time = strtotime($step->completionexpected_month . '/' .
+                                $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
                                     $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
                                     $step->completionexpected_hour . ':' . $step->completionexpected_minute);
-    
+
                                 foreach ($cmids as $cmid) {
                                     $cminspect = new stdClass();
                                     $cminspect->id = (int)$cmid;
                                     $completiondata = $completion->get_data($cminspect);
-    
+
                                     if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
                                         $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
                                     ) {
                                         $step->incomplete = true;
                                     }
                                 }
-                                $step->completedontime = ($step->expectedcomplete == 1 && !$step->incomplete && $completiondata->timemodified < $expected_complete_time);
-    
-                                // Step-link Logic
+                                $step->completedontime = ($step->expectedcomplete == 1 &&
+                                                          !$step->incomplete &&
+                                                          $completiondata->timemodified < $expectedcompletetime);
+
+                                // Step-link Logic.
                                 if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                                    // Check for linksingleactivity and create link
+                                    // Check for linksingleactivity and create link.
                                     $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
                                 } else if ($step->pagelink != '') {
-                                    // Or use provided link if available
+                                    // Or use provided link if available.
                                     $step->stepurl = $step->pagelink;
                                 } else {
-                                    // Or don't link at all
+                                    // Or don't link at all.
                                     $step->stepurl = false;
                                 }
                             } else {
@@ -169,11 +186,13 @@ function roadmap_cm_info_view(cm_info $cm) {
                             }
 
                             if (!empty($step->stepicon)) {
-                                // read icon and grab svg contents
-                                $icon_filename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
-                                if (file_exists($icon_filename)) {
-                                    $icon_filecontents = file_get_contents($icon_filename);
-                                    $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' . $icon_filecontents . '</span>';
+                                // Read icon and grab svg contents.
+                                $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
+                                if (file_exists($iconfilename)) {
+                                    $iconfilecontents = file_get_contents($iconfilename);
+                                    $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' .
+                                        $iconfilecontents .
+                                        '</span>';
                                 }
                             }
                         }
@@ -183,31 +202,33 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
 
         if (!empty($roadmap->learningobjectives)) {
-            $clo_data = json_decode($roadmap->learningobjectives);
+            $clodata = json_decode($roadmap->learningobjectives);
 
-            if (isset($clo_data->learningobjectives)) {
+            if (isset($clodata->learningobjectives)) {
                 $number = 1;
-                foreach ($clo_data->learningobjectives as $learningobjective) {
+                foreach ($clodata->learningobjectives as $learningobjective) {
                     $learningobjective->prefix = $roadmap->cloprefix;
                     $learningobjective->number = $number;
                     $number += 1;
                 }
-                $clo_content = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clo_data);
+                $clocontent = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clodata);
             }
         }
 
         if ($roadmap->clodisplayposition == 0) {
-            $content .= $clo_content;
+            $content .= $clocontent;
         }
         $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
         if ($roadmap->clodisplayposition == 1) {
-            $content .= $clo_content;
+            $content .= $clocontent;
         }
     }
 
     // Show configuration link if editing is on.
     if (has_capability('mod/roadmap:configure', $context)) {
-        $content .= '<div><a class="btn btn-primary" href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">Configure Roadmap</a></div>';
+        $content .= '<div>' .
+            '<a class="btn btn-primary" href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">' .
+            'Configure Roadmap</a></div>';
     }
 
     $cm->set_content($content);
