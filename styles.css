@@ -6,13 +6,19 @@
 }
 
 #roadmap-learningobjective-container .learningobjective {
-    white-space: nowrap;
     margin: 5px 0;
+    display: flex;
+    align-items: stretch;
 }
 
 #roadmap-learningobjective-container .learningobjective .prefix {
     white-space: nowrap;
     margin: 0 5px;
+    align-items: stretch;
+}
+
+#roadmap-learningobjective-container .learningobjective .name {
+    align-items: stretch;
 }
 
 /* -- Phase */
