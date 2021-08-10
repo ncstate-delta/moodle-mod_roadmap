@@ -99,6 +99,13 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('.cycle-delete-control').click(function (e) { RoadmapConfig.prototype.deleteCycle(e); });
                     $('.step-delete-control').click(function (e) { RoadmapConfig.prototype.deleteStep(e); });
 
+                    $('.phase-up-control').click(function (e) { RoadmapConfig.prototype.upPhase(e); });
+                    $('.phase-down-control').click(function (e) { RoadmapConfig.prototype.downPhase(e); });
+                    $('.cycle-up-control').click(function (e) { RoadmapConfig.prototype.upCycle(e); });
+                    $('.cycle-down-control').click(function (e) { RoadmapConfig.prototype.downCycle(e); });
+                    $('.step-up-control').click(function (e) { RoadmapConfig.prototype.upStep(e); });
+                    $('.step-down-control').click(function (e) { RoadmapConfig.prototype.downStep(e); });
+
                     learningobjectives.refresh_checklists();
 
                     stepiconselect.rebind_buttons();
@@ -291,6 +298,90 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 var stepWrapper = thisnode.closest('.step-wrapper');
                 var cycleContainer = thisnode.closest('.cycle-container');
                 stepWrapper.remove();
+                cycleContainer.find('.cycle-title').triggerHandler("change");
+            }
+        };
+
+        RoadmapConfig.prototype.upPhase = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var phaseWrapper = thisnode.closest('.phase-wrapper');
+            var prevPhaseWrapper = phaseWrapper.prev();
+
+            phaseWrapper.insertBefore(prevPhaseWrapper);
+            RoadmapConfig.prototype.configSave();
+        };
+
+        RoadmapConfig.prototype.downPhase = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var phaseWrapper = thisnode.closest('.phase-wrapper');
+            var nextPhaseWrapper = phaseWrapper.next();
+
+            phaseWrapper.insertAfter(nextPhaseWrapper);
+            RoadmapConfig.prototype.configSave();
+        };
+
+        RoadmapConfig.prototype.upCycle = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var cycleWrapper = thisnode.closest('.cycle-wrapper');
+            var phaseContainer = thisnode.closest('.phase-container');
+            var prevCycleWrapper = cycleWrapper.prev();
+
+            if (prevCycleWrapper) {
+                cycleWrapper.insertBefore(prevCycleWrapper);
+                phaseContainer.find('.phase-title').triggerHandler("change");
+            }
+        };
+
+        RoadmapConfig.prototype.downCycle = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var cycleWrapper = thisnode.closest('.cycle-wrapper');
+            var phaseContainer = thisnode.closest('.phase-container');
+            var nextCycleWrapper = cycleWrapper.next();
+
+            if (nextCycleWrapper) {
+                cycleWrapper.insertAfter(nextCycleWrapper);
+                phaseContainer.find('.phase-title').triggerHandler("change");
+            }
+        };
+
+        RoadmapConfig.prototype.upStep = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var stepWrapper = thisnode.closest('.step-wrapper');
+            var cycleContainer = thisnode.closest('.cycle-container');
+            var prevStepWrapper = stepWrapper.prev();
+
+            if (prevStepWrapper) {
+                stepWrapper.insertBefore(prevStepWrapper);
+                cycleContainer.find('.cycle-title').triggerHandler("change");
+            }
+        };
+
+        RoadmapConfig.prototype.downStep = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var stepWrapper = thisnode.closest('.step-wrapper');
+            var cycleContainer = thisnode.closest('.cycle-container');
+            var nextStepWrapper = stepWrapper.next();
+
+            if (nextStepWrapper) {
+                stepWrapper.insertAfter(nextStepWrapper);
                 cycleContainer.find('.cycle-title').triggerHandler("change");
             }
         };
