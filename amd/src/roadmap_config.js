@@ -95,6 +95,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('.cycle-collapse-control').click(function(e) { RoadmapConfig.prototype.collapseCycle(e); });
                     $('.step-collapse-control').click(function(e) { RoadmapConfig.prototype.collapseStep(e); });
 
+                    $('.phase-delete-control').click(function (e) { RoadmapConfig.prototype.deletePhase(e); });
+                    $('.cycle-delete-control').click(function (e) { RoadmapConfig.prototype.deleteCycle(e); });
+                    $('.step-delete-control').click(function (e) { RoadmapConfig.prototype.deleteStep(e); });
+
                     learningobjectives.refresh_checklists();
 
                     stepiconselect.rebind_buttons();
@@ -145,6 +149,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('.phase-collapse-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.collapsePhase(e); });
 
+                    $('.phase-delete-control').unbind('click')
+                        .click(function(e) { RoadmapConfig.prototype.deletePhase(e); });
+
                     $('#add-phase').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.addPhase(e); });
 
@@ -173,6 +180,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
                     $('.cycle-collapse-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.collapseCycle(e); });
+
+                    $('.cycle-delete-control').unbind('click')
+                        .click(function(e) { RoadmapConfig.prototype.deleteCycle(e); });
 
                     $('.add-cycle-step').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.addStep(e); });
@@ -212,6 +222,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     $('.step-collapse-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.collapseStep(e); });
 
+                    $('.step-delete-control').unbind('click')
+                        .click(function(e) { RoadmapConfig.prototype.deleteStep(e); });
+
                     stepiconselect.rebind_buttons();
                     stepactivityselect.rebind_buttons();
                     stepsave.rebind_inputs();
@@ -245,6 +258,41 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var cycleWrapper = thisnode.closest('.step-wrapper');
             var metadata = cycleWrapper.children('.step-container');
             ec.expandCollapse(metadata, thisnode);
+        };
+
+        RoadmapConfig.prototype.deletePhase = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirm("Are you sure you want to delete this Phase?")) {
+                var thisnode = $(event.currentTarget);
+                var phaseWrapper = thisnode.closest('.phase-wrapper');
+                phaseWrapper.remove();
+                RoadmapConfig.prototype.configSave();
+            }
+        };
+
+        RoadmapConfig.prototype.deleteCycle = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirm("Are you sure you want to delete this Cycle?")) {
+                var thisnode = $(event.currentTarget);
+                var cycleWrapper = thisnode.closest('.cycle-wrapper');
+                var phaseContainer = thisnode.closest('.phase-container');
+                cycleWrapper.remove();
+                phaseContainer.find('.phase-title').triggerHandler("change");
+            }
+        };
+
+        RoadmapConfig.prototype.deleteStep = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirm("Are you sure you want to delete this Step?")) {
+                var thisnode = $(event.currentTarget);
+                var stepWrapper = thisnode.closest('.step-wrapper');
+                var cycleContainer = thisnode.closest('.cycle-container');
+                stepWrapper.remove();
+                cycleContainer.find('.cycle-title').triggerHandler("change");
+            }
         };
 
         return {
