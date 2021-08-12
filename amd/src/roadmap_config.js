@@ -116,6 +116,11 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                     phasesave.rebind_inputs();
 
                     RoadmapConfig.prototype.bindConfigSave();
+
+                    require(['theme_boost/loader']);
+                    require(['theme_boost/tooltip'], function(){
+                        $('[data-toggle="tooltip"]').tooltip();
+                    });
                 }).fail(notification.exception);
         };
 

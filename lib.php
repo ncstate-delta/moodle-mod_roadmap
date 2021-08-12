@@ -176,6 +176,11 @@ function roadmap_cm_info_view(cm_info $cm) {
                                                           !$step->incomplete &&
                                                           $completiondata->timemodified < $expectedcompletetime);
 
+                                if ($step->expectedcomplete == 1) {
+                                    $step->rollovertext = $step->rollovertext . PHP_EOL . 'Due: ' . PHP_EOL .
+                                        date("n/j/Y h:i A", $expectedcompletetime);
+                                }
+
                                 // Step-link Logic.
                                 if ($step->linksingleactivity == 1 && count($cmids) == 1) {
                                     // Check for linksingleactivity and create link.

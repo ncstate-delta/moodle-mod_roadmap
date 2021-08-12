@@ -61,8 +61,6 @@
     margin: 3px 0;
     font-size: 18px;
     font-weight: normal;
-    color: #000000;
-    text-decoration: none;
     background-color: transparent;
     height: 27px;
 }
@@ -111,13 +109,13 @@
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row .roadmap-topic-container .title {
     vertical-align: bottom;
     font-size: 12px;
-    color: #990000;
+    color: #000;
     padding-right: 3px;
     font-family: sans-serif;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row .roadmap-topic-container .learningobjectives {
-    color: #990000;
+    color: #000;
     font-size: 12px;
     font-family: sans-serif;
     vertical-align: bottom;
