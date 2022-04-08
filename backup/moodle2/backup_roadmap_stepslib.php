@@ -25,6 +25,10 @@
  */
 class backup_roadmap_activity_structure_step extends backup_activity_structure_step {
 
+    /**
+     * Define the structure for the roadmap activity
+     * @return void
+     */
     protected function define_structure() {
 
         // Define each element separated.
@@ -32,8 +36,37 @@ class backup_roadmap_activity_structure_step extends backup_activity_structure_s
             'name', 'intro', 'introformat', 'timemodified', 'configuration', 'learningobjectives', 'colors',
             'clodisplayposition', 'cloalignment', 'clodecoration', 'cloprefix'));
 
+        $phases = new backup_nested_element('phases');
+
+        $phase = new backup_nested_element('phase', array('id'), array(
+           'title', 'sort', 'roadmapid'
+        ));
+
+        $cycles = new backup_nested_element('cycles');
+
+        $cycle = new backup_nested_element('cycle', array('id'), array(
+            'title', 'subtitle', 'pagelink', 'learningobjectives', 'sort', 'phaseid'
+        ));
+
+        $steps = new backup_nested_element('steps');
+
+        $step = new backup_nested_element('step', array('id'), array(
+            'rollovertext', 'stepicon', 'completionmodules', 'linksingleactivity', 'pagelink', 'expectedcomplete',
+            'completionexpected_datetime', 'sort', 'cycleid'
+        ));
+
+        $roadmap->add_child($phases);
+        $phases->add_child($phase);
+        $phase->add_child($cycles);
+        $cycles->add_child($cycle);
+        $cycle->add_child($steps);
+        $steps->add_child($step);
+
         // Define sources.
         $roadmap->set_source_table('roadmap', array('id' => backup::VAR_ACTIVITYID));
+        $phase->set_source_table('roadmap_phase', array('roadmapid' => backup::VAR_PARENTID));
+        $cycle->set_source_table('roadmap_cycle', array('phaseid' => backup::VAR_PARENTID));
+        $step->set_source_table('roadmap_step', array('stepid' => backup::VAR_PARENTID));
 
         // Define file annotations.
         $roadmap->annotate_files('mod_roadmap', 'intro', null);

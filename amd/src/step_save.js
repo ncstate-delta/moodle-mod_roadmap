@@ -17,7 +17,6 @@
  * Handle opening a dialogue to configure scale data.
  *
  * @module     mod_roadmap/stepiconselect
- * @package    mod_roadmap
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery'],
@@ -49,6 +48,7 @@ define(['jquery'],
                 expectedComplete = 1;
             }
             var stepData = {
+                id: stepContainer.closest('.step-wrapper').data('stepid'),
                 rollovertext: stepContainer.find('.fitem input.step-rollovertext').val(),
                 stepicon: stepContainer.find('.fitem input.step-icon').val(),
                 completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),

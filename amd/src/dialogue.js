@@ -18,7 +18,6 @@
  * use the YUI version in AMD code until it is replaced.
  *
  * @module     mod_roadmap/dialogue
- * @package    mod_roadmap
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['core/yui'], function(Y) {

@@ -17,7 +17,6 @@
  * Handle opening a dialogue to configure scale data.
  *
  * @module     mod_roadmap/stepiconselect
- * @package    mod_roadmap
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadmap/dialogue'],
@@ -73,9 +72,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
             /**
              * Main initialisation.
              *
-             * @param {String} selectSelector The select box selector.
-             * @param {String} inputSelector The hidden input field selector.
-             * @param {String} triggerSelector The trigger selector.
              * @return {ScaleConfig} A new instance of ScaleConfig.
              * @method init
              */

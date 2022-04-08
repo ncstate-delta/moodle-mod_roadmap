@@ -17,7 +17,6 @@
  * Handle the configuration of the roadmap.
  *
  * @module     mod_roadmap/roadmapconfig
- * @package    mod_roadmap
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,6 +29,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         /**
          * Learning objectives config object.
          * @param {String} inputSelector The hidden input field selector.
+         * @param {String} inputConfig The hidden input configuration.
          */
         var RoadmapConfig = function(inputSelector, inputConfig) {
             this.inputSelector = inputSelector;
@@ -52,29 +52,20 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             }
             var config = JSON.parse(inputConfigVal);
 
-            var phaseId = 0;
-            var cycleId = 0;
-            var stepId = 0;
             $.each(config.phases, function(p) {
                 let phase = config.phases[p];
-                phaseId = phaseId + 1;
-                phase.id = phaseId;
                 phase.number = p + 1;
                 phase.index = p;
                 phase.configuration = JSON.stringify(phase);
 
                 $.each(phase.cycles, function(c) {
                     let cycle = phase.cycles[c];
-                    cycleId = cycleId + 1;
-                    cycle.id = cycleId;
                     cycle.number = c + 1;
                     cycle.index = c;
                     cycle.configuration = JSON.stringify(cycle);
 
                     $.each(cycle.steps, function(s) {
                         let step = cycle.steps[s];
-                        stepId = stepId + 1;
-                        step.id = stepId;
                         step.number = s + 1;
                         step.index = s;
                         step.configuration = JSON.stringify(step);
@@ -138,10 +129,13 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 let phaseDataObj = JSON.parse(phaseData);
                 phaseDataObj.index = index;
                 index = index + 1;
-                phaseDataObj.id = index;
                 roadmapData.push(phaseDataObj);
             });
-            $('input[name="roadmapconfiguration"]').val(JSON.stringify({ phases: roadmapData }));
+            $('input[name="roadmapconfiguration"]').val(JSON.stringify({ phases: roadmapData,
+                phaseDeletes: $('#phase-deletes').val(),
+                cycleDeletes: $('#cycle-deletes').val(),
+                stepDeletes: $('#step-deletes').val()
+            }));
         };
 
         RoadmapConfig.prototype.addPhase = function(event) {
@@ -150,7 +144,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
             var config = JSON.parse($('input[name="roadmapconfiguration"]').val());
             var nextIndex = config.phases.length;
-            var newPhase = {id: nextIndex+1, index: nextIndex, number: nextIndex+1};
+            var newPhase = {id: 0, index: nextIndex, number: nextIndex+1};
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
 
@@ -183,8 +177,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var cycleContainer = phaseContainer.children('.phase-cycles-container');
 
             var nextCycleIndex = cycleContainer.children('.cycle-wrapper').length;
-            var totalCycles = $('.phase-cycles-container > .cycle-wrapper').length;
-            var newCycle = {id: totalCycles+1, index: nextCycleIndex, number: nextCycleIndex+1};
+            var newCycle = {id: 0, index: nextCycleIndex, number: nextCycleIndex+1};
 
             templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then(function(html, js) {
@@ -213,10 +206,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var stepsContainer = cycleContainer.children('.cycle-steps-container');
 
             var nextStepIndex = stepsContainer.children('.step-wrapper').length;
-            var totalSteps = $('.step-wrapper').length;
             var dtpdata = JSON.parse($('input[name="datetimepickerdata"]').val());
             var newStep = {
-                id: totalSteps+1,
+                id: 0,
                 index: nextStepIndex,
                 number: nextStepIndex+1,
                 days: dtpdata.days,
@@ -278,6 +270,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             if (confirm("Are you sure you want to delete this Phase?")) {
                 var thisnode = $(event.currentTarget);
                 var phaseWrapper = thisnode.closest('.phase-wrapper');
+                var phaseId = phaseWrapper.data('phaseid');
+                $('#phase-deletes').val($('#phase-deletes').val() + phaseId + ',');
                 phaseWrapper.remove();
                 RoadmapConfig.prototype.configSave();
             }
@@ -290,6 +284,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 var thisnode = $(event.currentTarget);
                 var cycleWrapper = thisnode.closest('.cycle-wrapper');
                 var phaseContainer = thisnode.closest('.phase-container');
+                var cycleId = cycleWrapper.data('cycleid');
+                $('#cycle-deletes').val($('#cycle-deletes').val() + cycleId + ',');
                 cycleWrapper.remove();
                 phaseContainer.find('.phase-title').triggerHandler("change");
             }
@@ -302,6 +298,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 var thisnode = $(event.currentTarget);
                 var stepWrapper = thisnode.closest('.step-wrapper');
                 var cycleContainer = thisnode.closest('.cycle-container');
+                var stepId = stepWrapper.data('stepid');
+                $('#step-deletes').val($('#step-deletes').val() + stepId + ',');
                 stepWrapper.remove();
                 cycleContainer.find('.cycle-title').triggerHandler("change");
             }
@@ -397,6 +395,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
              * Main initialisation.
              *
              * @param {String} inputSelector The hidden input field selector.
+             * @param {String} inputConfig The hidden input configuration.
              * @return {LearningObjectivesConfig} A new instance of PhasesConfig.
              * @method init
              */

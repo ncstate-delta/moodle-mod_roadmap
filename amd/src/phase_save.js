@@ -17,7 +17,6 @@
  * Handle opening a dialogue to configure scale data.
  *
  * @module     mod_roadmap/stepiconselect
- * @package    mod_roadmap
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery'],
@@ -43,10 +42,10 @@ define(['jquery'],
                 let cycleDataObj = JSON.parse(cycleData);
                 cycleDataObj.index = index;
                 index = index + 1;
-                cycleDataObj.id = index;
                 phaseCycles.push(cycleDataObj);
             });
             var phaseData = {
+                id: phaseContainer.closest('.phase-wrapper').data('phaseid'),
                 title: phaseContainer.find('.fitem input.phase-title').val(),
                 cycles: phaseCycles,
             };

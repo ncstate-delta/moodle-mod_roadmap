@@ -17,7 +17,6 @@
  * Handle the configuration of the roadmap.
  *
  * @module     mod_roadmap/roadmapconfig
- * @package    mod_roadmap
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +26,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
         /**
          * Learning objectives config object.
-         * @param {String} inputSelector The hidden input field selector.
+         * @param {String} lo_inputSelector The hidden input field selector for learning objectives.
+         * @param {String} lo_inputConfig The hidden input configuration for learning objectives.
+         * @param {String} rm_inputSelector The hidden input field selector for the roadmap.
+         * @param {String} rm_inputConfig The hidden input configuration for the roadmap.
          */
         var Configuration = function(lo_inputSelector, lo_inputConfig, rm_inputSelector, rm_inputConfig) {
             LearningObjectivesConfig.init(lo_inputSelector, lo_inputConfig);
@@ -40,7 +42,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             /**
              * Main initialisation.
              *
-             * @param {String} inputSelector The hidden input field selector.
+             * @param {String} lo_inputSelector The hidden input field selector for learning objectives.
+             * @param {String} lo_inputConfig The hidden input configuration for learning objectives.
+             * @param {String} rm_inputSelector The hidden input field selector for the roadmap.
+             * @param {String} rm_inputConfig The hidden input configuration for the roadmap.
              * @return {LearningObjectivesConfig} A new instance of PhasesConfig.
              * @method init
              */

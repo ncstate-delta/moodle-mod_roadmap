@@ -17,7 +17,6 @@
  * Handle opening a dialogue to configure scale data.
  *
  * @module     mod_roadmap/stepiconselect
- * @package    mod_roadmap
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery'],
@@ -55,6 +54,7 @@ define(['jquery'],
             });
 
             var cycleData = {
+                id: cycleContainer.closest('.cycle-wrapper').data('cycleid'),
                 title: cycleContainer.find('.fitem input.cycle-title').val(),
                 subtitle: cycleContainer.find('.fitem input.cycle-subtitle').val(),
                 pagelink: cycleContainer.find('.fitem input.cycle-pagelink').val(),

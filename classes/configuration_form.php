@@ -108,7 +108,7 @@ class mod_roadmap_configuration_form extends moodleform {
         // Roadmap Configuration.
         $mform->addElement('hidden', 'roadmapconfiguration');
         $mform->setType('roadmapconfiguration', PARAM_RAW);
-        $mform->setDefault('roadmapconfiguration', roadmap_configuration_edit($roadmap->configuration));
+        $mform->setDefault('roadmapconfiguration', roadmap_configuration_edit($roadmap->id));
 
         $mform->addElement('html', '<div id="roadmapconfiguration"></div>', get_string('phases', 'roadmap'));
 

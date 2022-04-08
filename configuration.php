@@ -62,6 +62,10 @@ if ($configurationform->is_cancelled()) {
 // Get form data.
 $data = $configurationform->get_submitted_data();
 if ($data) {
+    
+    // Update phase, cycle, step tables
+    roadmap_configuration_save($data->roadmapconfiguration, $roadmap->id);
+    
     $sql = "UPDATE {roadmap}
                    SET configuration = ?,
                        learningobjectives = ?,
@@ -71,7 +75,9 @@ if ($data) {
                        clodecoration = ?,
                        cloprefix = ?
                  WHERE id = ?";
-    $DB->execute($sql, array(roadmap_configuration_save($data->roadmapconfiguration), $data->learningobjectivesconfiguration,
+
+    // Any saves from this version on will clear the configuration field.  Soon to be deprecated.
+    $DB->execute($sql, array('', $data->learningobjectivesconfiguration,
         $data->phasecolorpattern, $data->displayposition, $data->cyclealignment, $data->cycledecoration,
         $data->cloprefix, $roadmap->id));
 

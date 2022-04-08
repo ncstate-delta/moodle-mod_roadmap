@@ -112,127 +112,137 @@ function roadmap_cm_info_view(cm_info $cm) {
     $clocontent = '';
 
     if (!empty($roadmap->configuration)) {
+        roadmap_configuration_save($roadmap->configuration, $roadmap->id);
+    }
 
-        $colorset = roadmap_color_sets($roadmap->colors);
-        $colorcount = count($colorset);
 
-        $data = json_decode($roadmap->configuration);
-        $completion = new completion_info($COURSE);
+    $colorset = roadmap_color_sets($roadmap->colors);
+    $colorcount = count($colorset);
 
-        $colorindex = 0;
-        foreach ($data->phases as $phase) {
-            $phase->color = $colorset[$colorindex];
+    $completion = new completion_info($COURSE);
 
-            if ($colorindex == $colorcount - 1) {
-                $colorindex = 0;
-            } else {
-                $colorindex += 1;
+    $colorindex = 0;
+
+    $data = new \stdClass();
+    $data->phases = [];
+    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id]);
+    foreach ($phases as $phase) {
+        $phase->color = $colorset[$colorindex];
+
+        if ($colorindex == $colorcount - 1) {
+            $colorindex = 0;
+        } else {
+            $colorindex += 1;
+        }
+
+        $phase->cycles = [];
+        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id]);
+        foreach ($cycles as $cycle) {
+
+            if (isset($cycle->learningobjectives) && $cycle->learningobjectives !== '') {
+                $learningobjectivenumbers = [];
+                foreach (explode(",", $cycle->learningobjectives) as $loids) {
+                    $learningobjectivenumbers[] = $loids + 1;
+                }
+                $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
             }
 
-            if (isset($phase->cycles)) {
-                foreach ($phase->cycles as $cycle) {
+            $cycle->steps = [];
+            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
+            foreach ($steps as $step) {
 
-                    if (isset($cycle->learningobjectives) && $cycle->learningobjectives !== '') {
-                        $learningobjectivenumbers = [];
-                        foreach (explode(",", $cycle->learningobjectives) as $loids) {
-                            $learningobjectivenumbers[] = $loids + 1;
-                        }
-                        $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
+                if (!isset($step->completionmodules)) {
+                    $step->completionmodules = '';
+                }
+                $cmids = explode(',', $step->completionmodules);
+
+                $step->completedontime = false;
+                $step->incomplete = false;
+
+                if (!empty($step->completionmodules)) {
+
+                    if (property_exists($step, 'completionexpected_datetime')) {
+                        $expectedcompletetime = (int)$step->completionexpected_datetime;
+                    } else {
+                        // Eventually this can be removed.  This is the old bad way.
+                        $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
+                            $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
+                            $step->completionexpected_hour . ':' . $step->completionexpected_minute);
                     }
 
-                    if (isset($cycle->steps)) {
-                        foreach ($cycle->steps as $step) {
-                            if (!isset($step->completionmodules)) {
-                                $step->completionmodules = '';
-                            }
-                            $cmids = explode(',', $step->completionmodules);
+                    foreach ($cmids as $cmid) {
+                        $cminspect = new stdClass();
+                        $cminspect->id = (int)$cmid;
+                        $completiondata = $completion->get_data($cminspect);
 
-                            $step->completedontime = false;
-                            $step->incomplete = false;
-
-                            if (!empty($step->completionmodules)) {
-
-                                if (property_exists($step, 'completionexpected_datetime')) {
-                                    $expectedcompletetime = (int)$step->completionexpected_datetime;
-                                } else {
-                                    // Eventually this can be removed.  This is the old bad way.
-                                    $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
-                                        $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
-                                        $step->completionexpected_hour . ':' . $step->completionexpected_minute);
-                                }
-
-                                foreach ($cmids as $cmid) {
-                                    $cminspect = new stdClass();
-                                    $cminspect->id = (int)$cmid;
-                                    $completiondata = $completion->get_data($cminspect);
-
-                                    if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
-                                        $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
-                                    ) {
-                                        $step->incomplete = true;
-                                    }
-                                }
-                                $step->completedontime = ($step->expectedcomplete == 1 &&
-                                                          !$step->incomplete &&
-                                                          $completiondata->timemodified < $expectedcompletetime);
-
-                                if ($step->expectedcomplete == 1) {
-                                    $step->rollovertext = $step->rollovertext . PHP_EOL . 'Due: ' . PHP_EOL .
-                                        date("n/j/Y h:i A", $expectedcompletetime);
-                                }
-
-                                // Step-link Logic.
-                                if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                                    // Check for linksingleactivity and create link.
-                                    $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
-                                } else if ($step->pagelink != '') {
-                                    // Or use provided link if available.
-                                    $step->stepurl = $step->pagelink;
-                                } else {
-                                    // Or don't link at all.
-                                    $step->stepurl = false;
-                                }
-                            } else {
-                                $step->incomplete = true;
-                            }
-
-                            if (!empty($step->stepicon)) {
-                                // Read icon and grab svg contents.
-                                $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
-                                if (file_exists($iconfilename)) {
-                                    $iconfilecontents = file_get_contents($iconfilename);
-                                    $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' .
-                                        $iconfilecontents .
-                                        '</span>';
-                                }
-                            }
+                        if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
+                            $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
+                        ) {
+                            $step->incomplete = true;
                         }
                     }
+                    $step->completedontime = ($step->expectedcomplete == 1 &&
+                                              !$step->incomplete &&
+                                              $completiondata->timemodified < $expectedcompletetime);
+
+                    if ($step->expectedcomplete == 1) {
+                        $step->rollovertext = $step->rollovertext . PHP_EOL . 'Due: ' . PHP_EOL .
+                            date("n/j/Y h:i A", $expectedcompletetime);
+                    }
+
+                    // Step-link Logic.
+                    if ($step->linksingleactivity == 1 && count($cmids) == 1) {
+                        // Check for linksingleactivity and create link.
+                        $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+                    } else if ($step->pagelink != '') {
+                        // Or use provided link if available.
+                        $step->stepurl = $step->pagelink;
+                    } else {
+                        // Or don't link at all.
+                        $step->stepurl = false;
+                    }
+                } else {
+                    $step->incomplete = true;
                 }
-            }
-        }
 
-        if (!empty($roadmap->learningobjectives)) {
-            $clodata = json_decode($roadmap->learningobjectives);
-
-            if (isset($clodata->learningobjectives)) {
-                $number = 1;
-                foreach ($clodata->learningobjectives as $learningobjective) {
-                    $learningobjective->prefix = $roadmap->cloprefix;
-                    $learningobjective->number = $number;
-                    $number += 1;
+                if (!empty($step->stepicon)) {
+                    // Read icon and grab svg contents.
+                    $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
+                    if (file_exists($iconfilename)) {
+                        $iconfilecontents = file_get_contents($iconfilename);
+                        $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' .
+                            $iconfilecontents .
+                            '</span>';
+                    }
                 }
-                $clocontent = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clodata);
+                $cycle->steps[] = $step;
             }
+            $phase->cycles[] = $cycle;
         }
+        $data->phases[] = $phase;
+    }
 
-        if ($roadmap->clodisplayposition == 0) {
-            $content .= $clocontent;
+    if (!empty($roadmap->learningobjectives)) {
+        $clodata = json_decode($roadmap->learningobjectives);
+
+        if (isset($clodata->learningobjectives)) {
+            $number = 1;
+            foreach ($clodata->learningobjectives as $learningobjective) {
+                $learningobjective->prefix = $roadmap->cloprefix;
+                $learningobjective->number = $number;
+                $number += 1;
+            }
+            $clocontent = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clodata);
         }
-        $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
-        if ($roadmap->clodisplayposition == 1) {
-            $content .= $clocontent;
-        }
+    }
+
+    if ($roadmap->clodisplayposition == 0) {
+        $content .= $clocontent;
+    }
+
+    $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
+    if ($roadmap->clodisplayposition == 1) {
+        $content .= $clocontent;
     }
 
     // Show configuration link if editing is on.

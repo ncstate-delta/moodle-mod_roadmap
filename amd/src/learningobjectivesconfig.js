@@ -17,7 +17,6 @@
  * Handle the configuration of learning objectives.
  *
  * @module     mod_roadmap/learningobjectivesconfig
- * @package    mod_roadmap
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,6 +26,7 @@ define(['jquery', 'core/notification', 'core/templates'],
         /**
          * Learning objectives config object.
          * @param {String} inputSelector The hidden input field selector.
+         * @param {String} inputConfig The hidden input field configuration.
          */
         var LearningObjectivesConfig = function(inputSelector, inputConfig) {
             this.inputSelector = $(inputSelector).parent();
@@ -130,6 +130,7 @@ define(['jquery', 'core/notification', 'core/templates'],
              * Main initialisation.
              *
              * @param {String} inputSelector The hidden input field selector.
+             * @param {String} inputConfig The hidden input configuration.
              * @return {LearningObjectivesConfig} A new instance of LearningObjectivesConfig.
              * @method init
              */

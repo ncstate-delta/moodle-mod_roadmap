@@ -25,66 +25,175 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->dirroot/mod/roadmap/lib.php");
 
-function roadmap_configuration_edit($configjson) {
-    $data = json_decode($configjson);
-    if (empty($data)) {
-        $data = new \stdClass();
-    }
-    if (!isset($data->phases)) {
-        $data->phases = [];
-    }
-    foreach ($data->phases as $phase) {
-        if (!isset($phase->cycles)) {
-            $phase->cycles = [];
-        }
-        foreach ($phase->cycles as $cycle) {
-            if (!isset($cycle->steps)) {
-                $cycle->steps = [];
-            }
-            foreach ($cycle->steps as $step) {
+function roadmap_configuration_edit($roadmapid) {
+    global $DB;
+    $data = new \stdClass();
+    $data->phases = [];
+
+    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmapid]);
+    foreach ($phases as $phase) {
+        $phase->cycles = [];
+
+        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id]);
+        foreach ($cycles as $cycle) {
+            $cycle->steps = [];
+
+            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
+            foreach ($steps as $step) {
+
                 roadmap_datetime_picker_data($step);
+                $cycle->steps[] = $step;
             }
+            $phase->cycles[] = $cycle;
         }
+        $data->phases[] = $phase;
     }
+
     return json_encode($data);
 }
 
-function roadmap_configuration_save($configjson) {
+function roadmap_delete_phase($phaseid) {
+    global $DB;
+
+    // Delete cycles and cascade delete steps.
+    $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phaseid]);
+    foreach ($cycles as $cycle) {
+        roadmap_delete_cycle($cycle->id);
+    }
+
+    $DB->delete_records('roadmap_phase', ['id' => $phaseid]);
+}
+
+function roadmap_delete_cycle($cycleid) {
+    global $DB;
+
+    // Delete all child steps of the cycle
+    $DB->delete_records('roadmap_step', ['cycleid' => $cycleid]);
+    // Delete the cycle itself.
+    $DB->delete_records('roadmap_cycle', ['id' => $cycleid]);
+}
+
+
+
+function roadmap_configuration_save($configjson, $roadmap_id) {
+    global $DB;
+
     $data = json_decode($configjson);
 
     if (!isset($data->phases)) {
         $data->phases = [];
     }
+
+    // Delete phases that previously existed. that were deleted this submission.
+    if (property_exists($data, 'phaseDeletes')) {
+        $phase_deletes = explode(',', $data->phaseDeletes);
+        foreach ($phase_deletes as $phase_delete) {
+            // Cascade deletes to cycles and steps below.
+            roadmap_delete_phase($phase_delete);
+        }
+    }
+
+    // Delete cycles that previously existed that were deleted this submission.
+    if (property_exists($data, 'cycleDeletes')) {
+        $cycle_deletes = explode(',', $data->cycleDeletes);
+        foreach ($cycle_deletes as $cycle_delete) {
+            // Cascade deletes to cycles and steps below.
+            roadmap_delete_cycle($cycle_delete);
+        }
+    }
+
+    // Delete steps that previously existed that were deleted this submission.
+    if (property_exists($data, 'stepDeletes')) {
+        $step_deletes = explode(',', $data->stepDeletes);
+        foreach ($step_deletes as $step_delete) {
+            $DB->delete_records('roadmap_step', ['id' => $step_delete]);
+        }
+    }
+
+    $phase_sort = 0;
     foreach ($data->phases as $phase) {
         if (!isset($phase->cycles)) {
             $phase->cycles = [];
         }
+
+        // Save the phase specific data
+        $phase_data = [
+            'title' => $phase->title,
+            'sort' => $phase_sort,
+            'roadmapid' => $roadmap_id,
+        ];
+
+        if (!empty($phase->id)) {
+            // Update
+            $phase_data['id'] = $phase->id;
+            $DB->update_record('roadmap_phase', $phase_data);
+        } else {
+            // Add
+            $phase->id = $DB->insert_record('roadmap_phase', $phase_data);
+        }
+
+        $cycle_sort = 0;
         foreach ($phase->cycles as $cycle) {
             if (!isset($cycle->steps)) {
                 $cycle->steps = [];
             }
+
+            // Save the phase specific data
+            $cycle_data = [
+                'title' => $cycle->title,
+                'subtitle' => $cycle->subtitle,
+                'pagelink' => $cycle->pagelink,
+                'learningobjectives' => $cycle->learningobjectives,
+                'sort' => $cycle_sort,
+                'phaseid' => $phase->id,
+            ];
+
+            if (!empty($cycle->id)) {
+                // Update
+                $cycle_data['id'] = $cycle->id;
+                $DB->update_record('roadmap_cycle', $cycle_data);
+            } else {
+                // Add
+                $cycle->id = $DB->insert_record('roadmap_cycle', $cycle_data);
+            }
+
+            $step_sort = 0;
             foreach ($cycle->steps as $step) {
                 $strdatetime = sprintf("%02d", $step->completionexpected_month) . '/' .
-                               sprintf("%02d", $step->completionexpected_day) . '/' .
-                               sprintf("%04d", $step->completionexpected_year) . ' ' .
-                               sprintf("%02d", $step->completionexpected_hour) . ':' .
-                               sprintf("%02d", $step->completionexpected_minute) . ':00';
+                    sprintf("%02d", $step->completionexpected_day) . '/' .
+                    sprintf("%04d", $step->completionexpected_year) . ' ' .
+                    sprintf("%02d", $step->completionexpected_hour) . ':' .
+                    sprintf("%02d", $step->completionexpected_minute) . ':00';
                 $step->completionexpected_datetime = strtotime($strdatetime);
-                
-                unset($step->completionexpected_month);
-                unset($step->completionexpected_day);
-                unset($step->completionexpected_year);
-                unset($step->completionexpected_hour);
-                unset($step->completionexpected_minute);
-                unset($step->days);
-                unset($step->months);
-                unset($step->years);
-                unset($step->hours);
-                unset($step->minutes);
+
+                // Save the phase specific data
+                $step_data = [
+                    'rollovertext' => $step->rollovertext,
+                    'stepicon' => $step->stepicon,
+                    'completionmodules' => $step->completionmodules,
+                    'linksingleactivity' => $step->linksingleactivity,
+                    'pagelink' => $step->pagelink,
+                    'expectedcomplete' => $step->expectedcomplete,
+                    'completionexpected_datetime' => $step->completionexpected_datetime,
+                    'sort' => $step_sort,
+                    'cycleid' => $cycle->id,
+                ];
+
+                if (!empty($step->id)) {
+                    // Update
+                    $step_data['id'] = $step->id;
+                    $DB->update_record('roadmap_step', $step_data);
+                } else {
+                    // Add
+                    $step->id = $DB->insert_record('roadmap_step', $step_data);
+                }
+                $step_sort++;
             }
+            $cycle_sort++;
         }
+        $phase_sort++;
     }
-    return json_encode($data);
+    return true;
 }
 
 function roadmap_datetime_picker_data($step) {
