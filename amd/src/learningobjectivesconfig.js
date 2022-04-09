@@ -77,6 +77,15 @@ define(['jquery', 'core/notification', 'core/templates'],
                                 });
                             }).fail(notification.exception);
                     });
+                    $('.learningobjective-delete-control').click(function (e) {
+                        LearningObjectivesConfig.prototype.deleteLearningObjective(e);
+                    });
+                    $('.learningobjective-up-control').click(function (e) {
+                        LearningObjectivesConfig.prototype.upLearningObjective(e);
+                    });
+                    $('.learningobjective-down-control').click(function (e) {
+                        LearningObjectivesConfig.prototype.downLearningObjective(e);
+                    });
                 }).fail(notification.exception);
         };
 
@@ -122,6 +131,42 @@ define(['jquery', 'core/notification', 'core/templates'],
                 });
 
             });
+        };
+
+
+        LearningObjectivesConfig.prototype.deleteLearningObjective = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirm("Are you sure you want to delete this Learning Objective?")) {
+                var thisnode = $(event.currentTarget);
+                var loItem = thisnode.closest('.learningobjective');
+                loItem.remove();
+                LearningObjectivesConfig.prototype.saveConfig();
+            }
+        };
+
+        LearningObjectivesConfig.prototype.upLearningObjective = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var loItem = thisnode.closest('.learningobjective');
+            var prevloItem = loItem.prev();
+
+            loItem.insertBefore(prevloItem);
+            LearningObjectivesConfig.prototype.saveConfig();
+        };
+
+        LearningObjectivesConfig.prototype.downLearningObjective = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.currentTarget);
+            var loItem = thisnode.closest('.learningobjective');
+            var nextloItem = loItem.next();
+
+            loItem.insertAfter(nextloItem);
+            LearningObjectivesConfig.prototype.saveConfig();
         };
 
         return {

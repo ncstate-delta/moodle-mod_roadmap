@@ -171,6 +171,10 @@ function roadmap_cm_info_view(cm_info $cm) {
                     }
 
                     foreach ($cmids as $cmid) {
+                        if (!$cm_check = $DB->get_record('course_modules', array('id' => $cmid))) {
+                            continue;
+                        }
+
                         $cminspect = new stdClass();
                         $cminspect->id = (int)$cmid;
                         $completiondata = $completion->get_data($cminspect);
@@ -192,8 +196,14 @@ function roadmap_cm_info_view(cm_info $cm) {
 
                     // Step-link Logic.
                     if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                        // Check for linksingleactivity and create link.
-                        $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+
+                        if ($cm_check = $DB->get_record('course_modules', array('id' => (int)$cmids[0]))) {
+                            // Check for linksingleactivity and create link.
+                            $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+                        } else {
+                            $step->stepurl = false;
+                        }
+
                     } else if ($step->pagelink != '') {
                         // Or use provided link if available.
                         $step->stepurl = $step->pagelink;
@@ -236,12 +246,12 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
     }
 
-    if ($roadmap->clodisplayposition == 0) {
+    if ($roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) >0) {
         $content .= $clocontent;
     }
 
     $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
-    if ($roadmap->clodisplayposition == 1) {
+    if ($roadmap->clodisplayposition == 1 && count($clodata->learningobjectives) >0) {
         $content .= $clocontent;
     }
 
