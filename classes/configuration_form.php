@@ -52,7 +52,7 @@ class mod_roadmap_configuration_form extends moodleform {
         // Phase color pattern drown selector.
         $colorpatterns = [
             0 => 'All Secondary Brand Colors (Default)',
-            -1 => 'Custom',
+            // -1 => 'Custom',
         ];
         $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
         $mform->setDefault('phasecolorpattern', $roadmap->colors);

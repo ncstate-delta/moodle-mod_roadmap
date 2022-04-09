@@ -40,7 +40,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
             templates.render('mod_roadmap/configuration_iconselect', iconsData)
                 .done(function(html) {
                     new Dialogue(
-                        'Select Icon for Cycle',
+                        'Select Icon for Step',
                         html,
                         self.initIconConfig.bind(self)
                     );
