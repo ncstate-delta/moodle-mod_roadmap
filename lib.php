@@ -190,7 +190,9 @@ function roadmap_cm_info_view(cm_info $cm) {
                                               $completiondata->timemodified < $expectedcompletetime);
 
                     if ($step->expectedcomplete == 1) {
-                        $step->rollovertext = $step->rollovertext . PHP_EOL . 'Due: ' . PHP_EOL .
+                        $staricon = $CFG->wwwroot . '/mod/roadmap/pix/star.svg';
+                        $step->rollovertext = (!empty($step->rollovertext) ? $step->rollovertext . PHP_EOL . '<br /> ' : '') .
+                            '<img class="rollover-star" src="' . $staricon .  '" /> By: ' .
                             date("n/j/Y h:i A", $expectedcompletetime);
                     }
 
