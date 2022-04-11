@@ -75,7 +75,7 @@ function roadmap_delete_cycle($cycleid) {
 
 
 
-function roadmap_configuration_save($configjson, $roadmap_id) {
+function roadmap_configuration_save($configjson, $roadmap_id, $conversion = false) {
     global $DB;
 
     $data = json_decode($configjson);
@@ -123,7 +123,7 @@ function roadmap_configuration_save($configjson, $roadmap_id) {
             'roadmapid' => $roadmap_id,
         ];
 
-        if (!empty($phase->id)) {
+        if (!empty($phase->id) && !$conversion) {
             // Update
             $phase_data['id'] = $phase->id;
             $DB->update_record('roadmap_phase', $phase_data);
@@ -148,7 +148,7 @@ function roadmap_configuration_save($configjson, $roadmap_id) {
                 'phaseid' => $phase->id,
             ];
 
-            if (!empty($cycle->id)) {
+            if (!empty($cycle->id) && !$conversion) {
                 // Update
                 $cycle_data['id'] = $cycle->id;
                 $DB->update_record('roadmap_cycle', $cycle_data);
@@ -159,12 +159,21 @@ function roadmap_configuration_save($configjson, $roadmap_id) {
 
             $step_sort = 0;
             foreach ($cycle->steps as $step) {
-                $strdatetime = sprintf("%02d", $step->completionexpected_month) . '/' .
-                    sprintf("%02d", $step->completionexpected_day) . '/' .
-                    sprintf("%04d", $step->completionexpected_year) . ' ' .
-                    sprintf("%02d", $step->completionexpected_hour) . ':' .
-                    sprintf("%02d", $step->completionexpected_minute) . ':00';
-                $step->completionexpected_datetime = strtotime($strdatetime);
+
+                if (
+                    property_exists($step, 'completionexpected_month') &&
+                    property_exists($step, 'completionexpected_day') &&
+                    property_exists($step, 'completionexpected_year') &&
+                    property_exists($step, 'completionexpected_hour') &&
+                    property_exists($step, 'completionexpected_minute')
+                ) {
+                    $strdatetime = sprintf("%02d", $step->completionexpected_month) . '/' .
+                        sprintf("%02d", $step->completionexpected_day) . '/' .
+                        sprintf("%04d", $step->completionexpected_year) . ' ' .
+                        sprintf("%02d", $step->completionexpected_hour) . ':' .
+                        sprintf("%02d", $step->completionexpected_minute) . ':00';
+                    $step->completionexpected_datetime = strtotime($strdatetime);
+                }
 
                 // Save the phase specific data
                 $step_data = [
@@ -179,7 +188,7 @@ function roadmap_configuration_save($configjson, $roadmap_id) {
                     'cycleid' => $cycle->id,
                 ];
 
-                if (!empty($step->id)) {
+                if (!empty($step->id) && !$conversion) {
                     // Update
                     $step_data['id'] = $step->id;
                     $DB->update_record('roadmap_step', $step_data);
@@ -193,6 +202,7 @@ function roadmap_configuration_save($configjson, $roadmap_id) {
         }
         $phase_sort++;
     }
+
     return true;
 }
 

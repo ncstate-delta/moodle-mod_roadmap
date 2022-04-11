@@ -114,7 +114,11 @@ function roadmap_cm_info_view(cm_info $cm) {
     $clocontent = '';
 
     if (!empty($roadmap->configuration)) {
-        roadmap_configuration_save($roadmap->configuration, $roadmap->id);
+        if (roadmap_configuration_save($roadmap->configuration, $roadmap->id, true)) {
+            // After conversion from json data to database, clear the configuration field.
+            $roadmap->configuration = '';
+            $DB->update_record('roadmap', $roadmap);
+        }
     }
 
 
@@ -172,6 +176,8 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $step->completionexpected_hour . ':' . $step->completionexpected_minute);
                     }
 
+                    $cmid_complete = 0;
+                    $cmid_total = 0;
                     foreach ($cmids as $cmid) {
                         if (!$cm_check = $DB->get_record('course_modules', array('id' => $cmid))) {
                             continue;
@@ -185,11 +191,19 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
                         ) {
                             $step->incomplete = true;
+                        } else {
+                            $cmid_complete++;
                         }
+                        $cmid_total++;
                     }
                     $step->completedontime = ($step->expectedcomplete == 1 &&
                                               !$step->incomplete &&
                                               $completiondata->timemodified < $expectedcompletetime);
+
+                    $step->lowontime = ($step->expectedcomplete == 1 &&
+                        $step->incomplete &&
+                        time() + 86400 > $expectedcompletetime &&
+                        time() < $expectedcompletetime);
 
                     if ($step->expectedcomplete == 1) {
                         $staricon = $CFG->wwwroot . '/mod/roadmap/pix/star.svg';
@@ -223,8 +237,12 @@ function roadmap_cm_info_view(cm_info $cm) {
                     // Read icon and grab svg contents.
                     $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
                     if (file_exists($iconfilename)) {
+                        $cmid_percent = 0;
+                        if ($cmid_total > 0) {
+                            $cmid_percent = ((int)($cmid_complete / $cmid_total * 100))/100;
+                        }
                         $iconfilecontents = file_get_contents($iconfilename);
-                        $step->stepiconsvg = '<span class="step-icon-' . $phase->id . '">' .
+                        $step->stepiconsvg = '<span data-progress="' . $cmid_percent . '" class="bg step-icon-' . $phase->id . '">' .
                             $iconfilecontents .
                             '</span>';
                     }
@@ -268,6 +286,10 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     $cm->set_content($content);
 
+
+    // Add js.
+    global $PAGE;
+    $PAGE->requires->js_call_amd('mod_roadmap/roadmap_view', 'init', array());
 }
 
 function get_activity_url($cmid, $courseid) {

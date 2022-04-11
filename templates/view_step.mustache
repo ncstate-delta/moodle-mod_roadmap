@@ -13,6 +13,14 @@
 <div class="roadmap-step {{# incomplete }}incomplete{{/ incomplete }}" title="{{ rollovertext }}" alt="{{ rollovertext }}" data-html="true" data-clickable="0" data-toggle="tooltip">
     {{# stepurl }}<a href="{{ stepurl }}">{{/stepurl}}
     {{# stepiconsvg }}{{{ stepiconsvg }}}{{/ stepiconsvg }}
+        {{# lowontime }}
+            <svg class="roadmap-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" style="pointer-events: none; display: true; position: absolute; top: -1px; right: -1px; width: 13px; height: 13px">
+                <defs><style>.cls-1{fill:#c00;}.cls-2{fill:#fff;}</style></defs>
+                <circle class="cls-1" cx="7" cy="7" r="7"/>
+                <circle class="cls-2" cx="7" cy="10.99" r="1.12"/>
+                <path class="cls-2" d="M6.38,3.88c0-.82.28-1.49,1.12-1.49s1.12.67,1.12,1.49c0,1.69-.5,4.88-1.12,4.88S6.38,5.57,6.38,3.88Z" transform="translate(-0.5 -0.5)"/>
+            </svg>
+        {{/ lowontime }}
         {{# completedontime }}
             <svg version="1.1" class="roadmap-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" xml:space="preserve" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: true; position: absolute; top: -8px; right: -6px; width: 20px; height: 20px">
                 <polygon points="4.29 9.3 1.07 6.17 5.51 5.52 7.5 1.5 9.48 5.52 13.93 6.17 10.71 9.3 11.47 13.72 7.5 11.63 3.53 13.72 4.29 9.3" fill="#ff9000" stroke="#fff" -width="1" ;=""></polygon>
