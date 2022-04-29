@@ -66,7 +66,7 @@ class backup_roadmap_activity_structure_step extends backup_activity_structure_s
         $roadmap->set_source_table('roadmap', array('id' => backup::VAR_ACTIVITYID));
         $phase->set_source_table('roadmap_phase', array('roadmapid' => backup::VAR_PARENTID));
         $cycle->set_source_table('roadmap_cycle', array('phaseid' => backup::VAR_PARENTID));
-        $step->set_source_table('roadmap_step', array('stepid' => backup::VAR_PARENTID));
+        $step->set_source_table('roadmap_step', array('cycleid' => backup::VAR_PARENTID));
 
         // Define file annotations.
         $roadmap->annotate_files('mod_roadmap', 'intro', null);
