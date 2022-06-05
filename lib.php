@@ -156,6 +156,8 @@ function roadmap_cm_info_view(cm_info $cm) {
             $cycle->steps = [];
             $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
             foreach ($steps as $step) {
+                $cmid_complete = 0;
+                $cmid_total = 0;
 
                 if (!isset($step->completionmodules)) {
                     $step->completionmodules = '';
@@ -176,8 +178,6 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $step->completionexpected_hour . ':' . $step->completionexpected_minute);
                     }
 
-                    $cmid_complete = 0;
-                    $cmid_total = 0;
                     foreach ($cmids as $cmid) {
                         if (!$cm_check = $DB->get_record('course_modules', array('id' => $cmid))) {
                             continue;
