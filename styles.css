@@ -161,9 +161,12 @@
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step.incomplete .roadmap-background-circle {
-     fill:#ccc;
+     fill: #ccc;
 }
 
+#roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step.incomplete .circle-bg {
+    stroke: #c0c0c0;
+}
 
 
 /* Configuration CSS */

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_25" data-name="Layer 25"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
     <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#c0c0c0" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
+    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
     <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#4156A1" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
+    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
 </g><path d="M11.39,19.48A1.5,1.5,0,1,1,9.89,18a1.5,1.5,0,0,1,1.5,1.5" fill="#fff"/><path d="M8.39,16.25h3V12.48S15,13,15,7.85C15,4.33,11.63,4,10.42,4S5.16,3.47,5.16,7.2H7s-.39-1.42,3.07-1.42,2.55,4.34,1.28,4.34h-3Z" fill="#fff"/><polygon points="13.94 17.88 16.58 17.88 18.04 21.29 24.36 10.61 27.91 10.61 17.82 25.67 13.94 17.88" fill="#fff"/></g></svg>
