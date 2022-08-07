@@ -36,6 +36,24 @@
     margin: 0;
     font-weight: normal;
     vertical-align: middle;
+    cursor: pointer;
+}
+
+#roadmap-phase-container .roadmap-phase h2.roadmap-phase-title .roadmap-phase-progress-indicators {
+    padding: 0px;
+    margin: 0px;
+    line-height: 15px;
+    display: block;
+}
+
+
+#roadmap-phase-container .roadmap-phase h2.roadmap-phase-title .roadmap-phase-progress-indicators
+.roadmap-phase-progress-indicator {
+    display: inline-block;
+    width: 16px;
+    height: 8px;
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle-container {

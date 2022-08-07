@@ -1,5 +1,12 @@
 <div class="roadmap-phase" style="border-left-color: {{ color }};">
-    <h2 class="roadmap-phase-title" data-state="open" style="color: {{ color }};">{{ title }}</h2>
+    <h2 class="roadmap-phase-title" data-state="open" style="color: {{ color }};">
+        {{ title }}
+        <div class="roadmap-phase-progress-indicators" style="display: none;">
+            {{# cycles }}
+                <span class="roadmap-phase-progress-indicator" style="background-color: {{ indicatorcolor }};" data-color="{{ indicatorcolor }}" data-cycle-pos="0"></span>
+            {{/ cycles }}
+        </div>
+    </h2>
     <div class="roadmap-cycle-container">
         {{# cycles }}
             {{> mod_roadmap/view_cycle }}

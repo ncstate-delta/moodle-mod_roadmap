@@ -44,11 +44,13 @@ define(['jquery'],
                 index = index + 1;
                 phaseCycles.push(cycleDataObj);
             });
+            let title = phaseContainer.find('.fitem input.phase-title').val();
             var phaseData = {
                 id: phaseContainer.closest('.phase-wrapper').data('phaseid'),
-                title: phaseContainer.find('.fitem input.phase-title').val(),
+                title: title,
                 cycles: phaseCycles,
             };
+            phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
             phaseContainer.children('input.phase-configuration').val(JSON.stringify(phaseData)).triggerHandler("change");
         };
 

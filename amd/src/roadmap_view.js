@@ -44,6 +44,16 @@ define(['jquery'],
 
                 circle.setAttribute('stroke-dashoffset', c - (c * p));
             });
+
+            $('h2.roadmap-phase-title').each(function() {
+                $(this).click(function() {
+                    var cc = $(this).closest('.roadmap-phase').find('.roadmap-cycle-container');
+                    cc.toggle();
+
+                    var ind = $(this).find('.roadmap-phase-progress-indicators');
+                    ind.toggle();
+                });
+            });
         };
 
         return {

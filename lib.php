@@ -48,6 +48,7 @@ function roadmap_add_instance($data, $mform) {
     global $DB;
 
     $data->timemodified = time();
+    $data->cloprefix = 'CLO';
 
     $data->id = $DB->insert_record('roadmap', $data);
 
@@ -121,6 +122,13 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
     }
 
+    // Turn off filters
+    $availablefilters = filter_get_available_in_context($context);
+    foreach ($availablefilters as $filter => $filterinfo) {
+        if ($filterinfo->localstate !== TEXTFILTER_OFF) {
+            filter_set_local_state($filter, $context->id, TEXTFILTER_OFF);
+        }
+    }
 
     $colorset = roadmap_color_sets($roadmap->colors);
     $colorcount = count($colorset);
@@ -131,7 +139,7 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     $data = new \stdClass();
     $data->phases = [];
-    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id]);
+    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id], 'sort');
     foreach ($phases as $phase) {
         $phase->color = $colorset[$colorindex];
 
@@ -142,8 +150,9 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
 
         $phase->cycles = [];
-        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id]);
+        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id], 'sort');
         foreach ($cycles as $cycle) {
+            $cycle->indicatorcolor = $phase->color;
 
             if (isset($cycle->learningobjectives) && $cycle->learningobjectives !== '') {
                 $learningobjectivenumbers = [];
@@ -154,7 +163,7 @@ function roadmap_cm_info_view(cm_info $cm) {
             }
 
             $cycle->steps = [];
-            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
+            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort');
             foreach ($steps as $step) {
                 $cmid_complete = 0;
                 $cmid_total = 0;
@@ -246,6 +255,10 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $iconfilecontents .
                             '</span>';
                     }
+                }
+
+                if ($step->incomplete) {
+                    $cycle->indicatorcolor = '#cccccc';
                 }
                 $cycle->steps[] = $step;
             }

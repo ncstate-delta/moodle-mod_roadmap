@@ -52,15 +52,16 @@ define(['jquery'],
                 if (stepData == '') { stepData = '{}'; }
                 cycleSteps.push(JSON.parse(stepData));
             });
-
+            let title = cycleContainer.find('.fitem input.cycle-title').val();
             var cycleData = {
                 id: cycleContainer.closest('.cycle-wrapper').data('cycleid'),
-                title: cycleContainer.find('.fitem input.cycle-title').val(),
+                title: title,
                 subtitle: cycleContainer.find('.fitem input.cycle-subtitle').val(),
                 pagelink: cycleContainer.find('.fitem input.cycle-pagelink').val(),
                 learningobjectives: cycleLos.join(","),
                 steps: cycleSteps,
             };
+            cycleContainer.closest('.cycle').find('.cycle-header-title').html(title);
             cycleContainer.children('input.cycle-configuration').val(JSON.stringify(cycleData)).triggerHandler("change");
         };
 

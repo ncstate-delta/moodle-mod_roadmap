@@ -47,9 +47,10 @@ define(['jquery'],
             if(stepContainer.find('.completionexpected').prop("checked") == true){
                 expectedComplete = 1;
             }
+            let rollovertext = stepContainer.find('.fitem input.step-rollovertext').val();
             var stepData = {
                 id: stepContainer.closest('.step-wrapper').data('stepid'),
-                rollovertext: stepContainer.find('.fitem input.step-rollovertext').val(),
+                rollovertext: rollovertext,
                 stepicon: stepContainer.find('.fitem input.step-icon').val(),
                 completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),
                 linksingleactivity: stepContainer.find('.fitem input.chk-single-activity-link').val(),
@@ -66,6 +67,7 @@ define(['jquery'],
             delete stepData.years;
             delete stepData.hours;
             delete stepData.minutes;
+            stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
             stepContainer.children('input.step-configuration').val(JSON.stringify(stepData)).triggerHandler("change");
         };
 

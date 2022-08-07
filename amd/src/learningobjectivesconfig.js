@@ -20,8 +20,8 @@
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/notification', 'core/templates'],
-    function($, notification, templates) {
+define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save'],
+    function($, notification, templates, cyclesave) {
 
         /**
          * Learning objectives config object.
@@ -58,9 +58,6 @@ define(['jquery', 'core/notification', 'core/templates'],
                 .then(function(html, js) {
                     templates.prependNodeContents(self.inputSelector, html, js);
 
-                    $('.learning-objective-name').change(function() {
-                        LearningObjectivesConfig.prototype.saveConfig();
-                    });
                     $('#add-learning-objective').click(function(e) {
                         e.preventDefault();
 
@@ -70,23 +67,29 @@ define(['jquery', 'core/notification', 'core/templates'],
                         templates.render('mod_roadmap/configuration_learningobjective', newLo)
                             .then(function(html, js) {
                                 templates.appendNodeContents('#learningobjective-container', html, js);
+                                LearningObjectivesConfig.prototype.rebindInputs();
                                 LearningObjectivesConfig.prototype.saveConfig();
 
-                                $('.learning-objective-name').unbind('change').change(function() {
-                                    LearningObjectivesConfig.prototype.saveConfig();
-                                });
                             }).fail(notification.exception);
                     });
-                    $('.learningobjective-delete-control').click(function (e) {
-                        LearningObjectivesConfig.prototype.deleteLearningObjective(e);
-                    });
-                    $('.learningobjective-up-control').click(function (e) {
-                        LearningObjectivesConfig.prototype.upLearningObjective(e);
-                    });
-                    $('.learningobjective-down-control').click(function (e) {
-                        LearningObjectivesConfig.prototype.downLearningObjective(e);
-                    });
+
+                    LearningObjectivesConfig.prototype.rebindInputs();
                 }).fail(notification.exception);
+        };
+
+        LearningObjectivesConfig.prototype.rebindInputs = function() {
+            $('.learning-objective-name').unbind('change').change(function() {
+                LearningObjectivesConfig.prototype.saveConfig();
+            });
+            $('.learningobjective-delete-control').unbind('click').click(function (e) {
+                LearningObjectivesConfig.prototype.deleteLearningObjective(e);
+            });
+            $('.learningobjective-up-control').unbind('click').click(function (e) {
+                LearningObjectivesConfig.prototype.upLearningObjective(e);
+            });
+            $('.learningobjective-down-control').unbind('click').click(function (e) {
+                LearningObjectivesConfig.prototype.downLearningObjective(e);
+            });
         };
 
         LearningObjectivesConfig.prototype.saveConfig = function() {
@@ -100,6 +103,10 @@ define(['jquery', 'core/notification', 'core/templates'],
             });
             $('#id_learningobjectivesconfiguration').val(JSON.stringify({learningobjectives: arrlo}));
             LearningObjectivesConfig.prototype.refreshChecklists();
+            cyclesave.rebind_inputs();
+
+            // Save any changes to the checklists
+            $('.chk-learning-objectives input[type="checkbox"]').trigger('change');
         };
 
         LearningObjectivesConfig.prototype.refreshChecklists = function() {
@@ -127,12 +134,10 @@ define(['jquery', 'core/notification', 'core/templates'],
                     $('<input/>').attr('type', 'checkbox').attr('value', learningobjective.id)
                         .attr('class', 'form-control')
                         .attr('checked', ($.inArray(learningobjective.id, selectedIds)>=0)).appendTo(li);
-                    $('<span>').text(learningobjective.name).appendTo(li);
+                    $('<span>').text(' ' + learningobjective.name).appendTo(li);
                 });
-
             });
         };
-
 
         LearningObjectivesConfig.prototype.deleteLearningObjective = function(event) {
             event.preventDefault();

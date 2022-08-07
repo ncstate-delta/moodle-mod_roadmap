@@ -34,7 +34,7 @@ $string['roadmap:configure'] = 'Configure roadmap';
 
 // Form Strings.
 $string['appearance'] = 'Appearance';
-$string['courselearningobjectives'] = 'Applicable Course Learning Objectives (CLO)';
+$string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
 $string['learningobjectives'] = 'Course Learning Objectives';
 $string['editroadmap'] = 'Edit Roadmap';
 

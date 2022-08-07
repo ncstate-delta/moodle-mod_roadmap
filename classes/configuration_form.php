@@ -47,17 +47,6 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform =& $this->_form;
         $roadmap = $this->_customdata['roadmap'];
 
-        $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
-
-        // Phase color pattern drown selector.
-        $colorpatterns = [
-            0 => 'All Secondary Brand Colors (Default)',
-            // -1 => 'Custom',
-        ];
-        $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
-        $mform->setDefault('phasecolorpattern', $roadmap->colors);
-        $mform->setType('phasecolorpattern', PARAM_INT);
-
         $mform->addElement('header', 'header_learningobjectives', get_string('courselearningobjectives', 'roadmap'));
 
         $displayposition = [
@@ -120,6 +109,17 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->addElement('hidden', 'activity_data');
         $mform->setType('activity_data', PARAM_RAW);
         $mform->setDefault('activity_data', json_encode(array('activities' => roadmap_list_activities($COURSE))));
+
+        $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
+
+        // Phase color pattern drown selector.
+        $colorpatterns = [
+            0 => 'All Secondary Brand Colors (Default)',
+            // -1 => 'Custom',
+        ];
+        $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
+        $mform->setDefault('phasecolorpattern', $roadmap->colors);
+        $mform->setType('phasecolorpattern', PARAM_INT);
 
         // Add js.
         $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
