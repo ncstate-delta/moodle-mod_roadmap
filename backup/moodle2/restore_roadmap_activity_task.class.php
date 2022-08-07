@@ -54,6 +54,7 @@ class restore_roadmap_activity_task extends restore_activity_task {
 
         $contents[] = new restore_decode_content('roadmap', array('intro', 'configuration'), 'roadmap');
         $contents[] = new restore_decode_content('roadmap_step', array('pagelink'), 'roadmap_step');
+        $contents[] = new restore_decode_content('roadmap_cycle', array('pagelink'), 'roadmap_cycle');
 
         return $contents;
     }

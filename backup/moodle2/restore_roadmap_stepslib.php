@@ -33,6 +33,9 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
         $paths = array();
         $paths[] = new restore_path_element('roadmap', '/activity/roadmap');
+        $paths[] = new restore_path_element('roadmap_phase', '/activity/roadmap/phases/phase');
+        $paths[] = new restore_path_element('roadmap_cycle', '/activity/roadmap/phases/phase/cycles/cycle');
+        $paths[] = new restore_path_element('roadmap_step', '/activity/roadmap/phases/phase/cycles/cycle/steps/step');
 
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
@@ -48,6 +51,43 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $this->apply_activity_instance($newitemid);
     }
 
+    protected function process_roadmap_phase($data) {
+        global $DB;
+
+        $data = (object)$data;
+        $oldid = $data->id;
+
+        $data->roadmapid = $this->get_new_parentid('roadmap');
+
+        $newitemid = $DB->insert_record('roadmap_phase', $data);
+        echo ' << set mapping -- old: ' . $oldid . ' new: ' . $newitemid . ' >> ';
+        $this->set_mapping('roadmap_phase', $oldid, $newitemid, false);
+    }
+
+    protected function process_roadmap_cycle($data) {
+        global $DB;
+
+        $data = (object)$data;
+        $oldid = $data->id;
+        echo 'before: ' . $data->phaseid . ' ';
+        $data->phaseid = $this->get_new_parentid('roadmap_phase');
+        echo 'after: ' . $data->phaseid . ' ';
+
+        $newitemid = $DB->insert_record('roadmap_cycle', $data);
+        $this->set_mapping('roadmap_cycle', $oldid, $newitemid, false);
+    }
+
+    protected function process_roadmap_step($data) {
+        global $DB;
+
+        $data = (object)$data;
+        $oldid = $data->id;
+        $data->cycleid = $this->get_new_parentid('roadmap_cycle');
+
+        $newitemid = $DB->insert_record('roadmap_step', $data);
+        $this->set_mapping('roadmap_step', $oldid, $newitemid, false);
+    }
+
     protected function after_restore() {
         global $DB;
 
@@ -57,6 +97,7 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $activityid = $this->task->get_activityid();
         $roadmap = $DB->get_record('roadmap', array('id' => $activityid));
 
+        // Convert roadmap configuration if exists.
         if (!empty($roadmap->configuration)) {
             $data = json_decode($roadmap->configuration);
 
@@ -88,9 +129,44 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
                     }
                 }
             }
-
             $roadmap->configuration = json_encode($data);
             $DB->update_record('roadmap', $roadmap);
+
+        } else {
+
+            // Restore from 4.0 and later.
+            $phases = $DB->get_records('roadmap_phase', array('roadmapid' => $roadmap->id));
+
+            foreach ($phases as $phase) {
+                $cycles = $DB->get_records('roadmap_cycle', array('phaseid' => $phase->id));
+
+                foreach ($cycles as $cycle) {
+                    $steps = $DB->get_records('roadmap_step', array('cycleid' => $cycle->id));
+
+                    foreach ($steps as $step) {
+
+                        $newcmids = [];
+                        if (!isset($step->completionmodules)) {
+                            $step->completionmodules = '';
+                        }
+
+                        $cmids = explode(',', $step->completionmodules);
+                        foreach ($cmids as $cmid) {
+
+                            if (!$mapping = $this->get_mappingid('course_module', (int)$cmid)) {
+                                continue;
+                            }
+
+                            if ($mapping) {
+                                $newcmids[] = $mapping;
+                            }
+                        }
+                        $step->completionmodules = implode(',', $newcmids);
+                        $DB->update_record('roadmap_step', $step);
+                    }
+                }
+            }
+
         }
     }
 
