@@ -141,7 +141,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
             var config = JSON.parse($('input[name="roadmapconfiguration"]').val());
             var nextIndex = config.phases.length;
-            var newPhase = {id: 0, index: nextIndex, number: nextIndex+1};
+            var maxPhaseId = parseInt(RoadmapConfig.prototype.maxValue('phase'));
+            var newPhase = {id: maxPhaseId + 1, index: nextIndex, number: nextIndex+1};
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
 
@@ -154,6 +155,12 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
                     $('.phase-delete-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.deletePhase(e); });
+
+                    $('.phase-up-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.upPhase(e); });
+
+                    $('.phase-down-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.downPhase(e); });
 
                     $('#add-phase').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.addPhase(e); });
@@ -174,7 +181,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var cycleContainer = phaseContainer.children('.phase-cycles-container');
 
             var nextCycleIndex = cycleContainer.children('.cycle-wrapper').length;
-            var newCycle = {id: 0, index: nextCycleIndex, number: nextCycleIndex+1};
+            let maxCycleId = parseInt(RoadmapConfig.prototype.maxValue('cycle'));
+            var newCycle = {id: maxCycleId + 1, index: nextCycleIndex, number: nextCycleIndex+1};
 
             templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then(function(html, js) {
@@ -185,6 +193,12 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
                     $('.cycle-delete-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.deleteCycle(e); });
+
+                    $('.cycle-up-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.upCycle(e); });
+
+                    $('.cycle-down-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.downCycle(e); });
 
                     $('.add-cycle-step').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.addStep(e); });
@@ -204,8 +218,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
             var nextStepIndex = stepsContainer.children('.step-wrapper').length;
             var dtpdata = JSON.parse($('input[name="datetimepickerdata"]').val());
+            let maxStepId = parseInt(RoadmapConfig.prototype.maxValue('step'));
+
             var newStep = {
-                id: 0,
+                id: maxStepId + 1,
                 index: nextStepIndex,
                 number: nextStepIndex+1,
                 days: dtpdata.days,
@@ -225,6 +241,12 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
                     $('.step-delete-control').unbind('click')
                         .click(function(e) { RoadmapConfig.prototype.deleteStep(e); });
+
+                    $('.step-up-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.upStep(e); });
+
+                    $('.step-down-control').unbind('click')
+                        .click(function (e) { RoadmapConfig.prototype.downStep(e); });
 
                     stepiconselect.rebind_buttons();
                     stepactivityselect.rebind_buttons();
@@ -384,6 +406,19 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 stepWrapper.insertAfter(nextStepWrapper);
                 cycleContainer.find('.cycle-title').triggerHandler("change");
             }
+        };
+
+        RoadmapConfig.prototype.maxValue = function(dataType) {
+            var arrID = new Array();
+            $('.' + dataType + '-wrapper').each(function() {
+                let stepId = parseInt($(this).data(dataType + 'id'));
+                if (isNaN(stepId) === false) {
+                    arrID.push(stepId);
+                }
+            });
+            var newArrID = arrID.sort(function (a, b) {  return a - b;  });
+
+            return newArrID[arrID.length-1];
         };
 
         return {

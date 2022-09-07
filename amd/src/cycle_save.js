@@ -61,7 +61,7 @@ define(['jquery'],
                 learningobjectives: cycleLos.join(","),
                 steps: cycleSteps,
             };
-            cycleContainer.closest('.cycle').find('.cycle-header-title').html(title);
+            cycleContainer.closest('.cycle-wrapper').find('.cycle-header-title').html(title);
             cycleContainer.children('input.cycle-configuration').val(JSON.stringify(cycleData)).triggerHandler("change");
         };
 

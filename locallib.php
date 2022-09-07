@@ -123,7 +123,14 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
             'roadmapid' => $roadmap_id,
         ];
 
-        if (!empty($phase->id) && !$conversion) {
+        // Check to see if the step id exists for this course.
+        $sql = "SELECT rp.* 
+                      FROM mdl_roadmap_phase rp 
+                     WHERE rp.roadmapid = ? AND rp.id = ?";
+
+        $orig_phase = $DB->get_record_sql($sql, [$roadmap_id, $phase->id]);
+
+        if ($orig_phase && !$conversion) {
             // Update
             $phase_data['id'] = $phase->id;
             $DB->update_record('roadmap_phase', $phase_data);
@@ -148,7 +155,15 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
                 'phaseid' => $phase->id,
             ];
 
-            if (!empty($cycle->id) && !$conversion) {
+            // Check to see if the step id exists for this course.
+            $sql = "SELECT rc.* 
+                      FROM mdl_roadmap_cycle rc
+                      JOIN mdl_roadmap_phase rp ON rp.id = rc.phaseid
+                     WHERE rp.roadmapid = ? AND rc.id = ?";
+
+            $orig_cycle = $DB->get_record_sql($sql, [$roadmap_id, $cycle->id]);
+
+            if ($orig_cycle && !$conversion) {
                 // Update
                 $cycle_data['id'] = $cycle->id;
                 $DB->update_record('roadmap_cycle', $cycle_data);
@@ -188,7 +203,16 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
                     'cycleid' => $cycle->id,
                 ];
 
-                if (!empty($step->id) && !$conversion) {
+                // Check to see if the step id exists for this course.
+                $sql = "SELECT rs.* 
+                          FROM mdl_roadmap_step rs
+                          JOIN mdl_roadmap_cycle rc ON rc.id = rs.cycleid
+                          JOIN mdl_roadmap_phase rp ON rp.id = rc.phaseid
+                         WHERE rp.roadmapid = ? AND rs.id = ?";
+
+                $orig_step = $DB->get_record_sql($sql, [$roadmap_id, $step->id]);
+
+                if ($orig_step && !$conversion) {
                     // Update
                     $step_data['id'] = $step->id;
                     $DB->update_record('roadmap_step', $step_data);
