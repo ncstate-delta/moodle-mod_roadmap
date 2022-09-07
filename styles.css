@@ -69,7 +69,8 @@
     display: inline-block;
     position: relative;
     vertical-align: top;
-    margin: 20px 20px 20px 0;
+    margin: 15px 20px 0 0;
+    min-width: 150px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-cycle-title {
@@ -105,9 +106,8 @@
     display: block;
     position: relative;
     width: 100%;
-    height: 10px;
+    height: 24px;
     box-sizing: border-box;
-    border: 2px solid #c0c0c0;
     border-top: none;
     border: none;
     background-color: transparent;
