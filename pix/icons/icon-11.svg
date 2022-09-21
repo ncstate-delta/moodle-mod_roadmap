@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_22" data-name="Layer 22"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><rect x="12.8" y="21.62" width="10.19" height="1.02" fill="#fff"/><path d="M5.12,24.17H9.19V20.1H5.12Zm3.41-.66H5.77V20.75H8.53Z" fill="#fff"/><rect x="12.8" y="15.14" width="14.8" height="1.02" fill="#fff"/><rect x="5.12" y="13.61" width="4.07" height="4.07" fill="#fff"/><rect x="12.8" y="8.66" width="11.26" height="1.02" fill="#fff"/><path d="M5.12,11.21H9.19V7.13H5.12Zm3.41-.66H5.77V7.79H8.53Z" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path fill="#fff" d="M12.8 21.62h10.19v1.02H12.8zM5.12 24.17h4.07V20.1H5.12Zm3.41-.66H5.77v-2.76h2.76ZM12.8 15.14h14.8v1.02H12.8zM5.12 13.61h4.07v4.07H5.12zM12.8 8.66h11.26v1.02H12.8zM5.12 11.21h4.07V7.13H5.12Zm3.41-.66H5.77V7.79h2.76Z"/>
+</svg>

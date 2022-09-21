@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_44" data-name="Layer 44"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><rect x="12.35" y="22.78" width="5.31" height="1.83" fill="#fff"/><rect x="9.69" y="25.81" width="10.62" height="1.59" fill="#fff"/><path d="M24.57,7.16c-1.77-2.08-4-.1-4-.1v6.46s5.77-4.27,4-6.36m-3.15,4.4V7.63a1.69,1.69,0,0,1,2.44.06c1.08,1.27-2.44,3.87-2.44,3.87" fill="#fff"/><path d="M9.42,13.52V7.06s-2.22-2-4,.1,4,6.36,4,6.36M6.14,7.69a1.7,1.7,0,0,1,2.44-.06v3.93S5.06,9,6.14,7.69" fill="#fff"/><path d="M15,4.86H10.22V12a4.94,4.94,0,0,0,3.71,4.64c0,4.45-1,4.92-1,4.92h4.24s-1-.47-1.05-4.92A4.94,4.94,0,0,0,19.78,12V4.86ZM18.82,12s0,3-2.75,3c1.08-1,1.53-.41,1.38-3s-.21-6.41-.21-6.41h1.58Z" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path fill="#fff" d="M12.35 22.78h5.31v1.83h-5.31zM9.69 25.81h10.62v1.59H9.69zM24.57 7.16c-1.77-2.08-4-.1-4-.1v6.46s5.77-4.27 4-6.36m-3.15 4.4V7.63a1.69 1.69 0 0 1 2.44.06c1.08 1.27-2.44 3.87-2.44 3.87M9.42 13.52V7.06s-2.22-2-4 .1 4 6.36 4 6.36M6.14 7.69a1.7 1.7 0 0 1 2.44-.06v3.93S5.06 9 6.14 7.69M15 4.86h-4.78V12a4.94 4.94 0 0 0 3.71 4.64c0 4.45-1 4.92-1 4.92h4.24s-1-.47-1.05-4.92A4.94 4.94 0 0 0 19.78 12V4.86ZM18.82 12s0 3-2.75 3c1.08-1 1.53-.41 1.38-3s-.21-6.41-.21-6.41h1.58Z"/>
+</svg>

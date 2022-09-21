@@ -1,6 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_31" data-name="Layer 31"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><polygon points="18.57 15.88 18.57 23.83 7.89 23.83 7.89 8.52 10.78 8.52 10.78 7.51 6.91 7.51 6.91 24.89 19.55 24.89 19.55 15.88 18.57 15.88" fill="#fff"/><rect x="10.12" y="10.6" width="1.82" height="0.79" fill="#fff"/><rect x="10.12" y="14.65" width="3.57" height="0.79" fill="#fff"/><rect x="10.12" y="18.69" width="7.07" height="0.79" fill="#fff"/><path d="M21.9,12.91H20.25l-.66-1.71h-3L16,12.91H14.36l2.93-7.52h1.6Zm-2.79-3-1-2.78-1,2.78Z" fill="#fff"/><path d="M24.35,11.83v-2h-2V8.53h2v-2h1.31v2h2V9.87h-2v2Z" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path fill="#fff" d="M18.57 15.88v7.95H7.89V8.52h2.89V7.51H6.91v17.38h12.64v-9.01h-.98z"/>
+    <path fill="#fff" d="M10.12 10.6h1.82v.79h-1.82zM10.12 14.65h3.57v.79h-3.57zM10.12 18.69h7.07v.79h-7.07zM21.9 12.91h-1.65l-.66-1.71h-3L16 12.91h-1.64l2.93-7.52h1.6Zm-2.79-3-1-2.78-1 2.78ZM24.35 11.83v-2h-2v-1.3h2v-2h1.31v2h2v1.34h-2v2Z"/>
+</svg>

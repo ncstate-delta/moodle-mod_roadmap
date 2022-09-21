@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_29" data-name="Layer 29"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><polygon points="10.35 17.38 10.35 26.39 22.98 26.39 22.98 9.02 19.11 9.02 19.11 10.02 22.01 10.02 22.01 25.33 11.32 25.33 11.32 17.38 10.35 17.38" fill="#fff"/><rect x="17.95" y="12.1" width="1.23" height="0.79" fill="#fff"/><rect x="16.2" y="16.15" width="3.57" height="0.79" fill="#fff"/><rect x="12.69" y="20.19" width="5.68" height="0.79" fill="#fff"/><path d="M11.33,4.41a5.85,5.85,0,1,0,5.85,5.84,5.84,5.84,0,0,0-5.85-5.84m0,10.91a5.07,5.07,0,1,1,5.07-5.07,5.06,5.06,0,0,1-5.07,5.07" fill="#fff"/><polygon points="12.5 2.43 10.16 2.43 10.16 3.21 10.94 3.21 10.94 5.15 11.72 5.15 11.72 3.21 12.5 3.21 12.5 2.43" fill="#fff"/><path d="M10.94,10.25a.4.4,0,0,1,.39-.39.39.39,0,0,1,.39.39.38.38,0,0,1-.39.39.39.39,0,0,1-.39-.39" fill="#fff"/><path d="M10.94,9.86a.58.58,0,0,1,.78,0l-.39-3.44Z" fill="#fff"/><path d="M11.86,10.15a.58.58,0,0,1-.44.65l2.12.87Z" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path fill="#fff" d="M10.35 17.38v9.01h12.63V9.02h-3.87v1h2.9v15.31H11.32v-7.95h-.97z"/>
+    <path fill="#fff" d="M17.95 12.1h1.23v.79h-1.23zM16.2 16.15h3.57v.79H16.2zM12.69 20.19h5.68v.79h-5.68zM11.33 4.41a5.85 5.85 0 1 0 5.85 5.84 5.84 5.84 0 0 0-5.85-5.84m0 10.91a5.07 5.07 0 1 1 5.07-5.07 5.06 5.06 0 0 1-5.07 5.07"/>
+    <path fill="#fff" d="M12.5 2.43h-2.34v.78h.78v1.94h.78V3.21h.78v-.78zM10.94 10.25a.4.4 0 0 1 .39-.39.39.39 0 0 1 .39.39.38.38 0 0 1-.39.39.39.39 0 0 1-.39-.39M10.94 9.86a.58.58 0 0 1 .78 0l-.39-3.44Z"/>
+    <path d="M11.86 10.15a.58.58 0 0 1-.44.65l2.12.87Z" fill="#fff"/>
+</svg>

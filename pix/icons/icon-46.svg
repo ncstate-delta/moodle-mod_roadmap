@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_45" data-name="Layer 45"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><path d="M20.85,10.66l1.25-1.1L20.85,8.45,21.59,7,20,6.42l.11-1.67-1.67.11-.53-1.59L16.41,4,15.3,2.76,14.2,4l-1.5-.74-.54,1.59L10.5,4.75l.1,1.67L9,7l.74,1.5L8.5,9.56l1.26,1.1L9,12.16l1.58.54-.1,1.67,1.66-.11.54,1.58,1.5-.74,1.1,1.26,1.11-1.26,1.5.74.53-1.58,1.67.11L20,12.7l1.59-.54ZM15.3,13a3.48,3.48,0,1,1,3.48-3.47A3.47,3.47,0,0,1,15.3,13" fill="#fff"/><polygon points="13.83 16.96 11.83 17.94 11.24 16.2 7.27 25.89 10.43 23.68 11.13 27.47 14.92 18.2 13.83 16.96" fill="#fff"/><polygon points="18.78 17.94 16.77 16.96 15.78 18.1 18.78 28.09 19.85 24.39 22.77 26.89 19.47 15.91 18.78 17.94" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path d="m20.85 10.66 1.25-1.1-1.25-1.11.74-1.45L20 6.42l.11-1.67-1.67.11-.53-1.59-1.5.73-1.11-1.24L14.2 4l-1.5-.74-.54 1.59-1.66-.1.1 1.67L9 7l.74 1.5L8.5 9.56l1.26 1.1-.76 1.5 1.58.54-.1 1.67 1.66-.11.54 1.58 1.5-.74 1.1 1.26 1.11-1.26 1.5.74.53-1.58 1.67.11L20 12.7l1.59-.54ZM15.3 13a3.48 3.48 0 1 1 3.48-3.47A3.47 3.47 0 0 1 15.3 13M13.83 16.96l-2 .98-.59-1.74-3.97 9.69 3.16-2.21.7 3.79 3.79-9.27-1.09-1.24zM18.78 17.94l-2.01-.98-.99 1.14 3 9.99 1.07-3.7 2.92 2.5-3.3-10.98-.69 2.03z" fill="#fff"/>
+</svg>

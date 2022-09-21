@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><g id="Layer_5" data-name="Layer 5"><path class="roadmap-background-circle" d="M30,15A15,15,0,1,1,15,0,15,15,0,0,1,30,15" fill="#999"/>    <g transform-origin="15px 15px" transform="rotate(-90)">
-    <!-- normal background circle -->
-    <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"></circle>
-    <!-- progress circle, dashoffset initialized to be hidden before JS changes it; color must change along with background circle -->
-    <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.0973355292" stroke-dashoffset="113.0973355292" cx="15" cy="15" r="18"></circle>
-</g><path d="M6,8.41a2.41,2.41,0,1,1,2.41,2.41A2.41,2.41,0,0,1,6,8.41" fill="#fff"/><path d="M6,16.65C6,13.94,7.08,13,8.47,13s2.5.95,2.5,3.66c0,1.16-.1,6.16-.1,6.16H6Z" fill="#fff"/><path d="M19.71,10.5a2.06,2.06,0,1,1,2.06,2.07,2.06,2.06,0,0,1-2.06-2.07" fill="#fff"/><path d="M19.71,17.79c0-2.33,1-3.14,2.14-3.14S24,15.46,24,17.79c0,1-.08,5.28-.08,5.28H19.71Z" fill="#fff"/><path d="M12.41,7.14a2.76,2.76,0,1,1,2.75,2.75,2.76,2.76,0,0,1-2.75-2.75" fill="#fff"/><path d="M12.41,16.35c0-3.11,1.28-4.19,2.86-4.19s2.87,1.08,2.87,4.19c0,1.33-.12,7-.12,7H12.41Z" fill="#fff"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+    <g transform="rotate(-90 15 15)">
+        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
+        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
+    </g>
+    <path d="M6 8.41a2.41 2.41 0 1 1 2.41 2.41A2.41 2.41 0 0 1 6 8.41M6 16.65C6 13.94 7.08 13 8.47 13s2.5.95 2.5 3.66c0 1.16-.1 6.16-.1 6.16H6ZM19.71 10.5a2.06 2.06 0 1 1 2.06 2.07 2.06 2.06 0 0 1-2.06-2.07M19.71 17.79c0-2.33 1-3.14 2.14-3.14s2.15.81 2.15 3.14c0 1-.08 5.28-.08 5.28h-4.21ZM12.41 7.14a2.76 2.76 0 1 1 2.75 2.75 2.76 2.76 0 0 1-2.75-2.75M12.41 16.35c0-3.11 1.28-4.19 2.86-4.19s2.87 1.08 2.87 4.19c0 1.33-.12 7-.12 7h-5.61Z" fill="#fff"/>
+</svg>
