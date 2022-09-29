@@ -17,8 +17,8 @@
 /**
  * Capability definitions for the folder module.
  *
- * @package    mod_folder
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
+ * @package    mod_roadmap
+ * @copyright  2023 Steve Bader
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -54,5 +54,4 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         ),
     ),
-
 );

@@ -40,8 +40,8 @@
 }
 
 #roadmap-phase-container .roadmap-phase h2.roadmap-phase-title .roadmap-phase-progress-indicators {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     line-height: 15px;
     display: block;
 }
@@ -70,7 +70,7 @@
     position: relative;
     vertical-align: top;
     margin: 15px 20px 0 0;
-    min-width: 150px;
+    min-width: 215px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-cycle-title {
@@ -99,7 +99,7 @@
     position: relative;
     padding: 0;
     margin: 10px 0 5px 0;
-    height: 38px;
+    height: 33px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row {
@@ -144,8 +144,8 @@
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step {
     display: inline-block;
     position: relative;
-    width: 38px;
-    height: 38px;
+    width: 33px;
+    height: 33px;
     margin-right: 6px;
     padding: 3px 4px;
 }
@@ -179,7 +179,7 @@
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step.incomplete .roadmap-background-circle {
-     fill: #ccc;
+    fill: #ccc;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step.incomplete .circle-bg {
@@ -192,12 +192,12 @@
 /* -- Phase */
 
 #mformroadmap .phase-wrapper {
-    padding:0 0 20px 0;
+    padding: 0 0 20px 0;
 }
 
 #mformroadmap .cycle-wrapper,
 #mformroadmap .step-wrapper {
-    padding:20px 0 0 100px;
+    padding: 20px 0 0 100px;
 }
 
 #mformroadmap .phase-wrapper > div.row,
@@ -235,8 +235,24 @@
 
 #mformroadmap .phase-label {
     margin-left: 100px;
-    float:left;
+    float: left;
     width: 150px;
+}
+
+#mformroadmap #learningobjectives-container {
+    padding: 0 20px 20px 20px;
+}
+
+#mformroadmap #roadmapconfiguration {
+    padding: 20px 50px;
+}
+
+#mformroadmap #learningobjective-container input.learning-objective-name {
+    width: 90%;
+    display: inline;
+    background-color: transparent;
+    border-color: rgb(0 0 0 / 10%);
+    margin: 0 15px;
 }
 
 #mformroadmap ul.chk-learning-objectives {
@@ -259,7 +275,7 @@
     width: 30px;
     height: 30px;
     margin: 5px;
-    color: #ff0000;
+    color: #f00;
 }
 
 #step-activity-selector {

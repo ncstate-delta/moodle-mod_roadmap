@@ -18,10 +18,29 @@
     @template mod_roadmap/configuration_learningobjectives
 
     This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "learningobjectives": [{
+            "id": "1",
+            "number": "1",
+            "name": "Course Learning Objective 1"
+        }]
+    }
 }}
-<div id="learningobjective-container">
-    {{# learningobjectives }}
-        {{> mod_roadmap/configuration_learningobjective }}
-    {{/ learningobjectives }}
+<div id="learningobjectives-container">
+    <table class="generaltable fullwidth profilefield">
+        <thead>
+        <tr>
+            <th scope="col" class="col-8">Course Learning Objectives</th>
+            <th scope="col" class="col-3 text-right">{{#str}}edit{{/str}}</th>
+        </tr>
+        </thead>
+        <tbody id="learningobjective-container">
+        {{#learningobjectives}}
+            {{> mod_roadmap/configuration_learningobjective }}
+        {{/learningobjectives}}
+        </tbody>
+    </table>
+    <a id="add-learning-objective" class="btn btn-secondary" href="#" >Add a course learning objective</a>
 </div>
-<a id="add-learning-objective" href="#" >Add a course learning objective</a>

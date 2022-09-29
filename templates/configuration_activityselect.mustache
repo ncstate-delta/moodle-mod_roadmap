@@ -14,6 +14,17 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
+{{!
+    @template mod_roadmap/configuration_activityselect
+
+    Example context (json):
+    {
+        "activities": [{
+            "name": "Activity Name"
+            "coursemoduleid": "1"
+        }]
+    }
+}}
 <p>Select one or more activities below that must be marked complete in order for this step to be completed.
 Clicking on an item will toggle whether or not it is selected.</p>
 <select id="step-activity-selector" name="activities" multiple>

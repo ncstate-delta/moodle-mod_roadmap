@@ -18,6 +18,26 @@
     @template mod_roadmap/configuration_cycles
 
     This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "cycles": [{
+            "id": "1",
+            "index": "0",
+            "title": "Cycle Title",
+            "subtitle": "Cycle Sub Title",
+            "pagelink": "http://ncsu.edu",
+            "steps": [{
+                "id": "1",
+                "rollovertext": "Hover Text",
+                "stepicon": "icon-1",
+                "pagelink": "http://ncsu.edu",
+                "completionmodules": "1,2,3",
+                "configuration": "jsonData"
+            }],
+            "configuration": "jsonData"
+        }]
+    }
 }}
 {{# cycles }}
     {{> mod_roadmap/configuration_cycle }}

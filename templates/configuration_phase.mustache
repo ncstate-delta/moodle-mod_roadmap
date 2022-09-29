@@ -18,6 +18,28 @@
     @template mod_roadmap/configuration_phase
 
     This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "id": "1",
+        "index": "0",
+        "title": "Phase Title",
+        "configuration": "jsonData",
+        "cycles": [{
+            "title": "Cycle Title",
+            "pagelink": "http://ncsu.edu",
+            "subtitle": "Cycle Subtitle",
+            "steps": [{
+                "id": "1",
+                "rollovertext": "Hover Text",
+                "stepicon": "icon-1",
+                "pagelink": "http://ncsu.edu",
+                "completionmodules": "1,2,3",
+                "configuration": "jsonData"
+            }],
+            "learningobjectives": "1, 2, 3"
+        }]
+    }
 }}
 <div data-phaseid="{{ id }}" data-phaseindex="{{ index }}" class="phase-wrapper">
     <div class="row">

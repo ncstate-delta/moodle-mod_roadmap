@@ -23,10 +23,10 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
     function($, notification, templates, ajax, Dialogue) {
 
         var StepIconSelector = function() {
-
+            // Do nothing.
         };
 
-        StepIconSelector.prototype.rebind_buttons = function() {
+        StepIconSelector.prototype.rebindButtons = function() {
             $('.btn_icon_selector').unbind('click').click(this.showConfig.bind(this));
 
         };
@@ -50,16 +50,14 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         StepIconSelector.prototype.initIconConfig = function(popup) {
             this.popup = popup;
             var body = $(popup.getContent());
-            //if (this.originalscaleid === this.scaleid) {
 
-            //}
             body.on('click', 'img.icon', function(e) {
                 let iconContainer = $(e.target).parent('.icon-container');
                 let iconName = iconContainer.data('iconname');
                 let stepId = $(this.clickedButton).data('stepid');
-                $('input[name="step-'+stepId+'-icon"]').val(iconName).trigger('change');
-                $('input[name="step-'+stepId+'-icon"]').parent('.step-icon-display').children('img').remove();
-                $('input[name="step-'+stepId+'-icon"]').parent('.step-icon-display').append($(e.target));
+                $('input[name="step-' + stepId + '-icon"]').val(iconName).trigger('change');
+                $('input[name="step-' + stepId + '-icon"]').parent('.step-icon-display').children('img').remove();
+                $('input[name="step-' + stepId + '-icon"]').parent('.step-icon-display').append($(e.target));
                 popup.close();
             }.bind(this));
             body.on('click', '[data-action="cancel"]', function() {
@@ -79,8 +77,8 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 return new StepIconSelector();
             },
 
-            rebind_buttons: function() {
-                StepIconSelector.prototype.rebind_buttons();
+            rebindButtons: function() {
+                StepIconSelector.prototype.rebindButtons();
             }
         };
 });

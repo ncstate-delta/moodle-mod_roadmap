@@ -8,9 +8,23 @@
     * activities to trigger?  -- not shown here
     * link to page
     * complete on time (if true, we show the star)
+
+    Example context (json):
+    {
+        "id": "1",
+        "rollovertext": "Hover Text",
+        "incomplete": "true",
+        "lowontime": "true",
+        "completedontime": "false",
+        "stepicon": "icon-1",
+        "stepiconsvg": "svgdata",
+        "stepurl": "http://ncsu.edu",
+        "completionmodules": "1,2,3",
+        "configuration": "jsonData"
+    }
 }}
 
-<div class="roadmap-step {{# incomplete }}incomplete{{/ incomplete }}" title="{{ rollovertext }}" alt="{{ rollovertext }}" data-html="true" data-clickable="0" data-toggle="tooltip" data-placement="bottom">
+<div class="roadmap-step {{# incomplete }}incomplete{{/ incomplete }}" title="{{ rollovertext }}" data-html="true" data-clickable="0" data-toggle="tooltip" data-placement="bottom">
     {{# stepurl }}<a href="{{ stepurl }}">{{/stepurl}}
     {{# stepiconsvg }}{{{ stepiconsvg }}}{{/ stepiconsvg }}
         {{# lowontime }}

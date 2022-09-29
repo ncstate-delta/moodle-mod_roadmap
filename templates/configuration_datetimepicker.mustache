@@ -1,6 +1,52 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_roadmap/configuration_datetimepicker
+
+    This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "days": [{
+            "val": "1",
+            "sel": "true"
+        }],
+        "months": [{
+            "val": "1",
+            "sel": "true"
+        }],
+        "years": [{
+            "val": "1999",
+            "sel": "true"
+        }],
+        "hours": [{
+            "val": "1",
+            "sel": "true"
+        }],
+        "minutes": [{
+            "val": "1",
+            "sel": "true"
+        }],
+        "expectedcomplete": "true"
+    }
+}}
 <div class="fdate_time_selector d-flex flex-wrap align-items-center">
-    <div class="form-group fitem" style="">
-        <label class="col-form-label sr-only" for="" style="">Day</label>
+    <div class="form-group fitem">
+        <label class="col-form-label sr-only">Day</label>
         <span data-fieldtype="select">
             <select class="completionexpected_day custom-select">
                 {{#days}}
@@ -10,8 +56,8 @@
         </span>
     </div>
     &nbsp;
-    <div class="form-group fitem" style="">
-        <label class="col-form-label sr-only" for="" style="">
+    <div class="form-group fitem">
+        <label class="col-form-label sr-only">
             Month
         </label>
         <span data-fieldtype="select">
@@ -23,8 +69,8 @@
         </span>
     </div>
     &nbsp;
-    <div class="form-group fitem"  style="">
-        <label class="col-form-label sr-only" for="" style="">
+    <div class="form-group fitem">
+        <label class="col-form-label sr-only">
             Year
         </label>
         <span data-fieldtype="select">
@@ -36,8 +82,8 @@
         </span>
     </div>
     &nbsp;
-    <div class="form-group  fitem" style="">
-        <label class="col-form-label sr-only" for="" style="">
+    <div class="form-group fitem">
+        <label class="col-form-label sr-only">
             Hour
         </label>
         <span data-fieldtype="select">
@@ -49,8 +95,8 @@
         </span>
     </div>
     &nbsp;
-    <div class="form-group fitem" style="">
-        <label class="col-form-label sr-only" for="" style="">
+    <div class="form-group fitem">
+        <label class="col-form-label sr-only">
             Minute
         </label>
         <span data-fieldtype="select">
@@ -64,7 +110,7 @@
     &nbsp;
     <a href="#" id="" style=""><i class="icon fa fa-calendar fa-fw " title="Calendar" aria-label="Calendar"></i></a>
     &nbsp;
-    <label class="form-check fitem"  style="">
+    <label class="form-check fitem">
         <input type="checkbox" class="form-check-input completionexpected" value="1" {{#expectedcomplete}}checked{{/expectedcomplete}}>
         Enable
     </label>

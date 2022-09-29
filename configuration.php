@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Renderer class for mod_roadmap
+ * Prints roadmap configuration form
  *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
@@ -23,9 +23,10 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/lib/formslib.php');
 
-$cmid = required_param('id', PARAM_INT);
-$cm = get_coursemodule_from_id('', $cmid, 0, false, MUST_EXIST);
+$coursemoduleid = required_param('id', PARAM_INT);
+$cm = get_coursemodule_from_id('', $coursemoduleid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
 
 $params = array('id' => $cm->course);
@@ -33,7 +34,7 @@ $course = $DB->get_record('course', $params, '*', MUST_EXIST);
 
 require_login($course);
 
-$urlparams = array('id' => $cmid);
+$urlparams = array('id' => $coursemoduleid);
 $url = new moodle_url('/mod/roadmap/configuration.php', $urlparams);
 $returnurl = new moodle_url('/course/view.php', array('id' => $course->id));
 
@@ -48,24 +49,24 @@ $output = $PAGE->get_renderer('mod_roadmap');
 
 $roadmap = $DB->get_record('roadmap', array('id' => $cm->instance), '*', MUST_EXIST);
 
-$configurationform = new mod_roadmap_configuration_form($url->out(false), [
+$configuration = new mod_roadmap\form\configuration($url->out(false), [
     'course' => $course,
     'cm' => $cm,
     'roadmap' => $roadmap,
 ], 'post', '', array('id' => 'mformroadmap'));
 
 // Form cancelled.
-if ($configurationform->is_cancelled()) {
+if ($configuration->is_cancelled()) {
     redirect($returnurl);
 }
 
 // Get form data.
-$data = $configurationform->get_submitted_data();
+$data = $configuration->get_submitted_data();
 if ($data) {
-    
-    // Update phase, cycle, step tables
+
+    // Update phase, cycle, step tables.
     roadmap_configuration_save($data->roadmapconfiguration, $roadmap->id);
-    
+
     $sql = "UPDATE {roadmap}
                    SET configuration = ?,
                        learningobjectives = ?,
@@ -86,5 +87,5 @@ if ($data) {
 
 echo $output->header();
 echo $output->heading($title, 3);
-$configurationform->display();
+$configuration->display();
 echo $output->footer();

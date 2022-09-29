@@ -17,7 +17,17 @@
 {{!
     @template mod_roadmap/configuration_steps
 
-    This template includes ajax functionality, so it cannot be shown in the template library.
+    Example context (json):
+    {
+        "steps": [{
+            "id": "1",
+            "rollovertext": "Hover Text",
+            "stepicon": "icon-1",
+            "pagelink": "http://ncsu.edu",
+            "completionmodules": "1,2,3",
+            "configuration": "jsonData"
+        }]
+    }
 }}
 {{# steps }}
     {{> mod_roadmap/configuration_step }}

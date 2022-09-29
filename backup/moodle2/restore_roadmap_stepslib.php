@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This file is used for data restoration during an activity restore.
+ *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

@@ -23,10 +23,10 @@ define(['jquery'],
     function($) {
 
         var CycleSave = function() {
-
+            // Do nothing.
         };
 
-        CycleSave.prototype.rebind_inputs = function() {
+        CycleSave.prototype.rebindInputs = function() {
 
             $('.cycle-title').unbind('change').change(this.saveCycle.bind(this));
             $('.cycle-subtitle').unbind('change').change(this.saveCycle.bind(this));
@@ -40,8 +40,8 @@ define(['jquery'],
 
             var cycleContainer = $(event.target).closest('.cycle-container');
             var cycleLos = [];
-            $.each(cycleContainer.find('.chk-learning-objectives input[type="checkbox"]'), function(){
-                if($(this).prop("checked") == true){
+            $.each(cycleContainer.find('.chk-learning-objectives input[type="checkbox"]'), function() {
+                if ($(this).prop("checked") == true) {
                     cycleLos.push($(this).val());
                 }
             });
@@ -49,7 +49,9 @@ define(['jquery'],
             var cycleSteps = [];
             $.each(cycleContainer.find('.cycle-steps-container .step-wrapper .step-configuration'), function() {
                 let stepData = $(this).val();
-                if (stepData == '') { stepData = '{}'; }
+                if (stepData == '') {
+                    stepData = '{}';
+                }
                 cycleSteps.push(JSON.parse(stepData));
             });
             let title = cycleContainer.find('.fitem input.cycle-title').val();
@@ -71,8 +73,8 @@ define(['jquery'],
                 return new CycleSave();
             },
 
-            rebind_inputs: function() {
-                CycleSave.prototype.rebind_inputs();
+            rebindInputs: function() {
+                CycleSave.prototype.rebindInputs();
             }
         };
     });

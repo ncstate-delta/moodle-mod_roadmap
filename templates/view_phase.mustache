@@ -1,11 +1,39 @@
+
+{{!
+    @template mod_roadmap/view_phase
+
+    Example context (json):
+    {
+    	"color": "#000000",
+    	"title": "Cycle Title",
+    	"id": "1",
+    	"cycles": [{
+    		"id": "1",
+    		"index": "0",
+    		"title": "Cycle Title",
+    		"subtitle": "Cycle Sub Title",
+    		"pagelink": "http://ncsu.edu",
+    	    "indicatorcolor": "#000000",
+    		"steps": [{
+    			"id": "1",
+    			"rollovertext": "Hover Text",
+    			"stepicon": "icon-1",
+    			"pagelink": "http://ncsu.edu",
+    			"completionmodules": "1,2,3",
+    			"configuration": "jsonData"
+    		}],
+    		"configuration": "jsonData"
+    	}]
+    }
+}}
 <div class="roadmap-phase" style="border-left-color: {{ color }};">
     <h2 class="roadmap-phase-title" data-state="open" style="color: {{ color }};">
         {{ title }}
-        <div class="roadmap-phase-progress-indicators" style="display: none;">
+        <span class="roadmap-phase-progress-indicators" style="display: none;">
             {{# cycles }}
                 <span class="roadmap-phase-progress-indicator" style="background-color: {{ indicatorcolor }};" data-color="{{ indicatorcolor }}" data-cycle-pos="0"></span>
             {{/ cycles }}
-        </div>
+        </span>
     </h2>
     <div class="roadmap-cycle-container">
         {{# cycles }}

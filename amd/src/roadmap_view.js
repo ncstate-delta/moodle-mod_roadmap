@@ -33,8 +33,12 @@ define(['jquery'],
                var p = $(this).data('progress');
 
                 // Clamp progress
-                if (p < 0) { p = 0; }
-                if (p > 1) { p = 1; }
+                if (p < 0) {
+                    p = 0;
+                }
+                if (p > 1) {
+                    p = 1;
+                }
 
                 var circle = $(this).find('.roadmap-circle-progress')[0];
 

@@ -14,30 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Upgrade code for install
+ *
+ * @package   mod_roadmap
+ * @copyright  2023 Steve Bader
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+/**
+ * Upgrade function used to manage the database through plugin version changes.
+ *
+ * @param int $oldversion The old version of the assign module
+ * @return bool
+ */
 function xmldb_roadmap_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2022040700) {
 
-        // Adding Phase table to database
+        // Adding Phase table to database.
         $table = new xmldb_table('roadmap_phase');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('roadmapid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('title', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('sort', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        
+
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        
+
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Adding Cycle table to database
+        // Adding Cycle table to database.
         $table = new xmldb_table('roadmap_cycle');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('phaseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
@@ -52,8 +64,8 @@ function xmldb_roadmap_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        
-        // Adding Cycle table to database
+
+        // Adding Cycle table to database.
         $table = new xmldb_table('roadmap_step');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('cycleid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
@@ -70,8 +82,8 @@ function xmldb_roadmap_upgrade($oldversion) {
 
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
-        } 
-        
+        }
+
         // Roadmap savepoint reached.
         upgrade_mod_savepoint(true, 2022040700, 'roadmap');
     }

@@ -22,8 +22,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_roadmap\form;
+
+use moodleform;
+
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/formslib.php');
+
 require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
 /**
@@ -33,7 +37,7 @@ require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_roadmap_configuration_form extends moodleform {
+class configuration extends moodleform {
 
 
     /**
@@ -42,7 +46,7 @@ class mod_roadmap_configuration_form extends moodleform {
      * @return void
      */
     public function definition() {
-        global $CFG, $OUTPUT, $PAGE, $COURSE;
+        global $PAGE, $COURSE;
 
         $mform =& $this->_form;
         $roadmap = $this->_customdata['roadmap'];
@@ -87,8 +91,9 @@ class mod_roadmap_configuration_form extends moodleform {
         $mform->setDefault('datetimepickerdata', json_encode(roadmap_datetime_picker_options()));
 
         // Learning Objectives.
-        $mform->addElement('text', 'learningobjectivesconfiguration',
-            get_string('learningobjectives', 'roadmap'), 'style="display:none;"');
+        $mform->addElement('html', '<div id="learningobjectives_panel"></div>', get_string('learningobjectives', 'roadmap'));
+
+        $mform->addElement('hidden', 'learningobjectivesconfiguration');
         $mform->setType('learningobjectivesconfiguration', PARAM_RAW);
         $mform->setDefault('learningobjectivesconfiguration', $roadmap->learningobjectives);
 
@@ -115,7 +120,6 @@ class mod_roadmap_configuration_form extends moodleform {
         // Phase color pattern drown selector.
         $colorpatterns = [
             0 => 'All Secondary Brand Colors (Default)',
-            // -1 => 'Custom',
         ];
         $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
         $mform->setDefault('phasecolorpattern', $roadmap->colors);
@@ -123,7 +127,7 @@ class mod_roadmap_configuration_form extends moodleform {
 
         // Add js.
         $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
-            array('#id_learningobjectivesconfiguration',
+            array('#learningobjectives_panel',
                 'input[name="learningobjectivesconfiguration"]',
                 '#roadmapconfiguration',
                 'input[name="roadmapconfiguration"]')

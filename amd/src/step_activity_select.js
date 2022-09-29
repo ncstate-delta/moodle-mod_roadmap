@@ -24,10 +24,10 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
     function($, notification, templates, ajax, Dialogue, stepsave) {
 
         var StepActivitySelector = function() {
-
+            // Do nothing.
         };
 
-        StepActivitySelector.prototype.rebind_checkbox = function() {
+        StepActivitySelector.prototype.rebindCheckbox = function() {
             $('.chk-single-activity-link').unbind('click').each(function(index, chk) {
                 let stepid = $(chk).data('stepid');
                 $('#step-' + stepid + '-single-activity-link').prop("disabled", $(chk).prop('checked'));
@@ -39,11 +39,11 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
             });
 
             $('.completion-modules').unbind('change').each(function(index, input) {
-                StepActivitySelector.prototype.configure_checkbox(input);
+                StepActivitySelector.prototype.configureCheckbox(input);
             });
         };
 
-        StepActivitySelector.prototype.configure_checkbox = function(input) {
+        StepActivitySelector.prototype.configureCheckbox = function(input) {
             let stepid = $(input).data('stepid');
             let multipleActivities = ($('#step-' + stepid + '-completion-modules').val().split(',').length > 1);
 
@@ -54,7 +54,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
             }
         };
 
-        StepActivitySelector.prototype.rebind_buttons = function() {
+        StepActivitySelector.prototype.rebindButtons = function() {
             $('.btn_completion_selector').unbind('click').click(this.showConfig.bind(this));
         };
 
@@ -80,15 +80,14 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
 
             $(listAreas).each(function(i, e) {
 
-                // get the configuration line from the local hidden field
-                //let stepConfig = JSON.parse($(this).closest('.step-container').children('.step-configuration').val());
+                // Get the configuration line from the local hidden field
                 var stepCompletionModules = $(this).closest('.step-activity-container').find('.step-completion-modules').val();
                 var selectedIds = stepCompletionModules.split(',');
 
                 $(e).children('li').remove();
                 // Use the selected ids to get course module information
-                activityData.activities.forEach(function (activity) {
-                    if ($.inArray(activity.coursemoduleid, selectedIds)>=0) {
+                activityData.activities.forEach(function(activity) {
+                    if ($.inArray(activity.coursemoduleid, selectedIds) >= 0) {
                         var li = $('<li/>').attr('data-id', activity.coursemoduleid).appendTo($(e));
                         $('<span>').text(activity.name).appendTo(li);
                         $(e).append(li);
@@ -96,7 +95,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 });
 
                 $(e).trigger('change');
-                StepActivitySelector.prototype.configure_checkbox(
+                StepActivitySelector.prototype.configureCheckbox(
                     $(this).closest('.step-activity-container').find('.step-completion-modules'));
             });
 
@@ -114,7 +113,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 $('#step-' + stepId + '-completion-modules').val(values).trigger('change');
 
                 StepActivitySelector.prototype.loadList();
-                stepsave.rebind_inputs();
+                stepsave.rebindInputs();
                 popup.close();
             }.bind(this));
             body.on('click', '[data-action="cancel"]', function() {
@@ -134,9 +133,9 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
                 return new StepActivitySelector();
             },
 
-            rebind_buttons: function() {
-                StepActivitySelector.prototype.rebind_buttons();
-                StepActivitySelector.prototype.rebind_checkbox();
+            rebindButtons: function() {
+                StepActivitySelector.prototype.rebindButtons();
+                StepActivitySelector.prototype.rebindCheckbox();
                 StepActivitySelector.prototype.loadList();
             }
         };

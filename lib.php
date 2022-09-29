@@ -15,6 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This file contains the moodle hooks for the roadmap module.
+ *
+ * @package   mod_roadmap
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
  * List of features supported in Roadmap module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
@@ -122,7 +129,7 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
     }
 
-    // Turn off filters
+    // Turn off filters.
     $availablefilters = filter_get_available_in_context($context);
     foreach ($availablefilters as $filter => $filterinfo) {
         if ($filterinfo->localstate !== TEXTFILTER_OFF) {
@@ -165,8 +172,8 @@ function roadmap_cm_info_view(cm_info $cm) {
             $cycle->steps = [];
             $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort');
             foreach ($steps as $step) {
-                $cmid_complete = 0;
-                $cmid_total = 0;
+                $cmidcomplete = 0;
+                $cmidtotal = 0;
 
                 if (!isset($step->completionmodules)) {
                     $step->completionmodules = '';
@@ -195,7 +202,7 @@ function roadmap_cm_info_view(cm_info $cm) {
                     }
 
                     foreach ($cmids as $cmid) {
-                        if (!$cm_check = $DB->get_record('course_modules', array('id' => $cmid))) {
+                        if (!$cmcheck = $DB->get_record('course_modules', array('id' => $cmid))) {
                             continue;
                         }
 
@@ -208,9 +215,9 @@ function roadmap_cm_info_view(cm_info $cm) {
                         ) {
                             $step->incomplete = true;
                         } else {
-                            $cmid_complete++;
+                            $cmidcomplete++;
                         }
-                        $cmid_total++;
+                        $cmidtotal++;
                     }
                     $step->completedontime = ($step->expectedcomplete == 1 &&
                                               !$step->incomplete &&
@@ -230,7 +237,7 @@ function roadmap_cm_info_view(cm_info $cm) {
 
                     // Check for linksingleactivity and create link.
                     if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                        if ($cm_check = $DB->get_record('course_modules', array('id' => (int)$cmids[0]))) {
+                        if ($cmcheck = $DB->get_record('course_modules', array('id' => (int)$cmids[0]))) {
                             $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
                         }
                     }
@@ -243,14 +250,13 @@ function roadmap_cm_info_view(cm_info $cm) {
                     // Read icon and grab svg contents.
                     $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
                     if (file_exists($iconfilename)) {
-                        $cmid_percent = 0;
-                        if ($cmid_total > 0) {
-                            $cmid_percent = ((int)($cmid_complete / $cmid_total * 100))/100;
+                        $cmidpercent = 0;
+                        if ($cmidtotal > 0) {
+                            $cmidpercent = ((int)($cmidcomplete / $cmidtotal * 100)) / 100;
                         }
                         $iconfilecontents = file_get_contents($iconfilename);
-                        $step->stepiconsvg = '<span data-progress="' . $cmid_percent . '" class="bg step-icon-' . $phase->id . '">' .
-                            $iconfilecontents .
-                            '</span>';
+                        $step->stepiconsvg = '<span data-progress="' . $cmidpercent . '" class="bg step-icon-'
+                            . $phase->id . '">' . $iconfilecontents . '</span>';
                     }
                 }
 
@@ -279,20 +285,20 @@ function roadmap_cm_info_view(cm_info $cm) {
         }
     }
 
-    if ($roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) >0) {
+    if ($roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) > 0) {
         $content .= $clocontent;
     }
 
     $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
-    if ($roadmap->clodisplayposition == 1 && count($clodata->learningobjectives) >0) {
+    if ($roadmap->clodisplayposition == 1 && count($clodata->learningobjectives) > 0) {
         $content .= $clocontent;
     }
 
     // Show configuration link if editing is on.
     if (has_capability('mod/roadmap:configure', $context)) {
         $content .= '<div>' .
-            '<a class="btn btn-primary" href="' . $CFG->wwwroot . '/mod/roadmap/configuration.php?id=' . $cm->id . '">' .
-            'Configure Roadmap</a></div>';
+            '<a class="btn btn-primary" href="' . $CFG->wwwroot .
+            '/mod/roadmap/configuration.php?id=' . $cm->id . '">' . 'Configure Roadmap</a></div>';
     }
 
     // Add js.
@@ -310,7 +316,7 @@ function get_activity_url($cmid, $courseid) {
     if (!empty($modinfo->cms)) {
         $cm = $modinfo->get_cm($cmid);
 
-        if ($cm->visible and $cm->has_view() and $cm->uservisible) {
+        if ($cm->visible && $cm->has_view() && $cm->uservisible) {
             return $cm->url->out(false);
         }
     }

@@ -14,6 +14,16 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
+{{!
+    @template mod_roadmap/configuration_iconselect
+
+    Example context (json):
+    {
+        "icons": [{
+            "name": "icon-1"
+        }]
+    }
+}}
 {{# icons }}
     <div class="icon-container" data-iconname="{{ name }}">{{# pix }} icons/{{ name }} , mod_roadmap, {{ name}}  {{/ pix }}</div>
 {{/ icons }}

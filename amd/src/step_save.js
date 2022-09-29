@@ -23,10 +23,10 @@ define(['jquery'],
     function($) {
 
         var StepSave = function() {
-
+            // Do nothing.
         };
 
-        StepSave.prototype.rebind_inputs = function() {
+        StepSave.prototype.rebindInputs = function() {
             $('.step-rollovertext').unbind('change').change(this.saveStep.bind(this));
             $('.chk-single-activity-link').unbind('change').change(this.saveStep.bind(this));
             $('.step-single-activity-link').unbind('change').change(this.saveStep.bind(this));
@@ -44,11 +44,11 @@ define(['jquery'],
         StepSave.prototype.saveStep = function(event) {
             var stepContainer = $(event.target).closest('.step-container');
             var expectedComplete = 0;
-            if(stepContainer.find('.completionexpected').prop("checked") == true){
+            if (stepContainer.find('.completionexpected').prop("checked") == true) {
                 expectedComplete = 1;
             }
             var linksingleactivity = 0;
-            if(stepContainer.find('.fitem input.chk-single-activity-link').prop("checked") == true){
+            if (stepContainer.find('.fitem input.chk-single-activity-link').prop("checked") == true) {
                 linksingleactivity = 1;
             }
             let rollovertext = stepContainer.find('.fitem input.step-rollovertext').val();
@@ -81,8 +81,8 @@ define(['jquery'],
                 return new StepSave();
             },
 
-            rebind_inputs: function() {
-                StepSave.prototype.rebind_inputs();
+            rebindInputs: function() {
+                StepSave.prototype.rebindInputs();
             }
         };
     });

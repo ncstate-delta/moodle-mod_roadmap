@@ -29,7 +29,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
          * @param {String} inputConfig The hidden input field configuration.
          */
         var LearningObjectivesConfig = function(inputSelector, inputConfig) {
-            this.inputSelector = $(inputSelector).parent();
+            this.inputSelector = $(inputSelector);
             this.configContainer = $(inputConfig);
 
             this.showConfig(this);
@@ -45,11 +45,11 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
             var self = this;
             var inputConfigVal = this.configContainer.val();
             if (inputConfigVal == '') {
-                inputConfigVal = JSON.stringify({ 'learningobjectives':[] });
+                inputConfigVal = JSON.stringify({'learningobjectives': []});
                 this.configContainer.val(inputConfigVal);
             }
             var config = JSON.parse(inputConfigVal);
-            config.learningobjectives.forEach(function (learningobjective) {
+            config.learningobjectives.forEach(function(learningobjective) {
                 learningobjective.number = learningobjective.index + 1;
             });
 
@@ -62,18 +62,19 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                         e.preventDefault();
 
                         var nextloIndex = $('#learningobjective-container').children('.learningobjective').length;
-                        var newLo = {id: nextloIndex, number: nextloIndex+1};
+                        var newLo = {id: nextloIndex, number: nextloIndex + 1};
 
                         templates.render('mod_roadmap/configuration_learningobjective', newLo)
                             .then(function(html, js) {
                                 templates.appendNodeContents('#learningobjective-container', html, js);
                                 LearningObjectivesConfig.prototype.rebindInputs();
                                 LearningObjectivesConfig.prototype.saveConfig();
-
+                                return null;
                             }).fail(notification.exception);
                     });
 
                     LearningObjectivesConfig.prototype.rebindInputs();
+                    return null;
                 }).fail(notification.exception);
         };
 
@@ -81,13 +82,13 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
             $('.learning-objective-name').unbind('change').change(function() {
                 LearningObjectivesConfig.prototype.saveConfig();
             });
-            $('.learningobjective-delete-control').unbind('click').click(function (e) {
+            $('.learningobjective-delete-control').unbind('click').click(function(e) {
                 LearningObjectivesConfig.prototype.deleteLearningObjective(e);
             });
-            $('.learningobjective-up-control').unbind('click').click(function (e) {
+            $('.learningobjective-up-control').unbind('click').click(function(e) {
                 LearningObjectivesConfig.prototype.upLearningObjective(e);
             });
-            $('.learningobjective-down-control').unbind('click').click(function (e) {
+            $('.learningobjective-down-control').unbind('click').click(function(e) {
                 LearningObjectivesConfig.prototype.downLearningObjective(e);
             });
         };
@@ -95,29 +96,29 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
         LearningObjectivesConfig.prototype.saveConfig = function() {
 
             var arrlo = [];
-            $('#learningobjective-container').children('.learningobjective').each(function (index) {
+            $('#learningobjective-container').children('.learningobjective').each(function(index) {
                 let lonode = $('#learningobjective-container').children('.learningobjective')[index];
                 let id = $(lonode).data('id');
                 let name = $(lonode).find('input.learning-objective-name').val();
                 arrlo.push({index: index, id: id, name: name});
             });
-            $('#id_learningobjectivesconfiguration').val(JSON.stringify({learningobjectives: arrlo}));
+            $('input[name="learningobjectivesconfiguration"]').val(JSON.stringify({learningobjectives: arrlo}));
             LearningObjectivesConfig.prototype.refreshChecklists();
-            cyclesave.rebind_inputs();
+            cyclesave.rebindInputs();
 
             // Save any changes to the checklists
             $('.chk-learning-objectives input[type="checkbox"]').trigger('change');
         };
 
         LearningObjectivesConfig.prototype.refreshChecklists = function() {
-            var config = JSON.parse($('#id_learningobjectivesconfiguration').val());
+            var config = JSON.parse($('input[name="learningobjectivesconfiguration"]').val());
             var chkAreas = $('.chk-learning-objectives');
 
             $(chkAreas).each(function(i, e) {
                 let selectedIds = [];
                 let configVal = $(this).closest('.cycle-container').children('.cycle-configuration').val();
                 if (configVal != '') {
-                    // get the configuration line from the local hidden field
+                    // Get the configuration line from the local hidden field
                     let stepConfig = JSON.parse(configVal);
                     if (!stepConfig.learningobjectives) {
                         stepConfig.learningobjectives = '';
@@ -125,15 +126,15 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                     selectedIds = stepConfig.learningobjectives.split(',').map(x => parseInt(x));
                 }
 
-                // remove all inputs
+                // Remove all inputs
                 $(e).empty();
 
-                // re-add inputs and remark any selected.
-                config.learningobjectives.forEach(function (learningobjective) {
+                // Re-add inputs and remark any selected.
+                config.learningobjectives.forEach(function(learningobjective) {
                     var li = $('<li/>').attr('data-id', learningobjective.id).appendTo($(e));
                     $('<input/>').attr('type', 'checkbox').attr('value', learningobjective.id)
                         .attr('class', 'form-control')
-                        .attr('checked', ($.inArray(learningobjective.id, selectedIds)>=0)).appendTo(li);
+                        .attr('checked', ($.inArray(learningobjective.id, selectedIds) >= 0)).appendTo(li);
                     $('<span>').text(' ' + learningobjective.name).appendTo(li);
                 });
             });
@@ -142,7 +143,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
         LearningObjectivesConfig.prototype.deleteLearningObjective = function(event) {
             event.preventDefault();
             event.stopPropagation();
-            if (confirm("Are you sure you want to delete this Learning Objective?")) {
+            if (window.confirm("Are you sure you want to delete this Learning Objective?")) {
                 var thisnode = $(event.currentTarget);
                 var loItem = thisnode.closest('.learningobjective');
                 loItem.remove();

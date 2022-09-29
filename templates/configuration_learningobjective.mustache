@@ -18,13 +18,30 @@
     @template mod_roadmap/configuration_learningobjective
 
     This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "id": "1",
+        "number": "1",
+        "name": "Course Learning Objective 1"
+    }
 }}
-<div class="row-fluid form-group fitem learningobjective" data-id="{{ id }}">
-    <span class="col-md-1">{{ number }})</span>
-    <span class="col-md-7"><input class="learning-objective-name form-control " type="text" value="{{ name }}" /></span>
-    <span class="col-md-4">
-        <a class="learningobjective-up-control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
-        <a class="learningobjective-down-control" href="" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
-        <a class="learningobjective-delete-control" href="" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
-    </span>
-</div>
+<tr class="learningobjective" data-id="{{ id }}">
+    <td class="col-8">
+        {{ number }}. <input class="learning-objective-name form-control " type="text" value="{{ name }}" >
+    </td>
+    <td class="col-3 text-right">
+        <a class="learningobjective-delete-control" href="" onclick="return false;">
+            {{#pix}}t/delete, core, {{#str}}delete{{/str}}{{/pix}}</a>
+        {{^isfirst}}
+            <a class="learningobjective-up-control" href="" onclick="return false;">
+                {{#pix}}t/up, core, {{#str}}moveup{{/str}}{{/pix}}</a>
+        {{/isfirst}}
+        {{#isfirst}}{{#pix}}spacer, moodle{{/pix}}{{/isfirst}}
+        {{^islast}}
+            <a class="learningobjective-down-control" href="" onclick="return false;">
+                {{#pix}}t/down, core, {{#str}}movedown{{/str}}{{/pix}}</a>
+        {{/islast}}
+        {{#islast}}{{#pix}}spacer, moodle{{/pix}}{{/islast}}
+    </td>
+</tr>

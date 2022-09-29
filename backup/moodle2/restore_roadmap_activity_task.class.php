@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Defines restore_roadmap_activity_task class
+ *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,8 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/roadmap/backup/moodle2/restore_roadmap_stepslib.php');
 
 /**
- * roadmap restore task that provides all the settings and steps to perform one
- * complete restore of the activity
+ * Roadmap restore task that provides all the settings and steps to perform one complete restore of the activity.
  */
 class restore_roadmap_activity_task extends restore_activity_task {
 

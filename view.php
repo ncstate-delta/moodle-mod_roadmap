@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Individual activity view - not used for roadmap.  This will forward to config or course view.
+ *
+ * @package   mod_roadmap
+ * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once("../../config.php");
 require_once("lib.php");
 

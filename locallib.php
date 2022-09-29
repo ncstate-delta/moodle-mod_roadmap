@@ -25,6 +25,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->dirroot/mod/roadmap/lib.php");
 
+/**
+ * Prepare phase, cycle, and step data for mustache templates.
+ *
+ * @global object
+ * @param integer $roadmapid
+ * @return string json encoded data for the configuration form.
+ */
 function roadmap_configuration_edit($roadmapid) {
     global $DB;
     $data = new \stdClass();
@@ -70,7 +77,7 @@ function roadmap_delete_phase($phaseid) {
 function roadmap_delete_cycle($cycleid) {
     global $DB;
 
-    // Delete all child steps of the cycle
+    // Delete all child steps of the cycle.
     $DB->delete_records('roadmap_step', ['cycleid' => $cycleid]);
     // Delete the cycle itself.
     $DB->delete_records('roadmap_cycle', ['id' => $cycleid]);
@@ -78,7 +85,7 @@ function roadmap_delete_cycle($cycleid) {
 
 
 
-function roadmap_configuration_save($configjson, $roadmap_id, $conversion = false) {
+function roadmap_configuration_save($configjson, $roadmapid, $conversion = false) {
     global $DB;
 
     $data = json_decode($configjson);
@@ -89,93 +96,93 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
 
     // Delete phases that previously existed. that were deleted this submission.
     if (property_exists($data, 'phaseDeletes')) {
-        $phase_deletes = explode(',', $data->phaseDeletes);
-        foreach ($phase_deletes as $phase_delete) {
+        $phasedeletes = explode(',', $data->phaseDeletes);
+        foreach ($phasedeletes as $phasedelete) {
             // Cascade deletes to cycles and steps below.
-            roadmap_delete_phase($phase_delete);
+            roadmap_delete_phase($phasedelete);
         }
     }
 
     // Delete cycles that previously existed that were deleted this submission.
     if (property_exists($data, 'cycleDeletes')) {
-        $cycle_deletes = explode(',', $data->cycleDeletes);
-        foreach ($cycle_deletes as $cycle_delete) {
+        $cycledeletes = explode(',', $data->cycleDeletes);
+        foreach ($cycledeletes as $cycledelete) {
             // Cascade deletes to cycles and steps below.
-            roadmap_delete_cycle($cycle_delete);
+            roadmap_delete_cycle($cycledelete);
         }
     }
 
     // Delete steps that previously existed that were deleted this submission.
     if (property_exists($data, 'stepDeletes')) {
-        $step_deletes = explode(',', $data->stepDeletes);
-        foreach ($step_deletes as $step_delete) {
-            $DB->delete_records('roadmap_step', ['id' => $step_delete]);
+        $stepdeletes = explode(',', $data->stepDeletes);
+        foreach ($stepdeletes as $stepdelete) {
+            $DB->delete_records('roadmap_step', ['id' => $stepdelete]);
         }
     }
 
-    $phase_sort = 0;
+    $phasesort = 0;
     foreach ($data->phases as $phase) {
         if (!isset($phase->cycles)) {
             $phase->cycles = [];
         }
 
-        // Save the phase specific data
-        $phase_data = [
+        // Save the phase specific data.
+        $phasedata = [
             'title' => $phase->title,
-            'sort' => $phase_sort,
-            'roadmapid' => $roadmap_id,
+            'sort' => $phasesort,
+            'roadmapid' => $roadmapid,
         ];
 
         // Check to see if the step id exists for this course.
-        $sql = "SELECT rp.* 
-                      FROM mdl_roadmap_phase rp 
+        $sql = "SELECT rp.*
+                      FROM {roadmap_phase} rp
                      WHERE rp.roadmapid = ? AND rp.id = ?";
 
-        $orig_phase = $DB->get_record_sql($sql, [$roadmap_id, $phase->id]);
+        $origphase = $DB->get_record_sql($sql, [$roadmapid, $phase->id]);
 
-        if ($orig_phase && !$conversion) {
-            // Update
-            $phase_data['id'] = $phase->id;
-            $DB->update_record('roadmap_phase', $phase_data);
+        if ($origphase && !$conversion) {
+            // Update the phase.
+            $phasedata['id'] = $phase->id;
+            $DB->update_record('roadmap_phase', $phasedata);
         } else {
-            // Add
-            $phase->id = $DB->insert_record('roadmap_phase', $phase_data);
+            // Add the phase.
+            $phase->id = $DB->insert_record('roadmap_phase', $phasedata);
         }
 
-        $cycle_sort = 0;
+        $cyclesort = 0;
         foreach ($phase->cycles as $cycle) {
             if (!isset($cycle->steps)) {
                 $cycle->steps = [];
             }
 
-            // Save the phase specific data
-            $cycle_data = [
+            // Save the phase specific data.
+            $cycledata = [
                 'title' => $cycle->title,
                 'subtitle' => $cycle->subtitle,
                 'pagelink' => $cycle->pagelink,
                 'learningobjectives' => $cycle->learningobjectives,
-                'sort' => $cycle_sort,
+                'sort' => $cyclesort,
                 'phaseid' => $phase->id,
             ];
 
             // Check to see if the step id exists for this course.
-            $sql = "SELECT rc.* 
-                      FROM mdl_roadmap_cycle rc
-                      JOIN mdl_roadmap_phase rp ON rp.id = rc.phaseid
+            $sql = "SELECT rc.*
+                      FROM {roadmap_cycle} rc
+                      JOIN {roadmap_phase} rp ON rp.id = rc.phaseid
                      WHERE rp.roadmapid = ? AND rc.id = ?";
 
-            $orig_cycle = $DB->get_record_sql($sql, [$roadmap_id, $cycle->id]);
+            $origcycle = $DB->get_record_sql($sql, [$roadmapid, $cycle->id]);
 
-            if ($orig_cycle && !$conversion) {
-                // Update
-                $cycle_data['id'] = $cycle->id;
-                $DB->update_record('roadmap_cycle', $cycle_data);
+            if ($origcycle && !$conversion) {
+                // Update the cycle.
+                $cycledata['id'] = $cycle->id;
+                $DB->update_record('roadmap_cycle', $cycledata);
             } else {
-                // Add
-                $cycle->id = $DB->insert_record('roadmap_cycle', $cycle_data);
+                // Add the cycle.
+                $cycle->id = $DB->insert_record('roadmap_cycle', $cycledata);
             }
 
-            $step_sort = 0;
+            $stepsort = 0;
             foreach ($cycle->steps as $step) {
 
                 if (
@@ -193,8 +200,8 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
                     $step->completionexpected_datetime = strtotime($strdatetime);
                 }
 
-                // Save the phase specific data
-                $step_data = [
+                // Save the phase specific data.
+                $stepdata = [
                     'rollovertext' => $step->rollovertext,
                     'stepicon' => $step->stepicon,
                     'completionmodules' => $step->completionmodules,
@@ -202,32 +209,32 @@ function roadmap_configuration_save($configjson, $roadmap_id, $conversion = fals
                     'pagelink' => $step->pagelink,
                     'expectedcomplete' => $step->expectedcomplete,
                     'completionexpected_datetime' => $step->completionexpected_datetime,
-                    'sort' => $step_sort,
+                    'sort' => $stepsort,
                     'cycleid' => $cycle->id,
                 ];
 
                 // Check to see if the step id exists for this course.
-                $sql = "SELECT rs.* 
-                          FROM mdl_roadmap_step rs
-                          JOIN mdl_roadmap_cycle rc ON rc.id = rs.cycleid
-                          JOIN mdl_roadmap_phase rp ON rp.id = rc.phaseid
+                $sql = "SELECT rs.*
+                          FROM {roadmap_step} rs
+                          JOIN {roadmap_cycle} rc ON rc.id = rs.cycleid
+                          JOIN {roadmap_phase} rp ON rp.id = rc.phaseid
                          WHERE rp.roadmapid = ? AND rs.id = ?";
 
-                $orig_step = $DB->get_record_sql($sql, [$roadmap_id, $step->id]);
+                $origstep = $DB->get_record_sql($sql, [$roadmapid, $step->id]);
 
-                if ($orig_step && !$conversion) {
-                    // Update
-                    $step_data['id'] = $step->id;
-                    $DB->update_record('roadmap_step', $step_data);
+                if ($origstep && !$conversion) {
+                    // Update the step.
+                    $stepdata['id'] = $step->id;
+                    $DB->update_record('roadmap_step', $stepdata);
                 } else {
-                    // Add
-                    $step->id = $DB->insert_record('roadmap_step', $step_data);
+                    // Add the step.
+                    $step->id = $DB->insert_record('roadmap_step', $stepdata);
                 }
-                $step_sort++;
+                $stepsort++;
             }
-            $cycle_sort++;
+            $cyclesort++;
         }
-        $phase_sort++;
+        $phasesort++;
     }
 
     return true;
@@ -263,7 +270,9 @@ function roadmap_datetime_picker_data($step) {
 
     $step->days = [];
     for ($i = 1; $i <= 31; $i++) {
-        $step->days[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i), 'sel' => ($step->completionexpected_day == sprintf("%02d", $i))];
+        $step->days[] = ['val' => sprintf("%02d", $i),
+                         'txt' => sprintf("%02d", $i),
+                         'sel' => ($step->completionexpected_day == sprintf("%02d", $i))];
     }
     $step->months = [];
     $step->months[] = ['val' => '01', 'txt' => 'January', 'sel' => ($step->completionexpected_month == '01')];
@@ -286,11 +295,15 @@ function roadmap_datetime_picker_data($step) {
     }
     $step->hours = [];
     for ($i = 0; $i <= 23; $i++) {
-        $step->hours[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i), 'sel' => ($step->completionexpected_hour == sprintf("%02d", $i))];
+        $step->hours[] = ['val' => sprintf("%02d", $i),
+            'txt' => sprintf("%02d", $i),
+            'sel' => ($step->completionexpected_hour == sprintf("%02d", $i))];
     }
     $step->minutes = [];
     for ($i = 0; $i <= 59; $i++) {
-        $step->minutes[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i), 'sel' => ($step->completionexpected_minute == sprintf("%02d", $i))];
+        $step->minutes[] = ['val' => sprintf("%02d", $i),
+                            'txt' => sprintf("%02d", $i),
+                            'sel' => ($step->completionexpected_minute == sprintf("%02d", $i))];
     }
 }
 
@@ -332,7 +345,7 @@ function roadmap_datetime_picker_options() {
 
 function roadmap_color_sets($id = -1) {
     $colors = [
-        // Default color scheme
+        // Default color scheme.
         0 => ['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905'],
     ];
     if (isset($colors[$id])) {

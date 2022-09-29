@@ -18,14 +18,24 @@
     @template mod_roadmap/configuration_step
 
     This template includes ajax functionality, so it cannot be shown in the template library.
+
+    Example context (json):
+    {
+        "id": "1",
+        "rollovertext": "Hover Text",
+        "stepicon": "icon-1",
+        "pagelink": "http://ncsu.edu",
+        "completionmodules": "1,2,3",
+        "configuration": "jsonData"
+    }
 }}
 <div data-stepid="{{ id }}" class="step-wrapper">
     <div class="row">
         <div class="step-controls">
-            <a class="step-collapse-control" href="">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
-            <a class="step-up-control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
-            <a class="step-down-control" href="" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
-            <a class="step-delete-control" href="" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
+            <a class="step-collapse-control">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
+            <a class="step-up-control" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
+            <a class="step-down-control" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
+            <a class="step-delete-control" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
         </div>
         <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} Untitled Step {{/ rollovertext }}</div>
     </div>

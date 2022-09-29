@@ -23,10 +23,10 @@ define(['jquery'],
     function($) {
 
         var PhaseSave = function() {
-
+            // Do nothing.
         };
 
-        PhaseSave.prototype.rebind_inputs = function() {
+        PhaseSave.prototype.rebindInputs = function() {
             $('.phase-title').unbind('change').change(this.savePhase.bind(this));
             $('.phase-cycles-container .cycle-wrapper .cycle-configuration').unbind('change').change(this.savePhase.bind(this));
             PhaseSave.prototype.savePhase(this);
@@ -38,7 +38,9 @@ define(['jquery'],
             let index = 0;
             $.each(phaseContainer.find('.phase-cycles-container .cycle-wrapper .cycle-configuration'), function() {
                 let cycleData = $(this).val();
-                if (cycleData == '') { cycleData = '{}'; }
+                if (cycleData == '') {
+                    cycleData = '{}';
+                }
                 let cycleDataObj = JSON.parse(cycleData);
                 cycleDataObj.index = index;
                 index = index + 1;
@@ -60,8 +62,8 @@ define(['jquery'],
                 return new PhaseSave();
             },
 
-            rebind_inputs: function() {
-                PhaseSave.prototype.rebind_inputs();
+            rebindInputs: function() {
+                PhaseSave.prototype.rebindInputs();
             }
         };
     });
