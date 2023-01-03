@@ -30,15 +30,15 @@ function roadmap_configuration_edit($roadmapid) {
     $data = new \stdClass();
     $data->phases = [];
 
-    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmapid]);
+    $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmapid], 'sort ASC');
     foreach ($phases as $phase) {
         $phase->cycles = [];
 
-        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id]);
+        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id], 'sort ASC');
         foreach ($cycles as $cycle) {
             $cycle->steps = [];
 
-            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
+            $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort ASC');
             foreach ($steps as $step) {
 
                 roadmap_datetime_picker_data($step);
