@@ -40,6 +40,9 @@ function roadmap_configuration_edit($roadmapid) {
 
             $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort ASC');
             foreach ($steps as $step) {
+                $step->expectedcomplete = (bool)$step->expectedcomplete;
+                $step->linksingleactivity = (bool)$step->linksingleactivity;
+                $step->sort = (int)$step->sort;
 
                 roadmap_datetime_picker_data($step);
                 $cycle->steps[] = $step;

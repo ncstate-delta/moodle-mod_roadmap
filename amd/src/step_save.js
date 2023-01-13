@@ -47,13 +47,17 @@ define(['jquery'],
             if(stepContainer.find('.completionexpected').prop("checked") == true){
                 expectedComplete = 1;
             }
+            var linksingleactivity = 0;
+            if(stepContainer.find('.fitem input.chk-single-activity-link').prop("checked") == true){
+                linksingleactivity = 1;
+            }
             let rollovertext = stepContainer.find('.fitem input.step-rollovertext').val();
             var stepData = {
                 id: stepContainer.closest('.step-wrapper').data('stepid'),
                 rollovertext: rollovertext,
                 stepicon: stepContainer.find('.fitem input.step-icon').val(),
                 completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),
-                linksingleactivity: stepContainer.find('.fitem input.chk-single-activity-link').val(),
+                linksingleactivity: linksingleactivity,
                 pagelink: stepContainer.find('.fitem input.step-single-activity-link').val(),
                 expectedcomplete: expectedComplete,
                 completionexpected_day: stepContainer.find('.fitem select.completionexpected_day').val(),
