@@ -262,6 +262,7 @@ function roadmap_cm_info_view(cm_info $cm) {
                 }
                 $cycle->steps[] = $step;
             }
+            $cycle->prefix = $roadmap->cloprefix;
             $phase->cycles[] = $cycle;
         }
         $data->phases[] = $phase;
