@@ -176,6 +176,13 @@ function roadmap_cm_info_view(cm_info $cm) {
                 $step->completedontime = false;
                 $step->incomplete = false;
 
+                // Step-link Logic.
+                if ($step->pagelink != '') {
+                    $step->stepurl = $step->pagelink;
+                } else {
+                    $step->stepurl = false;
+                }
+
                 if (!empty($step->completionmodules)) {
 
                     if (property_exists($step, 'completionexpected_datetime')) {
@@ -221,23 +228,13 @@ function roadmap_cm_info_view(cm_info $cm) {
                             date("n/j/Y h:i A", $expectedcompletetime);
                     }
 
-                    // Step-link Logic.
+                    // Check for linksingleactivity and create link.
                     if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-
                         if ($cm_check = $DB->get_record('course_modules', array('id' => (int)$cmids[0]))) {
-                            // Check for linksingleactivity and create link.
                             $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
-                        } else {
-                            $step->stepurl = false;
                         }
-
-                    } else if ($step->pagelink != '') {
-                        // Or use provided link if available.
-                        $step->stepurl = $step->pagelink;
-                    } else {
-                        // Or don't link at all.
-                        $step->stepurl = false;
                     }
+
                 } else {
                     $step->incomplete = true;
                 }
