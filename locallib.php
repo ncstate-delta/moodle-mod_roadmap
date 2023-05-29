@@ -332,12 +332,14 @@ function roadmap_datetime_picker_options() {
 
 function roadmap_color_sets($id = -1) {
     $colors = [
+        // Default color scheme
         0 => ['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905'],
     ];
-    if ($id >= 0) {
+    if (isset($colors[$id])) {
         return $colors[$id];
     }
-    return $colors;
+    // Return default color scheme.
+    return $colors[0];
 }
 
 /**
