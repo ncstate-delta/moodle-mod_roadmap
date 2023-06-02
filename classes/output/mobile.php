@@ -15,15 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Mobile output class for Roadmap
  *
- * @package   mod_roadmap
- * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_roadmap
+ * @copyright  2023 Steve Bader <smbader@ncsu.edu>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_roadmap\output;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_roadmap'; // Full name of the plugin (used for diagnostics).
-$plugin->version  = 2023053107;    // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2022032200;    // Requires this Moodle version.
+/**
+ * Mobile output class for Roadmap module
+ *
+ * @copyright  2023 Steve Bader <smbader@ncsu.edu>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class mobile {
+
+}

@@ -295,12 +295,14 @@ function roadmap_cm_info_view(cm_info $cm) {
             'Configure Roadmap</a></div>';
     }
 
-    $cm->set_content($content);
-
-
     // Add js.
     global $PAGE;
-    $PAGE->requires->js_call_amd('mod_roadmap/roadmap_view', 'init', array());
+    if ($PAGE->devicetypeinuse === 'mobile') {
+        $cm->set_content($content);
+    } else {
+        $cm->set_content($content);
+        $PAGE->requires->js_call_amd('mod_roadmap/roadmap_view', 'init', array());
+    }
 }
 
 function get_activity_url($cmid, $courseid) {
