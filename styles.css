@@ -244,20 +244,20 @@
 }
 
 #mformroadmap .step-icon-display .icon {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
 }
 
 .icon-container {
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    margin: 6px;
+    width: 40px;
+    height: 40px;
+    margin: 7px;
 }
 
 .icon-container img.icon {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     margin: 5px;
     color: #ff0000;
 }
