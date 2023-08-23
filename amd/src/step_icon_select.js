@@ -27,8 +27,8 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadm
         };
 
         StepIconSelector.prototype.rebindButtons = function() {
+            // This binds the button to open the model for icon selection.
             $('.btn_icon_selector').unbind('click').click(this.showConfig.bind(this));
-
         };
 
         StepIconSelector.prototype.showConfig = function(event) {

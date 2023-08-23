@@ -46,7 +46,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
              * @param {String} loInputConfig The hidden input configuration for learning objectives.
              * @param {String} rmInputSelector The hidden input field selector for the roadmap.
              * @param {String} rmInputConfig The hidden input configuration for the roadmap.
-             * @return {LearningObjectivesConfig} A new instance of PhasesConfig.
+             * @return {Configuration} A new instance of PhasesConfig.
              * @method init
              */
             init: function(loInputSelector, loInputConfig, rmInputSelector, rmInputConfig) {

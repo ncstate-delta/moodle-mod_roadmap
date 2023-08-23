@@ -186,17 +186,17 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
             foreach ($cycle->steps as $step) {
 
                 if (
-                    property_exists($step, 'completionexpected_month') &&
-                    property_exists($step, 'completionexpected_day') &&
-                    property_exists($step, 'completionexpected_year') &&
-                    property_exists($step, 'completionexpected_hour') &&
-                    property_exists($step, 'completionexpected_minute')
+                    property_exists($step, 'completionexpectedmonth') &&
+                    property_exists($step, 'completionexpectedday') &&
+                    property_exists($step, 'completionexpectedyear') &&
+                    property_exists($step, 'completionexpectedhour') &&
+                    property_exists($step, 'completionexpectedminute')
                 ) {
-                    $strdatetime = sprintf("%02d", $step->completionexpected_month) . '/' .
-                        sprintf("%02d", $step->completionexpected_day) . '/' .
-                        sprintf("%04d", $step->completionexpected_year) . ' ' .
-                        sprintf("%02d", $step->completionexpected_hour) . ':' .
-                        sprintf("%02d", $step->completionexpected_minute) . ':00';
+                    $strdatetime = sprintf("%02d", $step->completionexpectedmonth) . '/' .
+                        sprintf("%02d", $step->completionexpectedday) . '/' .
+                        sprintf("%04d", $step->completionexpectedyear) . ' ' .
+                        sprintf("%02d", $step->completionexpectedhour) . ':' .
+                        sprintf("%02d", $step->completionexpectedminute) . ':00';
                     $step->completionexpected_datetime = strtotime($strdatetime);
                 }
 
@@ -242,29 +242,29 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
 
 function roadmap_datetime_picker_data($step) {
     // This is the old, sad way.
-    if (!property_exists($step, 'completionexpected_day')) {
-        $step->completionexpected_day = date("d");
+    if (!property_exists($step, 'completionexpectedday')) {
+        $step->completionexpectedday = date("d");
     }
-    if (!property_exists($step, 'completionexpected_month')) {
-        $step->completionexpected_month = date("m");
+    if (!property_exists($step, 'completionexpectedmonth')) {
+        $step->completionexpectedmonth = date("m");
     }
-    if (!property_exists($step, 'completionexpected_year')) {
-        $step->completionexpected_year = date("Y");
+    if (!property_exists($step, 'completionexpectedyear')) {
+        $step->completionexpectedyear = date("Y");
     }
-    if (!property_exists($step, 'completionexpected_hour')) {
-        $step->completionexpected_hour = date("H");
+    if (!property_exists($step, 'completionexpectedhour')) {
+        $step->completionexpectedhour = date("H");
     }
-    if (!property_exists($step, 'completionexpected_minute')) {
-        $step->completionexpected_minute = date("i");
+    if (!property_exists($step, 'completionexpectedminute')) {
+        $step->completionexpectedminute = date("i");
     }
     // The new better way takes priority.
     if (property_exists($step, 'completionexpected_datetime')) {
         if ($step->completionexpected_datetime) {
-            $step->completionexpected_day = date("d", $step->completionexpected_datetime);
-            $step->completionexpected_month = date("m", $step->completionexpected_datetime);
-            $step->completionexpected_year = date("Y", $step->completionexpected_datetime);
-            $step->completionexpected_hour = date("H", $step->completionexpected_datetime);
-            $step->completionexpected_minute = date("i", $step->completionexpected_datetime);
+            $step->completionexpectedday = date("d", $step->completionexpected_datetime);
+            $step->completionexpectedmonth = date("m", $step->completionexpected_datetime);
+            $step->completionexpectedyear = date("Y", $step->completionexpected_datetime);
+            $step->completionexpectedhour = date("H", $step->completionexpected_datetime);
+            $step->completionexpectedminute = date("i", $step->completionexpected_datetime);
         }
     }
 
@@ -272,38 +272,38 @@ function roadmap_datetime_picker_data($step) {
     for ($i = 1; $i <= 31; $i++) {
         $step->days[] = ['val' => sprintf("%02d", $i),
                          'txt' => sprintf("%02d", $i),
-                         'sel' => ($step->completionexpected_day == sprintf("%02d", $i))];
+                         'sel' => ($step->completionexpectedday == sprintf("%02d", $i))];
     }
     $step->months = [];
-    $step->months[] = ['val' => '01', 'txt' => 'January', 'sel' => ($step->completionexpected_month == '01')];
-    $step->months[] = ['val' => '02', 'txt' => 'February', 'sel' => ($step->completionexpected_month == '02')];
-    $step->months[] = ['val' => '03', 'txt' => 'March', 'sel' => ($step->completionexpected_month == '03')];
-    $step->months[] = ['val' => '04', 'txt' => 'April', 'sel' => ($step->completionexpected_month == '04')];
-    $step->months[] = ['val' => '05', 'txt' => 'May', 'sel' => ($step->completionexpected_month == '05')];
-    $step->months[] = ['val' => '06', 'txt' => 'June', 'sel' => ($step->completionexpected_month == '06')];
-    $step->months[] = ['val' => '07', 'txt' => 'July', 'sel' => ($step->completionexpected_month == '07')];
-    $step->months[] = ['val' => '08', 'txt' => 'August', 'sel' => ($step->completionexpected_month == '08')];
-    $step->months[] = ['val' => '09', 'txt' => 'September', 'sel' => ($step->completionexpected_month == '09')];
-    $step->months[] = ['val' => '10', 'txt' => 'October', 'sel' => ($step->completionexpected_month == '10')];
-    $step->months[] = ['val' => '11', 'txt' => 'November', 'sel' => ($step->completionexpected_month == '11')];
-    $step->months[] = ['val' => '12', 'txt' => 'December', 'sel' => ($step->completionexpected_month == '12')];
+    $step->months[] = ['val' => '01', 'txt' => 'January', 'sel' => ($step->completionexpectedmonth == '01')];
+    $step->months[] = ['val' => '02', 'txt' => 'February', 'sel' => ($step->completionexpectedmonth == '02')];
+    $step->months[] = ['val' => '03', 'txt' => 'March', 'sel' => ($step->completionexpectedmonth == '03')];
+    $step->months[] = ['val' => '04', 'txt' => 'April', 'sel' => ($step->completionexpectedmonth == '04')];
+    $step->months[] = ['val' => '05', 'txt' => 'May', 'sel' => ($step->completionexpectedmonth == '05')];
+    $step->months[] = ['val' => '06', 'txt' => 'June', 'sel' => ($step->completionexpectedmonth == '06')];
+    $step->months[] = ['val' => '07', 'txt' => 'July', 'sel' => ($step->completionexpectedmonth == '07')];
+    $step->months[] = ['val' => '08', 'txt' => 'August', 'sel' => ($step->completionexpectedmonth == '08')];
+    $step->months[] = ['val' => '09', 'txt' => 'September', 'sel' => ($step->completionexpectedmonth == '09')];
+    $step->months[] = ['val' => '10', 'txt' => 'October', 'sel' => ($step->completionexpectedmonth == '10')];
+    $step->months[] = ['val' => '11', 'txt' => 'November', 'sel' => ($step->completionexpectedmonth == '11')];
+    $step->months[] = ['val' => '12', 'txt' => 'December', 'sel' => ($step->completionexpectedmonth == '12')];
 
     $currentyear = date("Y");
     $step->years = [];
     for ($i = $currentyear; $i <= $currentyear + 6; $i++) {
-        $step->years[] = ['val' => $i, 'txt' => $i, 'sel' => ($step->completionexpected_year == $i)];
+        $step->years[] = ['val' => $i, 'txt' => $i, 'sel' => ($step->completionexpectedyear == $i)];
     }
     $step->hours = [];
     for ($i = 0; $i <= 23; $i++) {
         $step->hours[] = ['val' => sprintf("%02d", $i),
             'txt' => sprintf("%02d", $i),
-            'sel' => ($step->completionexpected_hour == sprintf("%02d", $i))];
+            'sel' => ($step->completionexpectedhour == sprintf("%02d", $i))];
     }
     $step->minutes = [];
     for ($i = 0; $i <= 59; $i++) {
         $step->minutes[] = ['val' => sprintf("%02d", $i),
                             'txt' => sprintf("%02d", $i),
-                            'sel' => ($step->completionexpected_minute == sprintf("%02d", $i))];
+                            'sel' => ($step->completionexpectedminute == sprintf("%02d", $i))];
     }
 }
 

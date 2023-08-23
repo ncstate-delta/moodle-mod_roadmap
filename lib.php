@@ -196,9 +196,9 @@ function roadmap_cm_info_view(cm_info $cm) {
                         $expectedcompletetime = (int)$step->completionexpected_datetime;
                     } else {
                         // Eventually this can be removed.  This is the old bad way.
-                        $expectedcompletetime = strtotime($step->completionexpected_month . '/' .
-                            $step->completionexpected_day . '/' . $step->completionexpected_year . ' ' .
-                            $step->completionexpected_hour . ':' . $step->completionexpected_minute);
+                        $expectedcompletetime = strtotime($step->completionexpectedmonth . '/' .
+                            $step->completionexpectedday . '/' . $step->completionexpectedyear . ' ' .
+                            $step->completionexpectedhour . ':' . $step->completionexpectedminute);
                     }
 
                     foreach ($cmids as $cmid) {

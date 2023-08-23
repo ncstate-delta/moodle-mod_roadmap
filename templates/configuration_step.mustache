@@ -42,7 +42,7 @@
     <div class="hide step-container" aria-expanded="true">
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Rollover Text</div>
-            <div class="col-md-9 form-inline"><input class="step-rollovertext form-control" type="text" value="{{ rollovertext }}"></div>
+            <div class="col-md-9 form-inline"><input class="step-rollovertext form-control roadmap-form-control-step" type="text" value="{{ rollovertext }}"></div>
         </div>
         <div class="form-group row fitem step-icon-container">
             <div class="col-md-3 form-inline">
@@ -50,7 +50,7 @@
             </div>
             <div class="col-md-9 col-form-label step-icon-display">
                 {{# pix }} icons/{{ stepicon }} , mod_roadmap, {{ stepicon }}  {{/ pix }}
-                <input class="step-icon" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}" />
+                <input class="step-icon roadmap-form-control-step" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}" />
             </div>
         </div>
         <div class="form-group row fitem step-activity-container">
@@ -59,17 +59,17 @@
             </div>
             <div class="col-md-9 col-form-label">Completion tied to activities:
                 <ul id="step-{{ id }}-completion-list" class="step-completion-list"></ul>
-                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}" />
+                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control roadmap-form-control-step" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}" />
             </div>
         </div>
         <div class="form-group row fitem">
             <div class="col-form-label">
-                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
+                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link roadmap-form-control-step" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
                 If completion is tied to a single activity, also link to that activity</div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Link to Page</div>
-            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control" type="text" value="{{ pagelink }}" ></div>
+            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}" ></div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Expected completed on</div>

@@ -127,7 +127,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                         RoadmapConfig.prototype.downStep(e);
                     });
 
-                    learningobjectives.refresh_checklists();
+                    learningobjectives.refreshChecklists();
 
                     stepiconselect.rebindButtons();
                     stepactivityselect.rebindButtons();
@@ -259,7 +259,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                             RoadmapConfig.prototype.addStep(e);
                         });
 
-                    learningobjectives.refresh_checklists();
+                    learningobjectives.refreshChecklists();
                     cyclesave.rebindInputs();
                     phasesave.rebindInputs();
                     return null;

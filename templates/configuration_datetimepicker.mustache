@@ -48,7 +48,7 @@
     <div class="form-group fitem">
         <label class="col-form-label sr-only">Day</label>
         <span data-fieldtype="select">
-            <select class="completionexpected_day custom-select">
+            <select class="completionexpectedday custom-select roadmap-form-control-step">
                 {{#days}}
                     <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
                 {{/days}}
@@ -61,7 +61,7 @@
             Month
         </label>
         <span data-fieldtype="select">
-            <select class="completionexpected_month custom-select">
+            <select class="completionexpectedmonth custom-select roadmap-form-control-step">
                 {{#months}}
                     <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
                 {{/months}}
@@ -74,7 +74,7 @@
             Year
         </label>
         <span data-fieldtype="select">
-            <select class="completionexpected_year custom-select">
+            <select class="completionexpectedyear custom-select roadmap-form-control-step">
                 {{#years}}
                     <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
                 {{/years}}
@@ -87,7 +87,7 @@
             Hour
         </label>
         <span data-fieldtype="select">
-            <select class="completionexpected_hour custom-select">
+            <select class="completionexpectedhour custom-select roadmap-form-control-step">
                 {{#hours}}
                     <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
                 {{/hours}}
@@ -100,7 +100,7 @@
             Minute
         </label>
         <span data-fieldtype="select">
-            <select class="completionexpected_minute custom-select">
+            <select class="completionexpectedminute custom-select roadmap-form-control-step">
                 {{#minutes}}
                     <option value="{{val}}" {{#sel}}selected{{/sel}}>{{txt}}</option>
                 {{/minutes}}
@@ -111,7 +111,7 @@
     <a href="#" id="" style=""><i class="icon fa fa-calendar fa-fw " title="Calendar" aria-label="Calendar"></i></a>
     &nbsp;
     <label class="form-check fitem">
-        <input type="checkbox" class="form-check-input completionexpected" value="1" {{#expectedcomplete}}checked{{/expectedcomplete}}>
+        <input type="checkbox" class="form-check-input completionexpected roadmap-form-control-step" value="1" {{#expectedcomplete}}checked{{/expectedcomplete}}>
         Enable
     </label>
 </div>

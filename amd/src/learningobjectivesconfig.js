@@ -189,7 +189,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                 return new LearningObjectivesConfig(inputSelector, inputConfig);
             },
 
-            refresh_checklists: function() {
+            refreshChecklists: function() {
                 LearningObjectivesConfig.prototype.refreshChecklists();
             },
         };
