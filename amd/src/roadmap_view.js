@@ -29,10 +29,11 @@ define(['jquery'],
         var RoadmapView = function() {
             // Get progress, normalized
 
+            // For each step icon, light up the ring according the progress.
             $('li.roadmap span.bg').each(function() {
                var p = $(this).data('progress');
 
-                // Clamp progress
+                // Clamp progress. Sanity check, can't be less than zero and more than one.
                 if (p < 0) {
                     p = 0;
                 }
@@ -40,15 +41,18 @@ define(['jquery'],
                     p = 1;
                 }
 
+                // Find the progress circle around the step icon
                 var circle = $(this).find('.roadmap-circle-progress')[0];
 
                 // Get radius, calculate circumference
                 var r = circle.getAttribute('r');
                 var c = Math.PI * r * 2;
 
+                // Draw the stroke according to the progress.
                 circle.setAttribute('stroke-dashoffset', c - (c * p));
             });
 
+            // Collapsing phase functions.
             $('h2.roadmap-phase-title').each(function() {
                 $(this).click(function() {
                     var cc = $(this).closest('.roadmap-phase').find('.roadmap-cycle-container');
@@ -65,7 +69,7 @@ define(['jquery'],
             /**
              * Main initialisation.
              *
-             * @return {RoadmapView} A new instance of PhasesConfig.
+             * @return {RoadmapView} A new instance of the Roadmap Helper object.
              * @method init
              */
             init: function() {
