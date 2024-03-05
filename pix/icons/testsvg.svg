@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 32 32">
+        <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
+        <path fill="#fff" d="M24.5 5.88 8.59 12.24l3.18 3.18-6.36 6.36 3.18 3.19 6.36-6.37 3.19 3.18 6.36-15.9z"/>
+    </svg>
+    <svg class="icon-extras" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" style="position:absolute;top:0;left:0;">
+        <g transform="translate(5,5) rotate(-90 15 15)">
+            <circle class="circle-bg" stroke="#999" fill="none" stroke-width="3" cx="15" cy="15" r="18.5"></circle>
+            <circle class="roadmap-circle-progress" stroke="#999" fill="none" stroke-width="3" stroke-dasharray="116.18" stroke-dashoffset="116.18" cx="15" cy="15" r="18.5"></circle>
+            <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="1" cx="15" cy="15" r="17"></circle>
+        </g>
+    </svg>
+</svg>

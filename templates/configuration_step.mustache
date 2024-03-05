@@ -49,7 +49,7 @@
                 <button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector btn btn-secondary" data-stepid="{{ id }}">Select Icon for Step</button>
             </div>
             <div class="col-md-9 col-form-label step-icon-display">
-                {{# pix }} icons/{{ stepicon }} , mod_roadmap, {{ stepicon }}  {{/ pix }}
+                <img class="icon step-icon roadmap-form-control-step"  data-iconfilename="{{ stepicon }}" src="{{ iconurl }}" />
                 <input class="step-icon roadmap-form-control-step" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}" />
             </div>
         </div>

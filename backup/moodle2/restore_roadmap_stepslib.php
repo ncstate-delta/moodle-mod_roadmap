@@ -33,7 +33,7 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('roadmap', '/activity/roadmap');
         $paths[] = new restore_path_element('roadmap_phase', '/activity/roadmap/phases/phase');
         $paths[] = new restore_path_element('roadmap_cycle', '/activity/roadmap/phases/phase/cycles/cycle');
@@ -97,7 +97,7 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $this->add_related_files('mod_roadmap', 'intro', null);
 
         $activityid = $this->task->get_activityid();
-        $roadmap = $DB->get_record('roadmap', array('id' => $activityid));
+        $roadmap = $DB->get_record('roadmap', ['id' => $activityid]);
 
         // Convert roadmap configuration if exists.
         if (!empty($roadmap->configuration)) {
@@ -137,13 +137,13 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         } else {
 
             // Restore from 4.0 and later.
-            $phases = $DB->get_records('roadmap_phase', array('roadmapid' => $roadmap->id));
+            $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id]);
 
             foreach ($phases as $phase) {
-                $cycles = $DB->get_records('roadmap_cycle', array('phaseid' => $phase->id));
+                $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id]);
 
                 foreach ($cycles as $cycle) {
-                    $steps = $DB->get_records('roadmap_step', array('cycleid' => $cycle->id));
+                    $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
 
                     foreach ($steps as $step) {
 

@@ -29,14 +29,14 @@ $coursemoduleid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('', $coursemoduleid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
 
-$params = array('id' => $cm->course);
+$params = ['id' => $cm->course];
 $course = $DB->get_record('course', $params, '*', MUST_EXIST);
 
 require_login($course);
 
-$urlparams = array('id' => $coursemoduleid);
+$urlparams = ['id' => $coursemoduleid];
 $url = new moodle_url('/mod/roadmap/configuration.php', $urlparams);
-$returnurl = new moodle_url('/course/view.php', array('id' => $course->id));
+$returnurl = new moodle_url('/course/view.php', ['id' => $course->id]);
 
 $title = get_string('roadmapconfiguration', 'mod_roadmap');
 
@@ -47,13 +47,13 @@ $PAGE->set_pagelayout('incourse');
 
 $output = $PAGE->get_renderer('mod_roadmap');
 
-$roadmap = $DB->get_record('roadmap', array('id' => $cm->instance), '*', MUST_EXIST);
+$roadmap = $DB->get_record('roadmap', ['id' => $cm->instance], '*', MUST_EXIST);
 
 $configuration = new mod_roadmap\form\configuration($url->out(false), [
     'course' => $course,
     'cm' => $cm,
     'roadmap' => $roadmap,
-], 'post', '', array('id' => 'mformroadmap'));
+], 'post', '', ['id' => 'mformroadmap']);
 
 // Form cancelled.
 if ($configuration->is_cancelled()) {
@@ -78,9 +78,9 @@ if ($data) {
                  WHERE id = ?";
 
     // Any saves from this version on will clear the configuration field.  Soon to be deprecated.
-    $DB->execute($sql, array('', $data->learningobjectivesconfiguration,
+    $DB->execute($sql, ['', $data->learningobjectivesconfiguration,
         $data->phasecolorpattern, $data->displayposition, $data->cyclealignment, $data->cycledecoration,
-        $data->cloprefix, $roadmap->id));
+        $data->cloprefix, $roadmap->id]);
 
     redirect($returnurl, 'Configuration Saved Successfully.', null, \core\output\notification::NOTIFY_SUCCESS);
 }

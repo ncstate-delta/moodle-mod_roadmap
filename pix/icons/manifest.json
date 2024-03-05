@@ -1,0 +1,94 @@
+[
+  { "id": 0, "name":  "Document", "icons":  [
+    { "id": 52, "file": "icon-52", "name": "Book Gear" },
+    { "id": 53, "file": "icon-53", "name": "Book Light" },
+    { "id": 54, "file": "icon-54", "name": "Files" },
+    { "id": 55, "file": "icon-55", "name": "Folder" },
+    { "id": 35, "file": "icon-35", "name": "3D Book" },
+    { "id": 6,  "file": "icon-6",  "name": "Book" },
+    { "id": 30, "file": "icon-30", "name": "Book Magnifier" },
+    { "id": 25, "file": "icon-25", "name": "Bullet Points" },
+    { "id": 11, "file": "icon-11", "name": "Checkbox List" },
+    { "id": 20, "file": "icon-20", "name": "File A-Plus" },
+    { "id": 12, "file": "icon-12", "name": "File Check" },
+    { "id": 5,  "file": "icon-5",  "name": "File Hand" },
+    { "id": 31, "file": "icon-31", "name": "File Magnifier Check" },
+    { "id": 17, "file": "icon-17", "name": "File Pencil" },
+    { "id": 18, "file": "icon-18", "name": "File Timer" },
+    { "id": 26, "file": "icon-26", "name": "Files" },
+    { "id": 32, "file": "icon-32", "name": "Open Book" },
+    { "id": 10, "file": "icon-10", "name": "Paper Check" }
+  ]},
+
+  { "id": 1, "name":  "Game", "icons":  [
+    { "id": 43, "file": "icon-43", "name": "Chess" },
+    { "id": 47, "file": "icon-47", "name": "Console" },
+    { "id": 41, "file": "icon-41", "name": "Dice" },
+    { "id": 42, "file": "icon-42", "name": "Domino" },
+    { "id": 46, "file": "icon-46", "name": "Ribbon" },
+    { "id": 45, "file": "icon-45", "name": "Trophy" },
+    { "id": 56, "file": "icon-56", "name": "Puzzle Piece" }
+  ]},
+
+  { "id": 2, "name":  "Generic", "icons":  [
+    { "id": 1,  "file": "icon-1", "name": "Arrow" },
+    { "id": 38, "file": "icon-38", "name": "Arrow Axis" },
+    { "id": 36, "file": "icon-36", "name": "Arrow Expand" },
+    { "id": 37, "file": "icon-37", "name": "Arrow Next" },
+    { "id": 15, "file": "icon-15", "name": "Arrow Question" },
+    { "id": 19, "file": "icon-19", "name": "Checkbox" },
+    { "id": 24, "file": "icon-24", "name": "Pencil" },
+    { "id": 22, "file": "icon-22", "name": "Pencil Question" },
+    { "id": 21, "file": "icon-21", "name": "Pencil Markup" },
+    { "id": 8,  "file": "icon-8",  "name": "Question" },
+    { "id": 14, "file": "icon-14", "name": "Question Check" },
+    { "id": 28, "file": "icon-28", "name": "Rewind" },
+    { "id": 57, "file": "icon-57", "name": "Thought Bubble" },
+    { "id": 58, "file": "icon-58", "name": "Flow Chart" }
+  ]},
+
+  { "id": 3, "name":  "Person", "icons":  [
+    { "id": 48, "file": "icon-48", "name": "Audience" },
+    { "id": 51, "file": "icon-51", "name": "High Five" },
+    { "id": 49, "file": "icon-49", "name": "Raising Hand" },
+    { "id": 33, "file": "icon-33", "name": "Person Reading" },
+    { "id": 61, "file": "icon-61", "name": "Collaboration" },
+    { "id": 62, "file": "icon-62", "name": "Group" },
+    { "id": 63, "file": "icon-63", "name": "Person Thought" }
+  ]},
+
+  { "id": 4, "name":  "STEM", "icons":  [
+    { "id": 64, "file": "icon-64", "name": "Atom" },
+    { "id": 65, "file": "icon-65", "name": "Binary Digits" },
+    { "id": 66, "file": "icon-66", "name": "DNA Helix" },
+    { "id": 67, "file": "icon-67", "name": "Flask" },
+    { "id": 68, "file": "icon-68", "name": "Math Signs" },
+    { "id": 69, "file": "icon-69", "name": "Microscope" },
+    { "id": 70, "file": "icon-70", "name": "Variables" }
+  ]},
+
+  { "id": 5, "name":  "Tech", "icons":  [
+    { "id": 7,  "file": "icon-7",  "name": "Discuss Bubbles" },
+    { "id": 9,  "file": "icon-9",  "name": "Discuss Messages" },
+    { "id": 2,  "file": "icon-2",  "name": "Laptop" },
+    { "id": 39, "file": "icon-39", "name": "Narrow Link" },
+    { "id": 40, "file": "icon-40", "name": "Wide Link" },
+    { "id": 4,  "file": "icon-4",  "name": "Mobile Device" },
+    { "id": 3,  "file": "icon-3",  "name": "World Wide Web" },
+    { "id": 71, "file": "icon-71", "name": "Gears" },
+    { "id": 72, "file": "icon-72", "name": "Screens" }
+  ]},
+
+  { "id": 6, "name":  "Other", "icons":  [
+    { "id": 23, "file": "icon-23", "name": "Backpack" },
+    { "id": 34, "file": "icon-34", "name": "Cresent" },
+    { "id": 29, "file": "icon-29", "name": "Light Bulb" },
+    { "id": 27, "file": "icon-27", "name": "Magnifier" },
+    { "id": 16, "file": "icon-16", "name": "Scale" },
+    { "id": 50, "file": "icon-50", "name": "School" },
+    { "id": 13, "file": "icon-13", "name": "Timer" },
+    { "id": 44, "file": "icon-44", "name": "Treasure Box" },
+    { "id": 59, "file": "icon-59", "name": "Wolf Paw" },
+    { "id": 60, "file": "icon-60", "name": "Wolf" }
+  ]}
+]

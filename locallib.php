@@ -33,7 +33,7 @@ require_once("$CFG->dirroot/mod/roadmap/lib.php");
  * @return string json encoded data for the configuration form.
  */
 function roadmap_configuration_edit($roadmapid) {
-    global $DB;
+    global $DB, $CFG;
     $data = new \stdClass();
     $data->phases = [];
 
@@ -49,6 +49,7 @@ function roadmap_configuration_edit($roadmapid) {
             foreach ($steps as $step) {
                 $step->expectedcomplete = (bool)$step->expectedcomplete;
                 $step->linksingleactivity = (bool)$step->linksingleactivity;
+                $step->iconurl = $CFG->wwwroot . '/mod/roadmap/icon.php?name=' . $step->stepicon . '&percent=100&flags=n';
                 $step->sort = (int)$step->sort;
 
                 roadmap_datetime_picker_data($step);
@@ -359,17 +360,33 @@ function roadmap_color_sets($id = -1) {
  */
 function roadmap_list_icons() {
     global $CFG;
-    $result = [];
-
     $iconsfolder = $CFG->dirroot . '/mod/roadmap/pix/icons/';
-    $icons = scandir($iconsfolder);
 
-    foreach ($icons as $icon) {
-        // PHP 8.0: we can use the function str_ends_with.
-        if (substr($icon, -4) === '.svg') {
-            $result[] = ['name' => substr($icon, 0, -4)];
+    $selectedicon = new \stdClass();
+    $selectedicon->file = 'icon-59';
+    $selectedicon->name = 'Test';
+
+    $result = [];
+    $result['categories'] = [];
+
+    $currentlyused = new \stdClass();
+    $currentlyused->id = -1;
+    $currentlyused->name = 'Currently Used';
+    $currentlyused->icons = [];  // TODO: Load with currently used, when called dynamically.
+    $result['categories'][] = $currentlyused;
+
+    // TODO: Load this into cache or memory.
+    $jsonmanifest = file_get_contents($iconsfolder . 'manifest.json');
+    $iconmanifest = json_decode($jsonmanifest, false);
+
+    foreach ($iconmanifest as $iconcategory) {
+        foreach ($iconcategory->icons as $icon) {
+            $icon->iconurl = $CFG->wwwroot . '/mod/roadmap/icon.php?name=' . $icon->file . '&percent=100&flags=n';
         }
+        $result['categories'][] = $iconcategory;
     }
+
+    $result['selectedicon'] = $selectedicon;
 
     return $result;
 }

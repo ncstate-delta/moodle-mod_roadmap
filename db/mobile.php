@@ -24,24 +24,24 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$addons = array(
-    "mod_roadmap" => array(
-        "handlers" => array(
-            'courseroadmap' => array(
-                'displaydata' => array(
+$addons = [
+    "mod_roadmap" => [
+        "handlers" => [
+            'courseroadmap' => [
+                'displaydata' => [
                     'title' => 'pluginname',
                     'icon' => $CFG->wwwroot . '/mod/roadmap/pix/icon.svg',
                     'class' => '',
-                ),
+                ],
                 'delegate' => 'CoreCourseModuleDelegate',
-                'styles' => array(
+                'styles' => [
                     'url' => '/mod/roadmap/mobile/styles.css',
                     'version' => 2.1,
-                ),
-            )
-        ),
-        'lang' => array(
-            array('pluginname', 'roadmap'),
-        )
-    )
-);
+                ],
+            ],
+        ],
+        'lang' => [
+            ['pluginname', 'roadmap'],
+        ],
+    ],
+];

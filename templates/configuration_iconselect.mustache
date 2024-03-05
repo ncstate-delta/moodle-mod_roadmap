@@ -24,10 +24,40 @@
         }]
     }
 }}
-{{# icons }}
-    <div class="icon-container" data-iconname="{{ name }}">{{# pix }} icons/{{ name }} , mod_roadmap, {{ name}}  {{/ pix }}</div>
-{{/ icons }}
-
-<div data-region="scale-buttons" class="scale-buttons">
-    <input type="button" class="btn btn-secondary" data-action="cancel" value="Cancel"/>
+<div class="icon-select-container">
+    <div class="icon-categories-container">
+        {{# categories }}
+            <h6>{{ name }}</h6><hr />
+            {{# icons }}
+                <div class="icon-container">
+                    <img class="icon" data-iconname="{{ name }}"  data-iconfilename="{{ file }}" src="{{ iconurl }}" />
+                </div>
+            {{/ icons }}
+        {{/ categories }}
+    </div>
+    {{# selectedicon }}
+        <div class="selected-icon-container">
+            <h5>Selected Icon Preview</h5>
+            <span class="img-incomplete">
+                {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
+            </span>
+            <span class="img-partial">
+                {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
+            </span>
+            <span class="img-alert">
+                {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
+            </span>
+            <span class="img-complete">
+                {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
+            </span>
+            <span class="img-ontime">
+                {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
+            </span>
+            <input type="hidden" id="current-selected-icon" name="current-selected-icon" />
+        </div>
+    {{/ selectedicon }}
+    <input type="hidden" id="icon-url" name="icon-url" />
+    <input type="hidden" id="step-id" name="step-id" />
 </div>
+
+

@@ -1,8 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
-    <g transform="rotate(-90 15 15)">
-        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
-        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
     <path d="M16.07 7.49a6.2 6.2 0 1 0-.81 9.43L23 24.69l1.48-1.47-7.78-7.77a6.19 6.19 0 0 0-.66-8m-.69 8.08a5.22 5.22 0 1 1 0-7.39 5.21 5.21 0 0 1 0 7.39" fill="#fff"/>
 </svg>

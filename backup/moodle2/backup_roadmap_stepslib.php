@@ -32,28 +32,28 @@ class backup_roadmap_activity_structure_step extends backup_activity_structure_s
     protected function define_structure() {
 
         // Define each element separated.
-        $roadmap = new backup_nested_element('roadmap', array('id'), array(
+        $roadmap = new backup_nested_element('roadmap', ['id'], [
             'name', 'intro', 'introformat', 'timemodified', 'configuration', 'learningobjectives', 'colors',
-            'clodisplayposition', 'cloalignment', 'clodecoration', 'cloprefix'));
+            'clodisplayposition', 'cloalignment', 'clodecoration', 'cloprefix']);
 
         $phases = new backup_nested_element('phases');
 
-        $phase = new backup_nested_element('phase', array('id'), array(
-           'title', 'sort', 'roadmapid'
-        ));
+        $phase = new backup_nested_element('phase', ['id'], [
+           'title', 'sort', 'roadmapid',
+        ]);
 
         $cycles = new backup_nested_element('cycles');
 
-        $cycle = new backup_nested_element('cycle', array('id'), array(
-            'title', 'subtitle', 'pagelink', 'learningobjectives', 'sort', 'phaseid'
-        ));
+        $cycle = new backup_nested_element('cycle', ['id'], [
+            'title', 'subtitle', 'pagelink', 'learningobjectives', 'sort', 'phaseid',
+        ]);
 
         $steps = new backup_nested_element('steps');
 
-        $step = new backup_nested_element('step', array('id'), array(
+        $step = new backup_nested_element('step', ['id'], [
             'rollovertext', 'stepicon', 'completionmodules', 'linksingleactivity', 'pagelink', 'expectedcomplete',
-            'completionexpected_datetime', 'sort', 'cycleid'
-        ));
+            'completionexpected_datetime', 'sort', 'cycleid',
+        ]);
 
         $roadmap->add_child($phases);
         $phases->add_child($phase);
@@ -63,10 +63,10 @@ class backup_roadmap_activity_structure_step extends backup_activity_structure_s
         $steps->add_child($step);
 
         // Define sources.
-        $roadmap->set_source_table('roadmap', array('id' => backup::VAR_ACTIVITYID));
-        $phase->set_source_table('roadmap_phase', array('roadmapid' => backup::VAR_PARENTID));
-        $cycle->set_source_table('roadmap_cycle', array('phaseid' => backup::VAR_PARENTID));
-        $step->set_source_table('roadmap_step', array('cycleid' => backup::VAR_PARENTID));
+        $roadmap->set_source_table('roadmap', ['id' => backup::VAR_ACTIVITYID]);
+        $phase->set_source_table('roadmap_phase', ['roadmapid' => backup::VAR_PARENTID]);
+        $cycle->set_source_table('roadmap_cycle', ['phaseid' => backup::VAR_PARENTID]);
+        $step->set_source_table('roadmap_step', ['cycleid' => backup::VAR_PARENTID]);
 
         // Define file annotations.
         $roadmap->annotate_files('mod_roadmap', 'intro', null);

@@ -88,11 +88,11 @@ function roadmap_update_instance($data, $mform) {
 function roadmap_delete_instance($id) {
     global $DB;
 
-    if (!$roadmap = $DB->get_record('roadmap', array('id' => $id))) {
+    if (!$roadmap = $DB->get_record('roadmap', ['id' => $id])) {
         return false;
     }
 
-    $DB->delete_records('roadmap', array('id' => $roadmap->id));
+    $DB->delete_records('roadmap', ['id' => $roadmap->id]);
 
     return true;
 }
@@ -113,7 +113,7 @@ function roadmap_cm_info_view(cm_info $cm) {
     require_once($CFG->libdir . '/completionlib.php');
     require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
-    if (!$roadmap = $DB->get_record('roadmap', array('id' => $cm->instance))) {
+    if (!$roadmap = $DB->get_record('roadmap', ['id' => $cm->instance])) {
         return null;
     }
 
@@ -174,13 +174,13 @@ function roadmap_cm_info_view(cm_info $cm) {
             foreach ($steps as $step) {
                 $cmidcomplete = 0;
                 $cmidtotal = 0;
+                $flags = '';
 
                 if (!isset($step->completionmodules)) {
                     $step->completionmodules = '';
                 }
                 $cmids = explode(',', $step->completionmodules);
 
-                $step->completedontime = false;
                 $step->incomplete = false;
 
                 // Step-link Logic.
@@ -202,7 +202,7 @@ function roadmap_cm_info_view(cm_info $cm) {
                     }
 
                     foreach ($cmids as $cmid) {
-                        if (!$cmcheck = $DB->get_record('course_modules', array('id' => $cmid))) {
+                        if (!$cmcheck = $DB->get_record('course_modules', ['id' => $cmid])) {
                             continue;
                         }
 
@@ -219,25 +219,23 @@ function roadmap_cm_info_view(cm_info $cm) {
                         }
                         $cmidtotal++;
                     }
-                    $step->completedontime = ($step->expectedcomplete == 1 &&
-                                              !$step->incomplete &&
-                                              $completiondata->timemodified < $expectedcompletetime);
 
-                    $step->lowontime = ($step->expectedcomplete == 1 &&
+                    if ($step->expectedcomplete == 1 &&
+                        !$step->incomplete &&
+                        $completiondata->timemodified < $expectedcompletetime) {
+
+                        $flags .= 's';
+                    } else if ($step->expectedcomplete == 1 &&
                         $step->incomplete &&
                         time() + 86400 > $expectedcompletetime &&
-                        time() < $expectedcompletetime);
+                        time() < $expectedcompletetime) {
 
-                    if ($step->expectedcomplete == 1) {
-                        $staricon = $CFG->wwwroot . '/mod/roadmap/pix/star.svg';
-                        $step->rollovertext = (!empty($step->rollovertext) ? $step->rollovertext . PHP_EOL . '<br /> ' : '') .
-                            '<img class="rollover-star" src="' . $staricon .  '" /> By: ' .
-                            date("n/j/Y h:i A", $expectedcompletetime);
+                        $flags .= 'a';
                     }
 
                     // Check for linksingleactivity and create link.
                     if ($step->linksingleactivity == 1 && count($cmids) == 1) {
-                        if ($cmcheck = $DB->get_record('course_modules', array('id' => (int)$cmids[0]))) {
+                        if ($cmcheck = $DB->get_record('course_modules', ['id' => (int)$cmids[0]])) {
                             $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
                         }
                     }
@@ -247,22 +245,23 @@ function roadmap_cm_info_view(cm_info $cm) {
                 }
 
                 if (!empty($step->stepicon)) {
-                    // Read icon and grab svg contents.
-                    $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $step->stepicon . '.svg';
-                    if (file_exists($iconfilename)) {
-                        $cmidpercent = 0;
-                        if ($cmidtotal > 0) {
-                            $cmidpercent = ((int)($cmidcomplete / $cmidtotal * 100)) / 100;
-                        }
-                        $iconfilecontents = file_get_contents($iconfilename);
-                        $step->stepiconsvg = '<span data-progress="' . $cmidpercent . '" class="bg step-icon-'
-                            . $phase->id . '">' . $iconfilecontents . '</span>';
+
+                    $cmidpercent = 0;
+                    if ($cmidtotal > 0) {
+                        $cmidpercent = (int)($cmidcomplete / $cmidtotal * 100);
                     }
+                    $iconcolor = $phase->color;
+                    if (substr($iconcolor, 0, 1) == '#') {
+                        $iconcolor = substr($iconcolor, 1);
+                    }
+                    $step->iconurl = $CFG->wwwroot . '/mod/roadmap/icon.php?name=' . $step->stepicon .
+                        '&percent=' . (int)$cmidpercent . '&color=' . $iconcolor . '&flags=' . $flags;
                 }
 
                 if ($step->incomplete) {
                     $cycle->indicatorcolor = '#cccccc';
                 }
+
                 $cycle->steps[] = $step;
             }
             $cycle->prefix = $roadmap->cloprefix;
@@ -307,7 +306,7 @@ function roadmap_cm_info_view(cm_info $cm) {
         $cm->set_content($content);
     } else {
         $cm->set_content($content);
-        $PAGE->requires->js_call_amd('mod_roadmap/roadmap_view', 'init', array());
+        $PAGE->requires->js_call_amd('mod_roadmap/roadmap_view', 'init', []);
     }
 }
 

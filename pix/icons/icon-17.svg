@@ -1,9 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-    <path class="roadmap-background-circle" d="M30 15A15 15 0 1 1 15 0a15 15 0 0 1 15 15" fill="#999"/>
-    <g transform="rotate(-90 15 15)">
-        <circle class="circle-bg" stroke="#fff" fill="none" stroke-width="3" cx="15" cy="15" r="18"/>
-        <circle class="roadmap-circle-progress" stroke="#fff" fill="none" stroke-width="3" stroke-dasharray="113.097" stroke-dashoffset="113.097" cx="15" cy="15" r="18"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
     <path fill="#fff" d="M14.44 20.88v2.48H5.29V10.25h9.98V9.4H4.46v14.87h10.81v-4.72l-.83 1.33z"/>
     <path fill="#fff" d="M6.47 12.04h5.55v.68H6.47zM6.47 15.5h3.05v.68H6.47zM6.47 18.96h3.36v.68H6.47zM12.74 16.49l.62-.1-.21.67 1.12-.23-2.7 1.35 1.35-2.7-.18 1.01zM14.82 13.16a4.92 4.92 0 0 1-.89.3l5.78-5.77a3.07 3.07 0 0 0 .05.53s-4.85 4.9-4.94 4.94M15.75 14.72c-.58.24-1.16.47-1.32.25.13-.34.24-.62.38-.92.06-.12 5.19-5.21 5.19-5.17a1.89 1.89 0 0 0 .81.8s-4.93 5-5 5M22.06 10l-5.77 5.78c-.19 0-.19-.31-.09-.68 0-.07 5.17-5.21 5.21-5.2a2.76 2.76 0 0 0 .65.1M20.43 7l.26-.26a2.31 2.31 0 0 0 2.36 2.36l-.26.26A2.31 2.31 0 0 1 20.43 7M21.41 6l1.18-1.2A2.31 2.31 0 0 1 25 7.16l-1.23 1.18A2.31 2.31 0 0 1 21.41 6"/>
 </svg>

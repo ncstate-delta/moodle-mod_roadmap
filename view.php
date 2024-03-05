@@ -26,7 +26,7 @@ require_once("../../config.php");
 require_once("lib.php");
 
 $id = required_param('id', PARAM_INT); // Course Module ID.
-$url = new moodle_url('/mod/roadmap/view.php', array('id' => $id));
+$url = new moodle_url('/mod/roadmap/view.php', ['id' => $id]);
 
 $PAGE->set_url($url);
 
@@ -34,7 +34,7 @@ if (!$cm = get_coursemodule_from_id('roadmap', $id)) {
     moodle_exception('invalidcoursemodule');
 }
 
-if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
+if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
     moodle_exception('coursemisconf');
 }
 
@@ -45,8 +45,8 @@ require_course_login($course, false, $cm);
 // If allowed, forward to configuration page
 // Show configuration link if editing is on.
 if (has_capability('mod/roadmap:configure', $context)) {
-    redirect(new \moodle_url('/mod/roadmap/configuration.php', array('id' => $cm->id)));
+    redirect(new \moodle_url('/mod/roadmap/configuration.php', ['id' => $cm->id]));
 } else {
     // Redirect to course page.
-    redirect(new \moodle_url('/course/view.php', array('id' => $cm->course)));
+    redirect(new \moodle_url('/course/view.php', ['id' => $cm->course]));
 }

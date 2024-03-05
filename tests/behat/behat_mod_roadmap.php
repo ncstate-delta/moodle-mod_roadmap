@@ -51,7 +51,7 @@ class behat_mod_roadmap extends behat_question_base {
     public function i_move_up_learning_objective($objectivename) {
         // Expand the new phase.
         $moveupbuttonxpath = $this->get_xpath_for_learning_objective_moveup_button($objectivename);
-        $this->execute("behat_general::i_click_on", array($moveupbuttonxpath, "xpath_element"));
+        $this->execute("behat_general::i_click_on", [$moveupbuttonxpath, "xpath_element"]);
     }
 
     /**
@@ -65,7 +65,7 @@ class behat_mod_roadmap extends behat_question_base {
     public function i_move_down_learning_objective($objectivename) {
         // Expand the new phase.
         $movedownbuttonxpath = $this->get_xpath_for_learning_objective_movedown_button($objectivename);
-        $this->execute("behat_general::i_click_on", array($movedownbuttonxpath, "xpath_element"));
+        $this->execute("behat_general::i_click_on", [$movedownbuttonxpath, "xpath_element"]);
     }
 
     /**
@@ -81,7 +81,7 @@ class behat_mod_roadmap extends behat_question_base {
         $deletebuttonxpath = $this->get_xpath_for_learning_objective_delete_button($objectivename);
 
         try {
-            $this->execute("behat_general::i_click_on", array($deletebuttonxpath, "xpath_element"));
+            $this->execute("behat_general::i_click_on", [$deletebuttonxpath, "xpath_element"]);
         } catch (Facebook\WebDriver\Exception\UnexpectedAlertOpenException $e) {
             // Accepting the alert so the framework can continue properly running
             // the following scenarios. Some browsers already closes the alert, so
@@ -110,7 +110,7 @@ class behat_mod_roadmap extends behat_question_base {
             $this->execute('behat_general::click_link', 'Add a course learning objective');
 
             $lotitlexpath = $this->get_xpath_for_learning_objective_input($number);
-            $this->execute("behat_forms::i_set_the_field_with_xpath_to", array($lotitlexpath, $row['title']));
+            $this->execute("behat_forms::i_set_the_field_with_xpath_to", [$lotitlexpath, $row['title']]);
             $number++;
         }
     }
@@ -136,10 +136,10 @@ class behat_mod_roadmap extends behat_question_base {
             // Expand the new phase.
             $phasewrapperxpath = $this->get_xpath_for_phase_wrapper($heading);
             $expandphasexpath  = $this->get_xpath_for_phase_expand_button($phasewrapperxpath);
-            $this->execute("behat_general::i_click_on", array($expandphasexpath, "xpath_element"));
+            $this->execute("behat_general::i_click_on", [$expandphasexpath, "xpath_element"]);
 
             $phasetitlexpath = $this->get_xpath_for_phase_title($phasewrapperxpath);
-            $this->execute("behat_forms::i_set_the_field_with_xpath_to", array($phasetitlexpath, $row['title']));
+            $this->execute("behat_forms::i_set_the_field_with_xpath_to", [$phasetitlexpath, $row['title']]);
         }
     }
 
@@ -156,7 +156,7 @@ class behat_mod_roadmap extends behat_question_base {
         // Expand the new phase.
         $phasewrapperxpath = $this->get_xpath_for_phase_wrapper($phasename);
         $expandphasexpath  = $this->get_xpath_for_phase_moveup_button($phasewrapperxpath);
-        $this->execute("behat_general::i_click_on", array($expandphasexpath, "xpath_element"));
+        $this->execute("behat_general::i_click_on", [$expandphasexpath, "xpath_element"]);
     }
 
     /**

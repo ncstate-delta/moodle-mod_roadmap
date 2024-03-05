@@ -46,7 +46,7 @@ class configuration extends moodleform {
      * @return void
      */
     public function definition() {
-        global $PAGE, $COURSE;
+        global $CFG, $PAGE, $COURSE;
 
         $mform =& $this->_form;
         $roadmap = $this->_customdata['roadmap'];
@@ -109,11 +109,15 @@ class configuration extends moodleform {
         // Icon Selection.
         $mform->addElement('hidden', 'icon_data');
         $mform->setType('icon_data', PARAM_RAW);
-        $mform->setDefault('icon_data', json_encode(array('icons' => roadmap_list_icons())));
+        $mform->setDefault('icon_data', json_encode(roadmap_list_icons()));
+
+        $mform->addElement('hidden', 'icon_url');
+        $mform->setType('icon_url', PARAM_RAW);
+        $mform->setDefault('icon_url', $CFG->wwwroot . '/mod/roadmap/icon.php');
 
         $mform->addElement('hidden', 'activity_data');
         $mform->setType('activity_data', PARAM_RAW);
-        $mform->setDefault('activity_data', json_encode(array('activities' => roadmap_list_activities($COURSE))));
+        $mform->setDefault('activity_data', json_encode(['activities' => roadmap_list_activities($COURSE)]));
 
         $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
 
@@ -127,10 +131,10 @@ class configuration extends moodleform {
 
         // Add js.
         $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
-            array('#learningobjectives_panel',
+            ['#learningobjectives_panel',
                 'input[name="learningobjectivesconfiguration"]',
                 '#roadmapconfiguration',
-                'input[name="roadmapconfiguration"]')
+                'input[name="roadmapconfiguration"]']
         );
 
         $this->add_action_buttons(true, 'Save Configuration');

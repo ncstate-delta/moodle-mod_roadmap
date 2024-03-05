@@ -99,7 +99,7 @@
     position: relative;
     padding: 0;
     margin: 10px 0 5px 0;
-    height: 33px;
+    height: 46px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row {
@@ -144,17 +144,20 @@
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step {
     display: inline-block;
     position: relative;
-    width: 33px;
-    height: 33px;
-    margin-right: 6px;
+    width: 48px;
+    height: 46px;
     padding: 3px 4px;
+}
+
+#roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step a {
+    display: block;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step .icon {
     display: inline-block;
     position: relative;
-    width: 27px;
-    height: 27px;
+    width: 40px;
+    height: 40px;
     margin-right: 6px;
 }
 
@@ -260,22 +263,88 @@
 }
 
 #mformroadmap .step-icon-display .icon {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
 }
 
-.icon-container {
+#page-mod-roadmap-configuration .modal-body {
+    background-color: #eee;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-select-container {
+    background: #fff;
+    padding: 10px;
+    height: 100%;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-categories-container {
+    height: calc(100% - 200px);
+    overflow-y: scroll;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-categories-container h6 {
+    margin-top: 15px;
+}
+
+#page-mod-roadmap-configuration .modal-body .selected-icon-container {
+    height: 200px;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-container {
     display: inline-block;
-    width: 40px;
-    height: 40px;
-    margin: 7px;
 }
 
-.icon-container img.icon {
+#page-mod-roadmap-configuration .modal-body .icon-container img.icon {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-container img.icon:hover,
+#page-mod-roadmap-configuration .modal-body .icon-container img.icon.selected {
+    background-color: #ccc;
+    cursor: pointer;
+    outline: 1px #999 solid;
+}
+
+#page-mod-roadmap-configuration .modal-body .icon-container img.icon.selected {
+    background-color: #ccc;
+}
+
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-incomplete,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-partial,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-alert,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-complete,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-ontime {
+    position: relative;
+}
+
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-incomplete img,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-partial img,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-alert img,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-complete img,
+#page-mod-roadmap-configuration .modal-body .selected-icon-container span.img-ontime img {
+    font-size: 16px;
+    width: 80px;
+    height: 80px;
+    margin: 0;
+    padding: 28px;
+    box-sizing: content-box;
+}
+
+#page-mod-roadmap-configuration .modal-body .selected-icon-container svg.roadmap-star {
+    pointer-events: none;
+    position: absolute;
+    top: -30px;
+    right: 30px;
     width: 30px;
     height: 30px;
-    margin: 5px;
-    color: #f00;
 }
 
 #step-activity-selector {
