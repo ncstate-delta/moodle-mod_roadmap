@@ -276,6 +276,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var nextStepIndex = stepsContainer.children('.step-wrapper').length;
             var dtpdata = JSON.parse($('input[name="datetimepickerdata"]').val());
             let maxStepId = parseInt(RoadmapConfig.prototype.maxValue('step'));
+            let iconUrl = $('input[name="icon_url"]').val();
 
             var newStep = {
                 id: maxStepId + 1,
@@ -287,6 +288,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 hours: dtpdata.hours,
                 minutes: dtpdata.minutes,
                 stepicon: 'icon-10',
+                iconurl: iconUrl + '?name=icon-10&percent=100&flags=n',
             };
 
             templates.render('mod_roadmap/configuration_step', newStep)
