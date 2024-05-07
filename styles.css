@@ -69,8 +69,8 @@
     display: inline-block;
     position: relative;
     vertical-align: top;
-    margin: 15px 20px 0 0;
-    min-width: 215px;
+    margin: 15px 15px 5px 0;
+    min-width: 210px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-cycle-title {
@@ -94,12 +94,16 @@
     height: 21px;
 }
 
+#roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-cycle-subtitle:empty {
+    display: none;
+}
+
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step-row {
     display: block;
     position: relative;
     padding: 0;
-    margin: 10px 0 5px 0;
-    height: 46px;
+    margin: 8px 0 0 0;
+    height: 44px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-topic-row {
@@ -144,9 +148,9 @@
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step {
     display: inline-block;
     position: relative;
-    width: 48px;
-    height: 46px;
-    padding: 3px 4px;
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step a {
@@ -158,7 +162,7 @@
     position: relative;
     width: 40px;
     height: 40px;
-    margin-right: 6px;
+    margin-right: 0px;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .roadmap-step svg {
