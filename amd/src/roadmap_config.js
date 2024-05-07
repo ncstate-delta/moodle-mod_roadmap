@@ -274,7 +274,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
             var stepsContainer = cycleContainer.children('.cycle-steps-container');
 
             var nextStepIndex = stepsContainer.children('.step-wrapper').length;
-            var dtpdata = JSON.parse($('input[name="datetimepickerdata"]').val());
             let maxStepId = parseInt(RoadmapConfig.prototype.maxValue('step'));
             let iconUrl = $('input[name="icon_url"]').val();
 
@@ -282,11 +281,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
                 id: maxStepId + 1,
                 index: nextStepIndex,
                 number: nextStepIndex + 1,
-                days: dtpdata.days,
-                months: dtpdata.months,
-                years: dtpdata.years,
-                hours: dtpdata.hours,
-                minutes: dtpdata.minutes,
                 stepicon: 'icon-10',
                 iconurl: iconUrl + '?name=icon-10&percent=100&flags=n',
             };

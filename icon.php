@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file generates icon files used in the roadmap dynamically.
+ *
+ * @package   mod_roadmap
+ * @copyright 2024 NC State DELTA {@link http://delta.ncsu.edu}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once(__DIR__ . '/../../config.php');
 global $CFG;
 
@@ -42,12 +50,14 @@ if (file_exists($iconfilename)) {
 
     $iconfilecontents = file_get_contents($iconfilename);
     if ($percent < 100) {
-        $color = '#999';
+        $bgcolor = '#aaa';
+    } else {
+        $bgcolor = $color;
     }
 
     $output = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
     $output .= '    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">';
-    $output .= '        <circle cx="20" cy="20" r="15" fill="' . $color . '"></circle>';
+    $output .= '        <circle cx="20" cy="20" r="15" fill="' . $bgcolor . '"></circle>';
     $output .= '        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 40 40">';
     $output .= $iconfilecontents;
     $output .= '        </svg>';
@@ -122,6 +132,12 @@ if (file_exists($iconfilename)) {
     echo $output;
 }
 
+/**
+ * Verify string is a valid hex color using preg_match
+ *
+ * @param string $color The expected hex color.
+ * @return string a cleaned up ready-to-use hex color string.
+ */
 function verify_hex ($color) {
 
     if (substr($color, -1) != '#') {

@@ -31,6 +31,10 @@
  */
 class restore_roadmap_activity_structure_step extends restore_activity_structure_step {
 
+    /**
+     * Define the structure for the roadmap activity
+     * @return array paths of activity structure.
+     */
     protected function define_structure() {
 
         $paths = [];
@@ -43,6 +47,10 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process roadmap table data from restore file.
+     * @return void
+     */
     protected function process_roadmap($data) {
         global $DB;
 
@@ -53,6 +61,10 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * Process roadmap phase table data from restore file.
+     * @return void
+     */
     protected function process_roadmap_phase($data) {
         global $DB;
 
@@ -62,23 +74,30 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $data->roadmapid = $this->get_new_parentid('roadmap');
 
         $newitemid = $DB->insert_record('roadmap_phase', $data);
-        echo ' << set mapping -- old: ' . $oldid . ' new: ' . $newitemid . ' >> ';
+
         $this->set_mapping('roadmap_phase', $oldid, $newitemid, false);
     }
 
+    /**
+     * Process roadmap cycle table data from restore file.
+     * @return void
+     */
     protected function process_roadmap_cycle($data) {
         global $DB;
 
         $data = (object)$data;
         $oldid = $data->id;
-        echo 'before: ' . $data->phaseid . ' ';
+
         $data->phaseid = $this->get_new_parentid('roadmap_phase');
-        echo 'after: ' . $data->phaseid . ' ';
 
         $newitemid = $DB->insert_record('roadmap_cycle', $data);
         $this->set_mapping('roadmap_cycle', $oldid, $newitemid, false);
     }
 
+    /**
+     * Process roadmap step table data from restore file.
+     * @return void
+     */
     protected function process_roadmap_step($data) {
         global $DB;
 
@@ -86,10 +105,25 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
         $data->cycleid = $this->get_new_parentid('roadmap_cycle');
 
+        if (property_exists($data, 'expectedcomplete')) {
+            if ($data->expectedcomplete == 1) {
+                $data->completionexpectedcmid = -1;
+            } else {
+                $data->completionexpectedcmid = $data->expectedcomplete;
+            }
+        }
+        if (property_exists($data, 'completionexpected_datetime')) {
+            $data->completionexpecteddatetime = $data->completionexpected_datetime;
+        }
+
         $newitemid = $DB->insert_record('roadmap_step', $data);
         $this->set_mapping('roadmap_step', $oldid, $newitemid, false);
     }
 
+    /**
+     * Map course module ids to new values in the restored course.
+     * @return void
+     */
     protected function after_restore() {
         global $DB;
 
@@ -164,6 +198,11 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
                             }
                         }
                         $step->completionmodules = implode(',', $newcmids);
+
+                        if ((int)$step->completionexpectedcmid > 0) {
+                            $step->completionexpectedcmid = $this->get_mappingid('course_module', (int)$step->completionexpectedcmid);
+                        }
+
                         $DB->update_record('roadmap_step', $step);
                     }
                 }

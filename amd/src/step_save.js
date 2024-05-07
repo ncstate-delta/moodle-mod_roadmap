@@ -33,18 +33,35 @@ define(['jquery'],
                 .change(this.saveStep.bind(this));
 
             // Run save step if a new field has been added.
+            StepSave.prototype.loadList();
             StepSave.prototype.saveStep(this);
+        };
+
+        StepSave.prototype.loadList = function() {
+            var activityData = JSON.parse($('input[name="activity_data"]').val());
+            var listAreas = $('ul.step-completion-list');
+
+            $(listAreas).each(function(i, e) {
+
+                // Get the configuration line from the local hidden field
+                var stepCompletionModules = $(this).closest('.step-activity-container').find('.step-completion-modules').val();
+                var selectedIds = stepCompletionModules.split(',');
+
+                $(e).children('li').remove();
+                // Use the selected ids to get course module information
+                activityData.activities.forEach(function(activity) {
+                    if ($.inArray(activity.id, selectedIds) >= 0) {
+                        var li = $('<li/>').attr('data-id', activity.id).appendTo($(e));
+                        $('<span>').text(activity.name).appendTo(li);
+                        $(e).append(li);
+                    }
+                });
+            });
         };
 
         StepSave.prototype.saveStep = function(event) {
             // Find step container that we are saving data from.
             var stepContainer = $(event.target).closest('.step-container');
-
-            // Expected complete check box option.
-            var expectedComplete = 0;
-            if (stepContainer.find('.completionexpected').prop("checked") == true) {
-                expectedComplete = 1;
-            }
 
             // Link single activity check box option.
             var linksingleactivity = 0;
@@ -63,20 +80,9 @@ define(['jquery'],
                 completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),
                 linksingleactivity: linksingleactivity,
                 pagelink: stepContainer.find('.fitem input.step-single-activity-link').val(),
-                expectedcomplete: expectedComplete,
-                completionexpectedday: stepContainer.find('.fitem select.completionexpectedday').val(),
-                completionexpectedmonth: stepContainer.find('.fitem select.completionexpectedmonth').val(),
-                completionexpectedyear: stepContainer.find('.fitem select.completionexpectedyear').val(),
-                completionexpectedhour: stepContainer.find('.fitem select.completionexpectedhour').val(),
-                completionexpectedminute: stepContainer.find('.fitem select.completionexpectedminute').val(),
+                completionexpectedcmid: stepContainer.find('.fitem input.expectedcomplete-coursemoduleid').val(),
+                completionexpecteddatetime: stepContainer.find('.fitem input.expectedcomplete-datetime').val(),
             };
-
-            // Clean up data object calendar binding data.
-            delete stepData.days;
-            delete stepData.months;
-            delete stepData.years;
-            delete stepData.hours;
-            delete stepData.minutes;
 
             // Set the header title with the new step roll over text and save the step data object as json to config.
             stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);

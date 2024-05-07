@@ -187,7 +187,7 @@ define([
             /**
              * Main initialisation.
              *
-             * @return {ScaleConfig} A new instance of ScaleConfig.
+             * @return {StepIconSelector} A new instance of StepIconSelector.
              * @method init
              */
             init: function() {

@@ -15,15 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Web service declarations.
  *
  * @package   mod_roadmap
- * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
+ * @copyright 2024 Steve Bader <smbader@ncsu.edu>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_roadmap'; // Full name of the plugin (used for diagnostics).
-$plugin->version  = 2024050600;    // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2022032200;    // Requires this Moodle version.
+$functions = [
+    'mod_roadmap_fetch_course_modules_for_steps' => [
+        'classname' => 'mod_roadmap\external',
+        'methodname' => 'fetch_course_modules_for_steps',
+        'classpath' => '',
+        'description' => 'Return course modules within a course that has activity completion configured.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+];

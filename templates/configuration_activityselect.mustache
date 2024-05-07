@@ -27,12 +27,33 @@
 }}
 <p>Select one or more activities below that must be marked complete in order for this step to be completed.
 Clicking on an item will toggle whether or not it is selected.</p>
-<select id="step-activity-selector" name="activities" multiple>
-{{# activities }}
-    <option value="{{ coursemoduleid }}">{{ name }}</option>
-{{/ activities }}
-</select>
-<div data-region="scale-buttons" class="scale-buttons">
-    <input type="button" class="btn btn-secondary" data-action="save" value="Save"/>
-    <input type="button" class="btn btn-secondary" data-action="cancel" value="Cancel"/>
+<div id="activity-select-window">
+    {{# sections }}
+        <div class="section-header">
+            {{ name }}
+        </div>
+        {{# coursemodules }}
+            <div class="activity">
+                <input type="checkbox"
+                       data-coursemoduleid="{{ id }}"
+                       data-completionexpecteddatetime="{{ completionexpecteddatetime }}"
+                       data-completionexpectedreadable="{{ completionexpectedreadable }}"
+                       data-name="{{ name }}">
+                {{ name }}
+            </div>
+        {{/coursemodules}}
+    {{/sections}}
 </div>
+<strong>Expected completion of all selected activities</strong>
+<p>The selected date below will be the expected completion of all activities selected for this step.
+    If completed in time, the step will be awarded with a star.</p>
+<select id="select-expected-activity-completion" class="form-control custom-select">
+    <option value="0">No Expected Completion Date</option>
+    <option value="-1">Custom Expected Completion Date</option>
+</select>
+<div id="customExpectedDateContainer" class="c1 text-nowrap form-inline">
+    <div class="fdate_time_selector d-flex flex-wrap align-items-center">
+        {{{customdatefields}}}
+    </div>
+</div>
+<input type="hidden" id="step-id" name="step-id" />

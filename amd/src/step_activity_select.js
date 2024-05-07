@@ -19,124 +19,246 @@
  * @module     mod_roadmap/stepactivityselect
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/notification', 'core/templates', 'core/ajax', 'mod_roadmap/dialogue',
-        'mod_roadmap/step_save'],
-    function($, notification, templates, ajax, Dialogue, stepsave) {
+define([
+    'jquery',
+    'core/notification',
+    'core/templates',
+    'mod_roadmap/repository',
+    'core/modal_factory',
+    'core/modal_events',
+    'mod_roadmap/step_save'
+], function(
+    $,
+    notification,
+    templates,
+    roadmapRepository,
+    ModalFactory,
+    ModalEvents,
+    stepsave
+) {
 
-        var StepActivitySelector = function() {
-            // Do nothing.
-        };
 
-        StepActivitySelector.prototype.rebindCheckbox = function() {
-            $('.chk-single-activity-link').unbind('click').each(function(index, chk) {
-                let stepid = $(chk).data('stepid');
-                $('#step-' + stepid + '-single-activity-link').prop("disabled", $(chk).prop('checked'));
+    var SELECTORS = {
+        SELECT_ACTIVITY_BUTTON: '.btn_completion_selector'
+    };
 
-                $(chk).click(function() {
-                    let stepid = $(this).data('stepid');
-                    $('#step-' + stepid + '-single-activity-link').prop("disabled", $(this).prop('checked'));
-                });
-            });
+    var StepActivitySelector = function() {
+        this.registerEventListeners();
+    };
 
-            $('.completion-modules').unbind('change').each(function(index, input) {
-                StepActivitySelector.prototype.configureCheckbox(input);
-            });
-        };
+    StepActivitySelector.prototype.registerEventListeners = function() {
 
-        StepActivitySelector.prototype.configureCheckbox = function(input) {
-            let stepid = $(input).data('stepid');
-            let multipleActivities = ($('#step-' + stepid + '-completion-modules').val().split(',').length > 1);
+        var trigger = $(SELECTORS.SELECT_ACTIVITY_BUTTON);
 
-            $('#step-' + stepid + '-chk-single-activity-link').prop("disabled", multipleActivities);
-            if (multipleActivities) {
-                $('#step-' + stepid + '-chk-single-activity-link').prop("checked", !multipleActivities);
-                $('#step-' + stepid + '-single-activity-link').prop("disabled", !multipleActivities);
-            }
-        };
+        trigger.off('click').on('click', function(e) {
+            let stepId = $(e.target).data('stepid');
 
-        StepActivitySelector.prototype.rebindButtons = function() {
-            $('.btn_completion_selector').unbind('click').click(this.showConfig.bind(this));
-        };
-
-        StepActivitySelector.prototype.showConfig = function(event) {
-            var self = this;
-            var activityData = JSON.parse($('input[name="activity_data"]').val());
-            self.clickedButton = event.target;
-
-            // Dish up the form.
-            templates.render('mod_roadmap/configuration_activityselect', activityData)
-                .done(function(html) {
-                    new Dialogue(
-                        'Select Activities for Step Completion',
-                        html,
-                        self.initActivityConfig.bind(self)
-                    );
-                }).fail(notification.exception);
-        };
-
-        StepActivitySelector.prototype.loadList = function() {
-            var activityData = JSON.parse($('input[name="activity_data"]').val());
-            var listAreas = $('ul.step-completion-list');
-
-            $(listAreas).each(function(i, e) {
-
-                // Get the configuration line from the local hidden field
-                var stepCompletionModules = $(this).closest('.step-activity-container').find('.step-completion-modules').val();
-                var selectedIds = stepCompletionModules.split(',');
-
-                $(e).children('li').remove();
-                // Use the selected ids to get course module information
-                activityData.activities.forEach(function(activity) {
-                    if ($.inArray(activity.coursemoduleid, selectedIds) >= 0) {
-                        var li = $('<li/>').attr('data-id', activity.coursemoduleid).appendTo($(e));
-                        $('<span>').text(activity.name).appendTo(li);
-                        $(e).append(li);
-                    }
-                });
-
-                $(e).trigger('change');
-                StepActivitySelector.prototype.configureCheckbox(
-                    $(this).closest('.step-activity-container').find('.step-completion-modules'));
-            });
-
-        };
-
-        StepActivitySelector.prototype.initActivityConfig = function(popup) {
-            this.popup = popup;
-            var body = $(popup.getContent());
-
-            body.on('click', '[data-action="save"]', function() {
-                let values = $('#step-activity-selector option:selected').toArray()
-                        .map(item => item.value).join(',');
-
-                let stepId = $(this.clickedButton).data('stepid');
-                $('#step-' + stepId + '-completion-modules').val(values).trigger('change');
-
-                StepActivitySelector.prototype.loadList();
-                stepsave.rebindInputs();
-                popup.close();
+            ModalFactory.create({
+                type: ModalFactory.types.SAVE_CANCEL,
+                title: 'Choose Activities for Step Completion',
+                body: '',
+            }, trigger).done(function(modal) {
+                this.setupFormModal(modal, stepId, 'Save Selection');
             }.bind(this));
-            body.on('click', '[data-action="cancel"]', function() {
-                popup.close();
+        }.bind(this));
+    };
+
+    /**
+     * @method getBody
+     * @private
+     * @return {Promise}
+     */
+    StepActivitySelector.prototype.getBody = async() => {
+        const response = await roadmapRepository.fetchCourseModules();
+
+
+        // Get the content of the modal.
+        return templates.render('mod_roadmap/configuration_activityselect', response);
+    };
+
+
+    StepActivitySelector.prototype.setupFormModal = function(modal, stepId, saveText) {
+        modal.setLarge();
+
+        modal.setSaveButtonText(saveText);
+
+        // We want to reset the form every time it is opened.
+        modal.getRoot().on(ModalEvents.hidden, this.destroy.bind(this));
+
+        modal.setBody(this.getBody());
+
+        modal.getRoot().on('click', '#activity-select-window .activity input[type="checkbox"]', function() {
+            this.updateExpectedCompleteDropdown();
+        }.bind(this));
+
+        modal.getRoot().on(ModalEvents.bodyRendered, function() {
+            $('#step-id').val(stepId);
+
+            // Check off all course modules currently selected.
+            let stepCompletionModules = $('#step-' + stepId + '-completion-modules').val().split(',');
+            let stepExpectedCompletionCourseModule = $('#step-' + stepId + '-expectedcomplete-coursemoduleid').val();
+            let stepExpectedCompleteDatetime = $('#step-' + stepId + '-expectedcomplete-datetime').val();
+
+            $.each(stepCompletionModules, function(i , val) {
+                $('#activity-select-window .activity input[type="checkbox"][data-coursemoduleid="' + val + '"]')
+                    .prop('checked', true);
             });
-        };
 
-        return {
+            this.updateExpectedCompleteDropdown();
 
-            /**
-             * Main initialisation.
-             *
-             * @return {ScaleConfig} A new instance of ScaleConfig.
-             * @method init
-             */
-            init: function() {
-                return new StepActivitySelector();
-            },
+            // Select the existing option from dropdown
+            // If expected complete is a course module id, attempt to locate it in the dropdown.
+            if (stepExpectedCompletionCourseModule > 0 &&
+                $('#select-expected-activity-completion option[value="' + stepExpectedCompletionCourseModule + '"]').length > 0) {
+                $('#select-expected-activity-completion option[value="' + stepExpectedCompletionCourseModule + '"]')
+                    .attr("selected","selected");
 
-            rebindButtons: function() {
-                StepActivitySelector.prototype.rebindButtons();
-                StepActivitySelector.prototype.rebindCheckbox();
-                StepActivitySelector.prototype.loadList();
+                // If the course module doesnt exist or isn't a cmid, use the datetime and select custom.
+            } else if (stepExpectedCompleteDatetime > 0) {
+                var date = new Date(stepExpectedCompleteDatetime * 1000);
+                $('#select-expected-activity-completion option[value="-1"]').attr("selected", "selected");
+                $('#customExpectedDateContainer select[name="today"] option[value="' + date.getDate() + '"]')
+                    .attr("selected","selected");
+                $('#customExpectedDateContainer select[name="tomonth"] option[value="' + (date.getMonth()+1) + '"]')
+                    .attr("selected","selected");
+                $('#customExpectedDateContainer select[name="toyear"] option[value="' + date.getFullYear() + '"]')
+                    .attr("selected","selected");
+                $('#customExpectedDateContainer select[name="tohour"] option[value="' + date.getHours() + '"]')
+                    .attr("selected","selected");
+                $('#customExpectedDateContainer select[name="tominute"] option[value="' + date.getMinutes() + '"]')
+                    .attr("selected","selected");
+
+                // If the datetime is not a unixtime, then no completion is expected.
+            } else {
+                $('#select-expected-activity-completion option[value="0"]').attr("selected", "selected");
             }
-        };
-    });
+
+            this.expectedCompleteDropdownChanged();
+        }.bind(this));
+
+        // We catch the modal save event, and use it to submit the form inside the modal.
+        // Triggering a form submission will give JS validation scripts a chance to check for errors.
+        modal.getRoot().on(ModalEvents.save, this.submitForm.bind(this));
+
+        modal.getRoot().on('submit', 'form', this.submitForm.bind(this));
+
+        this.modal = modal;
+
+        modal.show();
+    };
+
+    StepActivitySelector.prototype.expectedCompleteDropdownChanged = function () {
+        let selectedOption = $('#select-expected-activity-completion').find(':selected');
+        if (selectedOption.val() == '-1') {
+            $('#customExpectedDateContainer').show();
+        } else {
+            $('#customExpectedDateContainer').hide();
+        }
+    };
+
+    StepActivitySelector.prototype.updateExpectedCompleteDropdown = function () {
+        let select = $('#select-expected-activity-completion');
+
+        $('#activity-select-window .activity input[type="checkbox"]').each(function() {
+            let coursemoduleid = $(this).data('coursemoduleid');
+            let completionexpecteddatetime = $(this).data('completionexpecteddatetime');
+            let completionexpectedreadable = $(this).data('completionexpectedreadable');
+
+            if (completionexpecteddatetime != 0) {
+                // Is the checkbox checked?
+                if ($(this).is(':checked')) {
+                    let found = false;
+                    $('#select-expected-activity-completion option').each(function() {
+                        if ($(this).val() == coursemoduleid) {
+                            found = true;
+                        }
+                    });
+                    if (found === false) {
+                        select.append($('<option>', {
+                            value: coursemoduleid,
+                            text: completionexpectedreadable + ' ' + $(this).data('name'),
+                            'data-completionexpecteddatetime': completionexpecteddatetime,
+                        }));
+                    }
+                } else {
+                    $('#select-expected-activity-completion option').each(function() {
+                        if ($(this).val() == coursemoduleid) {
+                            $(this).remove();
+                        }
+                    });
+                }
+            }
+        });
+
+        select.unbind('change').change(this.expectedCompleteDropdownChanged.bind(this));
+    };
+
+    StepActivitySelector.prototype.submitForm = function(e) {
+        // We don't want to do a real form submission.
+        e.preventDefault();
+        let stepId = $('#step-id').val();
+
+        $('#step-' + stepId + '-completion-list li').remove();
+        $('#activity-select-window .activity input[type="checkbox"]:checked').each(function() {
+            $('#step-' + stepId + '-completion-list').append('<li>' + $(this).data('name') + '</li>');
+        });
+
+        // Collect the expected completion cmid and datetime
+        let selectedOption = $('#select-expected-activity-completion').find(':selected');
+        if (selectedOption.val() == 0) {
+            $('#step-' + stepId + '-expectedcomplete-coursemoduleid').val(0);
+            $('#step-' + stepId + '-expectedcomplete-datetime').val(0);
+            $('#step-' + stepId + '-expectedcomplete-readable').html(selectedOption.text());
+
+        } else if (selectedOption.val() == -1) {
+            $('#step-' + stepId + '-expectedcomplete-coursemoduleid').val(-1);
+            let day = $('#customExpectedDateContainer select[name="today"]').find(':selected').val();
+            let month = $('#customExpectedDateContainer select[name="tomonth"]').find(':selected').val();
+            let year = $('#customExpectedDateContainer select[name="toyear"]').find(':selected').val();
+            let hours = $('#customExpectedDateContainer select[name="tohour"]').find(':selected').val();
+            let minutes = $('#customExpectedDateContainer select[name="tominute"]').find(':selected').val();
+
+            let jsDate = new Date(year,(month-1),day,hours,minutes);
+            let unixTimestamp = Math.floor(jsDate.getTime() / 1000);
+            $('#step-' + stepId + '-expectedcomplete-datetime').val(unixTimestamp);
+
+            $('#step-' + stepId + '-expectedcomplete-readable').html(month + '/' + day + '/' + year + ' ' + hours + ':' + minutes);
+
+        } else {
+            $('#step-' + stepId + '-expectedcomplete-datetime').val(selectedOption.data('completionexpecteddatetime'));
+            $('#step-' + stepId + '-expectedcomplete-coursemoduleid').val(selectedOption.val());
+            $('#step-' + stepId + '-expectedcomplete-readable').html(selectedOption.text());
+        }
+
+        // Collect all checked course module ids and prep them
+        // to go back to the config form.
+        let values = $('#activity-select-window .activity input[type="checkbox"]:checked')
+            .map(function() { return $(this).data('coursemoduleid'); }).get().join(',');
+
+        $('#step-' + stepId + '-completion-modules').val(values).trigger('change');
+
+        stepsave.rebindInputs();
+        this.destroy();
+    };
+
+    StepActivitySelector.prototype.destroy = function() {
+        this.modal.destroy();
+    };
+
+    return {
+
+        /**
+         * Main initialisation.
+         *
+         * @return {StepActivitySelector} A new instance of StepActivitySelector.
+         * @method init
+         */
+        init: function() {
+            return new StepActivitySelector();
+        },
+
+        rebindButtons: function() {
+            StepActivitySelector.prototype.registerEventListeners();
+        }
+    };
+});

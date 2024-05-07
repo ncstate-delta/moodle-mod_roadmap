@@ -18,6 +18,7 @@
  * Private roadmap module utility functions
  *
  * @package   mod_roadmap
+ * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,7 +29,6 @@ require_once("$CFG->dirroot/mod/roadmap/lib.php");
 /**
  * Prepare phase, cycle, and step data for mustache templates.
  *
- * @global object
  * @param integer $roadmapid
  * @return string json encoded data for the configuration form.
  */
@@ -47,12 +47,26 @@ function roadmap_configuration_edit($roadmapid) {
 
             $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort ASC');
             foreach ($steps as $step) {
-                $step->expectedcomplete = (bool)$step->expectedcomplete;
+                $step->completionexpectedcmid = $step->completionexpectedcmid;
+                $step->completionexpecteddatetime = $step->completionexpecteddatetime;
+                if ($step->completionexpectedcmid == 0) {
+                    $step->completionexpectedreadable = 'No expected completion date set.';
+                } else if ($step->completionexpectedcmid > 0) {
+                    $step->completionexpectedreadable = ($step->completionexpecteddatetime == 0 ? 0 : userdate(
+                        $step->completionexpecteddatetime,
+                        get_string('strftimedatetimeshortaccurate', 'core_langconfig')
+                    ));
+                } else {
+                    $step->completionexpectedreadable = ($step->completionexpecteddatetime == 0 ? 0 : userdate(
+                        $step->completionexpecteddatetime,
+                        get_string('strftimedatetimeshortaccurate', 'core_langconfig')
+                    ));
+                }
+
                 $step->linksingleactivity = (bool)$step->linksingleactivity;
                 $step->iconurl = $CFG->wwwroot . '/mod/roadmap/icon.php?name=' . $step->stepicon . '&percent=100&flags=n';
                 $step->sort = (int)$step->sort;
 
-                roadmap_datetime_picker_data($step);
                 $cycle->steps[] = $step;
             }
             $phase->cycles[] = $cycle;
@@ -63,6 +77,12 @@ function roadmap_configuration_edit($roadmapid) {
     return json_encode($data);
 }
 
+/**
+ * Delete a phase and the tree of elements that belong to that phase.
+ *
+ * @param integer $phaseid
+ * @return void
+ */
 function roadmap_delete_phase($phaseid) {
     global $DB;
 
@@ -75,6 +95,12 @@ function roadmap_delete_phase($phaseid) {
     $DB->delete_records('roadmap_phase', ['id' => $phaseid]);
 }
 
+/**
+ * Delete a cycle and the tree of elements that belong to that phase.
+ *
+ * @param integer $cycleid
+ * @return void
+ */
 function roadmap_delete_cycle($cycleid) {
     global $DB;
 
@@ -84,8 +110,14 @@ function roadmap_delete_cycle($cycleid) {
     $DB->delete_records('roadmap_cycle', ['id' => $cycleid]);
 }
 
-
-
+/**
+ * Save the configuration passed in from the form.
+ *
+ * @param string $configjson json data structure of all roadmap data
+ * @param integer $roadmapid the roadmap to save the data to
+ * @param boolean $conversion convert from old format of roadmap
+ * @return boolean result of save.
+ */
 function roadmap_configuration_save($configjson, $roadmapid, $conversion = false) {
     global $DB;
 
@@ -186,21 +218,6 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
             $stepsort = 0;
             foreach ($cycle->steps as $step) {
 
-                if (
-                    property_exists($step, 'completionexpectedmonth') &&
-                    property_exists($step, 'completionexpectedday') &&
-                    property_exists($step, 'completionexpectedyear') &&
-                    property_exists($step, 'completionexpectedhour') &&
-                    property_exists($step, 'completionexpectedminute')
-                ) {
-                    $strdatetime = sprintf("%02d", $step->completionexpectedmonth) . '/' .
-                        sprintf("%02d", $step->completionexpectedday) . '/' .
-                        sprintf("%04d", $step->completionexpectedyear) . ' ' .
-                        sprintf("%02d", $step->completionexpectedhour) . ':' .
-                        sprintf("%02d", $step->completionexpectedminute) . ':00';
-                    $step->completionexpected_datetime = strtotime($strdatetime);
-                }
-
                 // Save the phase specific data.
                 $stepdata = [
                     'rollovertext' => $step->rollovertext,
@@ -208,8 +225,8 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
                     'completionmodules' => $step->completionmodules,
                     'linksingleactivity' => $step->linksingleactivity,
                     'pagelink' => $step->pagelink,
-                    'expectedcomplete' => $step->expectedcomplete,
-                    'completionexpected_datetime' => $step->completionexpected_datetime,
+                    'completionexpectedcmid' => $step->completionexpectedcmid,
+                    'completionexpecteddatetime' => $step->completionexpecteddatetime,
                     'sort' => $stepsort,
                     'cycleid' => $cycle->id,
                 ];
@@ -241,109 +258,13 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
     return true;
 }
 
-function roadmap_datetime_picker_data($step) {
-    // This is the old, sad way.
-    if (!property_exists($step, 'completionexpectedday')) {
-        $step->completionexpectedday = date("d");
-    }
-    if (!property_exists($step, 'completionexpectedmonth')) {
-        $step->completionexpectedmonth = date("m");
-    }
-    if (!property_exists($step, 'completionexpectedyear')) {
-        $step->completionexpectedyear = date("Y");
-    }
-    if (!property_exists($step, 'completionexpectedhour')) {
-        $step->completionexpectedhour = date("H");
-    }
-    if (!property_exists($step, 'completionexpectedminute')) {
-        $step->completionexpectedminute = date("i");
-    }
-    // The new better way takes priority.
-    if (property_exists($step, 'completionexpected_datetime')) {
-        if ($step->completionexpected_datetime) {
-            $step->completionexpectedday = date("d", $step->completionexpected_datetime);
-            $step->completionexpectedmonth = date("m", $step->completionexpected_datetime);
-            $step->completionexpectedyear = date("Y", $step->completionexpected_datetime);
-            $step->completionexpectedhour = date("H", $step->completionexpected_datetime);
-            $step->completionexpectedminute = date("i", $step->completionexpected_datetime);
-        }
-    }
 
-    $step->days = [];
-    for ($i = 1; $i <= 31; $i++) {
-        $step->days[] = ['val' => sprintf("%02d", $i),
-                         'txt' => sprintf("%02d", $i),
-                         'sel' => ($step->completionexpectedday == sprintf("%02d", $i))];
-    }
-    $step->months = [];
-    $step->months[] = ['val' => '01', 'txt' => 'January', 'sel' => ($step->completionexpectedmonth == '01')];
-    $step->months[] = ['val' => '02', 'txt' => 'February', 'sel' => ($step->completionexpectedmonth == '02')];
-    $step->months[] = ['val' => '03', 'txt' => 'March', 'sel' => ($step->completionexpectedmonth == '03')];
-    $step->months[] = ['val' => '04', 'txt' => 'April', 'sel' => ($step->completionexpectedmonth == '04')];
-    $step->months[] = ['val' => '05', 'txt' => 'May', 'sel' => ($step->completionexpectedmonth == '05')];
-    $step->months[] = ['val' => '06', 'txt' => 'June', 'sel' => ($step->completionexpectedmonth == '06')];
-    $step->months[] = ['val' => '07', 'txt' => 'July', 'sel' => ($step->completionexpectedmonth == '07')];
-    $step->months[] = ['val' => '08', 'txt' => 'August', 'sel' => ($step->completionexpectedmonth == '08')];
-    $step->months[] = ['val' => '09', 'txt' => 'September', 'sel' => ($step->completionexpectedmonth == '09')];
-    $step->months[] = ['val' => '10', 'txt' => 'October', 'sel' => ($step->completionexpectedmonth == '10')];
-    $step->months[] = ['val' => '11', 'txt' => 'November', 'sel' => ($step->completionexpectedmonth == '11')];
-    $step->months[] = ['val' => '12', 'txt' => 'December', 'sel' => ($step->completionexpectedmonth == '12')];
-
-    $currentyear = date("Y");
-    $step->years = [];
-    for ($i = $currentyear; $i <= $currentyear + 6; $i++) {
-        $step->years[] = ['val' => $i, 'txt' => $i, 'sel' => ($step->completionexpectedyear == $i)];
-    }
-    $step->hours = [];
-    for ($i = 0; $i <= 23; $i++) {
-        $step->hours[] = ['val' => sprintf("%02d", $i),
-            'txt' => sprintf("%02d", $i),
-            'sel' => ($step->completionexpectedhour == sprintf("%02d", $i))];
-    }
-    $step->minutes = [];
-    for ($i = 0; $i <= 59; $i++) {
-        $step->minutes[] = ['val' => sprintf("%02d", $i),
-                            'txt' => sprintf("%02d", $i),
-                            'sel' => ($step->completionexpectedminute == sprintf("%02d", $i))];
-    }
-}
-
-function roadmap_datetime_picker_options() {
-    $day = [];
-    for ($i = 1; $i <= 31; $i++) {
-        $day[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i)];
-    }
-    $month = [];
-    $month[] = ['val' => '01', 'txt' => 'January'];
-    $month[] = ['val' => '02', 'txt' => 'February'];
-    $month[] = ['val' => '03', 'txt' => 'March'];
-    $month[] = ['val' => '04', 'txt' => 'April'];
-    $month[] = ['val' => '05', 'txt' => 'May'];
-    $month[] = ['val' => '06', 'txt' => 'June'];
-    $month[] = ['val' => '07', 'txt' => 'July'];
-    $month[] = ['val' => '08', 'txt' => 'August'];
-    $month[] = ['val' => '09', 'txt' => 'September'];
-    $month[] = ['val' => '10', 'txt' => 'October'];
-    $month[] = ['val' => '11', 'txt' => 'November'];
-    $month[] = ['val' => '12', 'txt' => 'December'];
-
-    $currentyear = date("Y");
-    $year = [];
-    for ($i = $currentyear; $i <= $currentyear + 6; $i++) {
-        $year[] = ['val' => $i, 'txt' => $i];
-    }
-    $hour = [];
-    for ($i = 0; $i <= 23; $i++) {
-        $hour[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i)];
-    }
-    $minute = [];
-    for ($i = 0; $i <= 59; $i++) {
-        $minute[] = ['val' => sprintf("%02d", $i), 'txt' => sprintf("%02d", $i)];
-    }
-
-    return ['days' => $day, 'months' => $month, 'years' => $year, 'hours' => $hour, 'minutes' => $minute];
-}
-
+/**
+ * Retrieve color set for the roadmap
+ *
+ * @param integer $id optional
+ * @return array of colors in colorset
+ */
 function roadmap_color_sets($id = -1) {
     $colors = [
         // Default color scheme.
@@ -357,6 +278,9 @@ function roadmap_color_sets($id = -1) {
 }
 
 /**
+ * Load roadmap icons used for step icon selection.
+ *
+ * @return array of icons
  */
 function roadmap_list_icons() {
     global $CFG;
@@ -397,27 +321,62 @@ function roadmap_list_icons() {
  *
  * @return array $elements - return the elements to be added to the form
  */
-function roadmap_list_activities($course) {
-    $completionoptions = [];
+function roadmap_list_activities($course, $includesections = true) {
+    $results = [];
     $index = 0;
 
-    // For activity completition we need to generate a list of activities the same way moodle does.
-    // Conditions based on completion.
     $completion = new completion_info($course);
-    if ($completion->is_enabled()) {
-        $modinfo = get_fast_modinfo($course);
 
-        foreach ($modinfo->cms as $id => $cm) {
-            // Add each course-module if it:
-            // (a) has completion turned on.
-            // (b) is not the same as current course-module.
-            if ($cm->completion && $cm->modname != 'roadmap') {
-                $completionoptions[$index] = ['id' => $index, 'coursemoduleid' => $cm->id, 'name' => $cm->name];
-                $index += 1;
+    if ($completion->is_enabled()) {
+
+        $modinfo = get_fast_modinfo($course);
+        $cms = $modinfo->get_cms();
+
+        if ($includesections) {
+            foreach ($modinfo->get_sections() as $sectionnum => $section) {
+                $sectioninfo = [];
+                $sectioninfo['name'] = get_section_name($course, $sectionnum);
+                $sectioninfo['id'] = $sectionnum;
+
+                $coursemodules = [];
+                foreach ($section as $cmid) {
+                    $coursemodule = [];
+                    $cm = $cms[$cmid];
+                    // Add each course-module if it:
+                    // (a) has completion turned on.
+                    // (b) is not the same as current course-module.
+                    if ($cm->completion && $cm->modname != 'roadmap') {
+                        $coursemodule = [
+                            'id' => $cm->id,
+                            'name' => $cm->name,
+                            'completionexpecteddatetime' => $cm->completionexpected,
+                            'completionexpectedreadable' => $cm->completionexpected == 0 ? 0 :
+                                userdate($cm->completionexpected, get_string('strftimedatetimeshortaccurate', 'core_langconfig')),
+                        ];
+                        $index += 1;
+                        $coursemodules[] = $coursemodule;
+                    }
+                }
+                asort($coursemodules);
+                $sectioninfo['coursemodules'] = $coursemodules;
+                $results[] = $sectioninfo;
+            }
+        } else {
+            foreach ($modinfo->cms as $id => $cm) {
+                if ($cm->completion && $cm->modname != 'roadmap') {
+                    $coursemodule = [
+                        'id' => $cm->id,
+                        'name' => $cm->name,
+                        'completionexpecteddatetime' => $cm->completionexpected,
+                        'completionexpectedreadable' => $cm->completionexpected == 0 ? 0 :
+                            userdate($cm->completionexpected, get_string('strftimedatetimeshortaccurate', 'core_langconfig')),
+                    ];
+                    $index += 1;
+                    $results[] = $coursemodule;
+                }
             }
         }
-        asort($completionoptions);
+        return $results;
     }
 
-    return $completionoptions;
 }

@@ -85,11 +85,6 @@ class configuration extends moodleform {
         $mform->addRule('cloprefix', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
         $mform->setDefault('cloprefix', $roadmap->cloprefix);
 
-        // Date Time Picker.
-        $mform->addElement('hidden', 'datetimepickerdata');
-        $mform->setType('datetimepickerdata', PARAM_RAW);
-        $mform->setDefault('datetimepickerdata', json_encode(roadmap_datetime_picker_options()));
-
         // Learning Objectives.
         $mform->addElement('html', '<div id="learningobjectives_panel"></div>', get_string('learningobjectives', 'roadmap'));
 
@@ -117,7 +112,7 @@ class configuration extends moodleform {
 
         $mform->addElement('hidden', 'activity_data');
         $mform->setType('activity_data', PARAM_RAW);
-        $mform->setDefault('activity_data', json_encode(['activities' => roadmap_list_activities($COURSE)]));
+        $mform->setDefault('activity_data', json_encode(['activities' => roadmap_list_activities($COURSE, false)]));
 
         $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
 

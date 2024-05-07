@@ -18,6 +18,7 @@
  * This file contains the moodle hooks for the roadmap module.
  *
  * @package   mod_roadmap
+ * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -103,11 +104,9 @@ function roadmap_delete_instance($id) {
  * this activity in a course listing.
  * See get_array_of_activities() in course/lib.php
  *
- * @global object
  * @param object $coursemodule
  * @return cached_cm_info|null
  */
-
 function roadmap_cm_info_view(cm_info $cm) {
     global $DB, $CFG, $OUTPUT, $COURSE;
     require_once($CFG->libdir . '/completionlib.php');
@@ -192,8 +191,8 @@ function roadmap_cm_info_view(cm_info $cm) {
 
                 if (!empty($step->completionmodules)) {
 
-                    if (property_exists($step, 'completionexpected_datetime')) {
-                        $expectedcompletetime = (int)$step->completionexpected_datetime;
+                    if (property_exists($step, 'completionexpecteddatetime')) {
+                        $expectedcompletetime = (int)$step->completionexpecteddatetime;
                     } else {
                         // Eventually this can be removed.  This is the old bad way.
                         $expectedcompletetime = strtotime($step->completionexpectedmonth . '/' .
@@ -210,6 +209,13 @@ function roadmap_cm_info_view(cm_info $cm) {
                         $cminspect->id = (int)$cmid;
                         $completiondata = $completion->get_data($cminspect);
 
+                        if ($step->completionexpectedcmid > 0 && $step->completionexpectedcmid == $cmid) {
+                            if ($cmcheck->completionexpected != $step->completionexpecteddatetime) {
+                                $step->completionexpecteddatetime = $cmcheck->completionexpected;
+                                $DB->update_record('roadmap_step',
+                                    (object)['id' => $step->id, 'completionexpecteddatetime' => $cmcheck->completionexpected]);
+                            }
+                        }
                         if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
                             $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
                         ) {
@@ -220,17 +226,24 @@ function roadmap_cm_info_view(cm_info $cm) {
                         $cmidtotal++;
                     }
 
-                    if ($step->expectedcomplete == 1 &&
+                    if ($step->completionexpectedcmid != 0 &&
                         !$step->incomplete &&
                         $completiondata->timemodified < $expectedcompletetime) {
 
                         $flags .= 's';
-                    } else if ($step->expectedcomplete == 1 &&
+                    } else if ($step->completionexpectedcmid != 0 &&
                         $step->incomplete &&
                         time() + 86400 > $expectedcompletetime &&
                         time() < $expectedcompletetime) {
 
                         $flags .= 'a';
+                    }
+
+                    if ($step->completionexpectedcmid != 0) {
+                        $staricon = $CFG->wwwroot . '/mod/roadmap/pix/star.svg';
+                        $step->rollovertext = (!empty($step->rollovertext) ? $step->rollovertext . PHP_EOL . '<br /> ' : '') .
+                            '<img class="rollover-star" src="' . $staricon .  '" /> By: ' .
+                            date("n/j/Y h:i A", $expectedcompletetime);
                     }
 
                     // Check for linksingleactivity and create link.
@@ -310,6 +323,12 @@ function roadmap_cm_info_view(cm_info $cm) {
     }
 }
 
+/**
+ * Return the activity link for given cmid and course. Respect visibility and permissions.
+ * @param int $cmid Id of the activity's course module record.
+ * @param int $courseid Id of course where activity is located.
+ * @return string URL to activity, blank if not allowed.
+ */
 function get_activity_url($cmid, $courseid) {
     $modinfo = get_fast_modinfo($courseid);
     if (!empty($modinfo->cms)) {

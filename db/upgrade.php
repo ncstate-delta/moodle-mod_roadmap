@@ -88,5 +88,46 @@ function xmldb_roadmap_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022040700, 'roadmap');
     }
 
+    if ($oldversion < 2024050600) {
+
+        // Change name of completionexpected field to completionexpectedcmid.
+        $table = new xmldb_table('roadmap_step');
+        $field = new xmldb_field('expectedcomplete');
+        if ($dbman->field_exists($table, $field)) {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, 11, null, XMLDB_NOTNULL, null, '0', 'pagelink');
+            $dbman->rename_field($table, $field, 'completionexpectedcmid');
+        }
+
+        // Change name of completionexpected_datetime field to completionexpecteddatetime.
+        $field = new xmldb_field('completionexpected_datetime');
+        if ($dbman->field_exists($table, $field)) {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, 11, null, XMLDB_NOTNULL, null, '0', 'completionexpectedcmid');
+            $dbman->rename_field($table, $field, 'completionexpecteddatetime');
+        }
+
+        /*
+         * Convert column completionexpectedcmid to new convention.
+         * -1: Custom expected completion datetime.
+         *  0: No expected completion datetime for this step.
+         * >0: Indicates the course module id datetime is associated with.
+         */
+        $sql = "SELECT s.id, s.completionexpectedcmid FROM {roadmap_step} s";
+        $recordset = $DB->get_recordset_sql($sql);
+        foreach ($recordset as $record) {
+            if ($record->completionexpectedcmid == 1) {
+                // If the previous value was 1, expected completion was enabled.
+                // This will translate into a custom value.
+                $record->completionexpectedcmid = -1;
+            }
+            // A previous value of 0 will remain 0 in the new convention.
+            // Any other values is unexpected and should remain the same.
+            $DB->update_record('roadmap_step', $record);
+        }
+        $recordset->close();
+
+        // Roadmap savepoint reached.
+        upgrade_mod_savepoint(true, 2024050600, 'roadmap');
+    }
+
     return true;
 }

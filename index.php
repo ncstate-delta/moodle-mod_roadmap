@@ -13,3 +13,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This file is required by Moodle but unused by Roadmap
+ *
+ * @package   mod_roadmap
+ * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
