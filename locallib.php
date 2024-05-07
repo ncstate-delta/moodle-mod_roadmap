@@ -345,7 +345,7 @@ function roadmap_list_activities($course, $includesections = true) {
                     // Add each course-module if it:
                     // (a) has completion turned on.
                     // (b) is not the same as current course-module.
-                    if ($cm->completion && $cm->modname != 'roadmap') {
+                    if ($cm->completion && $cm->modname != 'roadmap' && $cm->deletioninprogress == 0) {
                         $coursemodule = [
                             'id' => $cm->id,
                             'name' => $cm->name,
