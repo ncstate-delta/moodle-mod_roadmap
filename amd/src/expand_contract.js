@@ -11,7 +11,7 @@ define(['jquery', 'core/url'], function($, url) {
         COLLAPSE: 'fa-caret-down'
     };
 
-    return /** @alias module:tool_dataprivacy/expand-collapse */ {
+    return {
         /**
          * Expand or collapse a selected node.
          *

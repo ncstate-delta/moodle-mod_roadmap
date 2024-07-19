@@ -37,7 +37,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
 
 
         /**
-         * Displays the scale configuration dialogue.
+         * Displays the learning objectives in a list.
          *
          * @method showConfig
          */

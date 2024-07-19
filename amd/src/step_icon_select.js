@@ -14,24 +14,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle opening a dialogue to configure scale data.
+ * Handle opening a modal for step icon selection.
  *
  * @module     mod_roadmap/stepiconselect
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define([
     'jquery',
+    'core/str',
     'core/notification',
     'core/templates',
     'core/ajax',
-    'core/modal_factory',
+    'core/modal_save_cancel',
     'core/modal_events'
 ], function(
     $,
-    notification,
-    templates,
-    ajax,
-    ModalFactory,
+    Str,
+    Notification,
+    Templates,
+    Ajax,
+    ModalSaveCancel,
     ModalEvents
 ) {
 
@@ -46,18 +48,35 @@ define([
         StepIconSelector.prototype.registerEventListeners = function() {
 
             var trigger = $(SELECTORS.SELECT_ICON_BUTTON);
+            var stringkeys = [
+                {
+                    key: 'selecticon',
+                    component: 'mod_roadmap'
+                },
+                {
+                    key: 'saveselection',
+                    component: 'mod_roadmap'
+                }
+            ];
 
             trigger.off('click').on('click', function(e) {
                 let stepId = $(e.target).data('stepid');
 
-                ModalFactory.create({
-                    type: ModalFactory.types.SAVE_CANCEL,
-                    title: 'Choose Step Icon',
-                    body: '',
-                }, trigger).done(function(modal) {
-                    this.setupFormModal(modal, stepId, 'Save Selection');
-                }.bind(this));
+                Str.get_strings(stringkeys).then(function(strings) {
+                    return Promise.all([
+                        ModalSaveCancel.create({
+                            title: strings[0],
+                            body: '',
+                        }),
+                        strings[1],
+                    ]).then(function([modal, string]) {
+                        this.setupFormModal(modal, stepId, string);
+                        return modal;
+                    }.bind(this));
+                }.bind(this))
+                .catch(Notification.exception);
             }.bind(this));
+
         };
 
         /**
@@ -83,7 +102,7 @@ define([
             });
 
             // Get the content of the modal.
-            return templates.render('mod_roadmap/configuration_iconselect', iconsData);
+            return Templates.render('mod_roadmap/configuration_iconselect', iconsData);
         };
 
         StepIconSelector.prototype.setupFormModal = function(modal, stepId, saveText) {

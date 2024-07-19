@@ -39,7 +39,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
         };
 
         /**
-         * Displays the scale configuration dialogue.
+         * Use configuration data to fill phases, cycle, and step containers.
          *
          * @method initForm
          */

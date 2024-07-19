@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle opening a dialogue to configure scale data.
+ * Handle the saving of cycle data and rebinding of inputs.
  *
  * @module     mod_roadmap/stepiconselect
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

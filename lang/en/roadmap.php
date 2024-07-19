@@ -38,6 +38,10 @@ $string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
 $string['learningobjectives'] = 'Course Learning Objectives';
 $string['editroadmap'] = 'Edit Roadmap';
 
+$string['selecticon'] = 'Select Step Icon';
+$string['chooseactivities'] = 'Choose Activities for Step Completion';
+$string['saveselection'] = 'Save Selection';
+
 $string['phasecolorpattern'] = 'Phase Color Pattern';
 $string['displayposition'] = 'CLO Display Position';
 $string['cyclealignment'] = 'Cycle CLO Alignment';

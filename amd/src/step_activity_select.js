@@ -14,29 +14,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle opening a dialogue to configure scale data.
+ * Handle opening a modal for activity selection.
  *
  * @module     mod_roadmap/stepactivityselect
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define([
     'jquery',
+    'core/str',
     'core/notification',
     'core/templates',
     'mod_roadmap/repository',
-    'core/modal_factory',
+    'core/modal_save_cancel',
     'core/modal_events',
     'mod_roadmap/step_save'
 ], function(
     $,
-    notification,
-    templates,
-    roadmapRepository,
-    ModalFactory,
+    Str,
+    Notification,
+    Templates,
+    RoadmapRepository,
+    ModalSaveCancel,
     ModalEvents,
-    stepsave
+    StepSave
 ) {
-
 
     var SELECTORS = {
         SELECT_ACTIVITY_BUTTON: '.btn_completion_selector'
@@ -49,17 +50,33 @@ define([
     StepActivitySelector.prototype.registerEventListeners = function() {
 
         var trigger = $(SELECTORS.SELECT_ACTIVITY_BUTTON);
+        var stringkeys = [
+            {
+                key: 'chooseactivities',
+                component: 'mod_roadmap'
+            },
+            {
+                key: 'saveselection',
+                component: 'mod_roadmap'
+            }
+        ];
 
         trigger.off('click').on('click', function(e) {
             let stepId = $(e.target).data('stepid');
 
-            ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
-                title: 'Choose Activities for Step Completion',
-                body: '',
-            }, trigger).done(function(modal) {
-                this.setupFormModal(modal, stepId, 'Save Selection');
-            }.bind(this));
+            Str.get_strings(stringkeys).then(function(strings) {
+                return Promise.all([
+                    ModalSaveCancel.create({
+                        title: strings[0],
+                        body: '',
+                    }),
+                    strings[1],
+                ]).then(function([modal, string]) {
+                    this.setupFormModal(modal, stepId, string);
+                    return modal;
+                }.bind(this));
+            }.bind(this))
+            .catch(Notification.exception);
         }.bind(this));
     };
 
@@ -69,11 +86,10 @@ define([
      * @return {Promise}
      */
     StepActivitySelector.prototype.getBody = async() => {
-        const response = await roadmapRepository.fetchCourseModules();
-
+        const response = await RoadmapRepository.fetchCourseModules();
 
         // Get the content of the modal.
-        return templates.render('mod_roadmap/configuration_activityselect', response);
+        return Templates.render('mod_roadmap/configuration_activityselect', response);
     };
 
 
@@ -237,7 +253,7 @@ define([
 
         $('#step-' + stepId + '-completion-modules').val(values).trigger('change');
 
-        stepsave.rebindInputs();
+        StepSave.rebindInputs();
         this.destroy();
     };
 
