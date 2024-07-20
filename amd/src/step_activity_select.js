@@ -135,7 +135,7 @@ define([
                 $('#select-expected-activity-completion option[value="-1"]').attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="today"] option[value="' + date.getDate() + '"]')
                     .attr("selected", "selected");
-                $('#customExpectedDateContainer select[name="tomonth"] option[value="' + (date.getMonth()+1) + '"]')
+                $('#customExpectedDateContainer select[name="tomonth"] option[value="' + (date.getMonth() + 1) + '"]')
                     .attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="toyear"] option[value="' + date.getFullYear() + '"]')
                     .attr("selected", "selected");
