@@ -49,6 +49,8 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
     /**
      * Process roadmap table data from restore file.
+     *
+     * @param object $data The data in object form
      * @return void
      */
     protected function process_roadmap($data) {
@@ -63,6 +65,8 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
     /**
      * Process roadmap phase table data from restore file.
+     *
+     * @param object $data The data in object form
      * @return void
      */
     protected function process_roadmap_phase($data) {
@@ -80,6 +84,8 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
     /**
      * Process roadmap cycle table data from restore file.
+     *
+     * @param object $data The data in object form
      * @return void
      */
     protected function process_roadmap_cycle($data) {
@@ -96,6 +102,8 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
     /**
      * Process roadmap step table data from restore file.
+     *
+     * @param object $data The data in object form
      * @return void
      */
     protected function process_roadmap_step($data) {
@@ -200,7 +208,10 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
                         $step->completionmodules = implode(',', $newcmids);
 
                         if ((int)$step->completionexpectedcmid > 0) {
-                            $step->completionexpectedcmid = $this->get_mappingid('course_module', (int)$step->completionexpectedcmid);
+                            $step->completionexpectedcmid = $this->get_mappingid(
+                                'course_module',
+                                (int)$step->completionexpectedcmid
+                            );
                         }
 
                         $DB->update_record('roadmap_step', $step);

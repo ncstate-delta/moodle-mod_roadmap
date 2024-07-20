@@ -115,7 +115,7 @@ define([
             let stepExpectedCompletionCourseModule = $('#step-' + stepId + '-expectedcomplete-coursemoduleid').val();
             let stepExpectedCompleteDatetime = $('#step-' + stepId + '-expectedcomplete-datetime').val();
 
-            $.each(stepCompletionModules, function(i , val) {
+            $.each(stepCompletionModules, function(i, val) {
                 $('#activity-select-window .activity input[type="checkbox"][data-coursemoduleid="' + val + '"]')
                     .prop('checked', true);
             });
@@ -127,22 +127,22 @@ define([
             if (stepExpectedCompletionCourseModule > 0 &&
                 $('#select-expected-activity-completion option[value="' + stepExpectedCompletionCourseModule + '"]').length > 0) {
                 $('#select-expected-activity-completion option[value="' + stepExpectedCompletionCourseModule + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
 
                 // If the course module doesnt exist or isn't a cmid, use the datetime and select custom.
             } else if (stepExpectedCompleteDatetime > 0) {
                 var date = new Date(stepExpectedCompleteDatetime * 1000);
                 $('#select-expected-activity-completion option[value="-1"]').attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="today"] option[value="' + date.getDate() + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="tomonth"] option[value="' + (date.getMonth()+1) + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="toyear"] option[value="' + date.getFullYear() + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="tohour"] option[value="' + date.getHours() + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
                 $('#customExpectedDateContainer select[name="tominute"] option[value="' + date.getMinutes() + '"]')
-                    .attr("selected","selected");
+                    .attr("selected", "selected");
 
                 // If the datetime is not a unixtime, then no completion is expected.
             } else {
@@ -163,7 +163,7 @@ define([
         modal.show();
     };
 
-    StepActivitySelector.prototype.expectedCompleteDropdownChanged = function () {
+    StepActivitySelector.prototype.expectedCompleteDropdownChanged = function() {
         let selectedOption = $('#select-expected-activity-completion').find(':selected');
         if (selectedOption.val() == '-1') {
             $('#customExpectedDateContainer').show();
@@ -172,7 +172,7 @@ define([
         }
     };
 
-    StepActivitySelector.prototype.updateExpectedCompleteDropdown = function () {
+    StepActivitySelector.prototype.updateExpectedCompleteDropdown = function() {
         let select = $('#select-expected-activity-completion');
 
         $('#activity-select-window .activity input[type="checkbox"]').each(function() {
@@ -234,7 +234,7 @@ define([
             let hours = $('#customExpectedDateContainer select[name="tohour"]').find(':selected').val();
             let minutes = $('#customExpectedDateContainer select[name="tominute"]').find(':selected').val();
 
-            let jsDate = new Date(year,(month-1),day,hours,minutes);
+            let jsDate = new Date(year, (month - 1), day, hours, minutes);
             let unixTimestamp = Math.floor(jsDate.getTime() / 1000);
             $('#step-' + stepId + '-expectedcomplete-datetime').val(unixTimestamp);
 
@@ -249,7 +249,9 @@ define([
         // Collect all checked course module ids and prep them
         // to go back to the config form.
         let values = $('#activity-select-window .activity input[type="checkbox"]:checked')
-            .map(function() { return $(this).data('coursemoduleid'); }).get().join(',');
+            .map(function() {
+                return $(this).data('coursemoduleid');
+            }).get().join(',');
 
         $('#step-' + stepId + '-completion-modules').val(values).trigger('change');
 

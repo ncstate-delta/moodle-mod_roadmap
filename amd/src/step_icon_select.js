@@ -92,7 +92,7 @@ define([
             $('.step-wrapper .step-container .step-icon-display img.step-icon').each(function() {
                 let iconfilename = $(this).data('iconfilename');
                 let iconsrc = $(this).attr('src');
-                let usedicon = { file: iconfilename, iconurl: iconsrc };
+                let usedicon = {file: iconfilename, iconurl: iconsrc};
 
                 if (iconsData.categories[0].icons.some(icon => icon.file === iconfilename)) {
                     // Icon already exists in currently used category.

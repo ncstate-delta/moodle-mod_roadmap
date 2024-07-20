@@ -319,7 +319,9 @@ function roadmap_list_icons() {
 /**
  * Return the form elements used for configuring this objective
  *
- * @return array $elements - return the elements to be added to the form
+ * @param stdClass $course - Course object to pull activities from.
+ * @param boolean $includesections - Should section information be included in list.
+ * @return array $elements - return the elements to be added to the form.
  */
 function roadmap_list_activities($course, $includesections = true) {
     $results = [];
