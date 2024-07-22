@@ -128,5 +128,36 @@ function xmldb_roadmap_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024050600, 'roadmap');
     }
 
+
+    if ($oldversion < 2024072000) {
+        global $CFG;
+
+        // Adding Phase table to database.
+        $table = new xmldb_table('roadmap_colors');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('colors', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Change column colors from char255 to integer
+        $table = new xmldb_table('roadmap');
+        $field = new xmldb_field('colors', XMLDB_TYPE_INTEGER, 10, null, null, null, null,
+            'learningobjectives');
+
+        // Launch change of type for field value.
+        $dbman->change_field_type($table, $field);
+
+        require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
+        roadmap_install_color_sets();
+
+        // Roadmap savepoint reached.
+        upgrade_mod_savepoint(true, 2024072000, 'roadmap');
+    }
+
     return true;
 }

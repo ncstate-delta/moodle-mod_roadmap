@@ -22,3 +22,16 @@ export const fetchCourseModules = () => fetchMany([{
         pageurl: window.location.href,
     }
 }])[0];
+
+/**
+ * Fetch roadmap color patterns by color set id.
+ *
+ * @param {Integer} colorid The color set id.
+ * @return {Promise}
+ */
+export const fetchColorPattern = (colorid) => fetchMany([{
+    methodname: 'mod_roadmap_fetch_color_pattern',
+    args: {
+        colorid: colorid,
+    }
+}])[0];

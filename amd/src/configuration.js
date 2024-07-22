@@ -20,9 +20,15 @@
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_contract',
-        'mod_roadmap/learningobjectivesconfig', 'mod_roadmap/step_icon_select', 'mod_roadmap/roadmap_config'],
-    function($, notification, templates, ec, LearningObjectivesConfig, StepIconSelector, RoadmapConfig) {
+define(['mod_roadmap/learningobjectivesconfig',
+        'mod_roadmap/step_icon_select',
+        'mod_roadmap/roadmap_config',
+    ],
+    function(
+        LearningObjectivesConfig,
+        StepIconSelector,
+        RoadmapConfig,
+    ) {
 
         /**
          * Learning objectives config object.

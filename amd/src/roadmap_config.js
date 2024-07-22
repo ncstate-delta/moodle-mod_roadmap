@@ -20,11 +20,29 @@
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_contract',
-        'mod_roadmap/learningobjectivesconfig', 'mod_roadmap/step_icon_select', 'mod_roadmap/step_activity_select',
-        'mod_roadmap/step_save', 'mod_roadmap/cycle_save', 'mod_roadmap/phase_save'],
-    function($, notification, templates, ec, learningobjectives, stepiconselect,
-             stepactivityselect, stepsave, cyclesave, phasesave) {
+define(['jquery',
+        'core/notification',
+        'core/templates',
+        'mod_roadmap/expand_contract',
+        'mod_roadmap/learningobjectivesconfig',
+        'mod_roadmap/step_icon_select',
+        'mod_roadmap/step_activity_select',
+        'mod_roadmap/step_save',
+        'mod_roadmap/cycle_save',
+        'mod_roadmap/phase_save',
+    ],
+    function(
+        $,
+        notification,
+        templates,
+        ec,
+        learningobjectives,
+        stepiconselect,
+        stepactivityselect,
+        stepsave,
+        cyclesave,
+        phasesave,
+    ) {
 
         /**
          * Learning objectives config object.
@@ -54,20 +72,14 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/expand_con
 
             $.each(config.phases, function(p) {
                 let phase = config.phases[p];
-                phase.number = p + 1;
-                phase.index = p;
                 phase.configuration = JSON.stringify(phase);
 
                 $.each(phase.cycles, function(c) {
                     let cycle = phase.cycles[c];
-                    cycle.number = c + 1;
-                    cycle.index = c;
                     cycle.configuration = JSON.stringify(cycle);
 
                     $.each(cycle.steps, function(s) {
                         let step = cycle.steps[s];
-                        step.number = s + 1;
-                        step.index = s;
                         step.configuration = JSON.stringify(step);
                     });
                 });

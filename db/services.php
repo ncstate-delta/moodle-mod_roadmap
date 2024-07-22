@@ -33,4 +33,12 @@ $functions = [
         'type' => 'read',
         'ajax' => true,
     ],
+    'mod_roadmap_fetch_color_pattern' => [
+        'classname' => 'mod_roadmap\external',
+        'methodname' => 'fetch_color_pattern',
+        'classpath' => '',
+        'description' => 'Return color pattern for roadmap.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
 ];

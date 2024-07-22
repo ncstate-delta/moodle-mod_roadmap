@@ -15,15 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Post installation and migration code.
  *
- * @package   mod_roadmap
- * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_roadmap
+ * @copyright  2024 Steve Bader
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_roadmap'; // Full name of the plugin (used for diagnostics).
-$plugin->version  = 2024072001;    // The current module version (Date: YYYYMMDDXX).
-$plugin->requires = 2022032200;    // Requires this Moodle version.
+/**
+ * Stub for database installation.
+ */
+function xmldb_roadmap_install() {
+    global $CFG;
+
+    require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
+    roadmap_install_color_sets();
+}

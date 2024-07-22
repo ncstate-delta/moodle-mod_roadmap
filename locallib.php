@@ -37,14 +37,17 @@ function roadmap_configuration_edit($roadmapid) {
     $data = new \stdClass();
     $data->phases = [];
 
+    $phaseindex = 0;
     $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmapid], 'sort ASC');
     foreach ($phases as $phase) {
         $phase->cycles = [];
 
+        $cycleindex = 0;
         $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phase->id], 'sort ASC');
         foreach ($cycles as $cycle) {
             $cycle->steps = [];
 
+            $stepindex = 0;
             $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id], 'sort ASC');
             foreach ($steps as $step) {
                 $step->completionexpectedcmid = $step->completionexpectedcmid;
@@ -67,11 +70,19 @@ function roadmap_configuration_edit($roadmapid) {
                 $step->iconurl = $CFG->wwwroot . '/mod/roadmap/icon.php?name=' . $step->stepicon . '&percent=100&flags=n';
                 $step->sort = (int)$step->sort;
 
+                $step->index = $stepindex;
                 $cycle->steps[] = $step;
+                $stepindex++;
             }
+
+            $cycle->index = $cycleindex;
             $phase->cycles[] = $cycle;
+            $cycleindex++;
         }
+
+        $phase->index = $phaseindex;
         $data->phases[] = $phase;
+        $phaseindex++;
     }
 
     return json_encode($data);
@@ -260,21 +271,41 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
 
 
 /**
+ * Retrieve color set names for the roadmap
+ *
+ * @return array of names in colorset
+ */
+function roadmap_color_set_names() {
+    global $DB;
+
+    $result = [];
+    $colorsets = $DB->get_records('roadmap_colors');
+
+    foreach($colorsets as $colorset) {
+        $result[$colorset->id] = $colorset->name;
+    }
+
+    return $result;
+}
+
+/**
  * Retrieve color set for the roadmap
  *
  * @param integer $id optional
  * @return array of colors in colorset
  */
 function roadmap_color_sets($id = -1) {
-    $colors = [
-        // Default color scheme.
-        0 => ['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905'],
-    ];
-    if (isset($colors[$id])) {
-        return $colors[$id];
+    global $DB;
+
+    if ($id < 0) {
+        return $DB->get_records('roadmap_colors');
     }
-    // Return default color scheme.
-    return $colors[0];
+
+    if($colorset = $DB->get_record('roadmap_colors', ['id' => $id])) {
+        return json_decode($colorset->colors);
+    }
+
+    return ['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905'];
 }
 
 /**
@@ -380,4 +411,43 @@ function roadmap_list_activities($course, $includesections = true) {
         return $results;
     }
 
+}
+
+
+/**
+ * Installs the five default color sets.
+ *
+ * @return null
+ */
+function roadmap_install_color_sets() {
+    global $DB;
+
+    $colors = $DB->get_records('roadmap_colors');
+    if (count($colors) == 0) {
+        // Default Color Set.
+        $DB->insert_record('roadmap_colors', [
+            'name' => 'Default',
+            'colors' => json_encode(['#4156A1', '#427E93', '#008473', '#6F7D1C', '#D14905']),
+        ]);
+        // Harvest Bold Color Set.
+        $DB->insert_record('roadmap_colors', [
+            'name' => 'Harvest Bold',
+            'colors' => json_encode(['#BD531F', '#C19C2A', '#2F6F38', '#9E2F73', '#3E1D93']),
+        ]);
+        // Bright Color Set.
+        $DB->insert_record('roadmap_colors', [
+            'name' => 'Bright',
+            'colors' => json_encode(['#E71E25', '#F47A20', '#2DB34A', '#0054FF', '#A200FF']),
+        ]);
+        // Cool Colors Color Set.
+        $DB->insert_record('roadmap_colors', [
+            'name' => 'Cool Colors',
+            'colors' => json_encode(['#4A309E', '#4F70DC', '#1C98A0', '#1EB0F4', '#9264F0']),
+        ]);
+        // Great Outdoors Color Set.
+        $DB->insert_record('roadmap_colors', [
+            'name' => 'Great Outdoors',
+            'colors' => json_encode(['#467CF7', '#499660', '#847344', '#E9612B', '#D8AB11']),
+        ]);
+    }
 }

@@ -50,6 +50,7 @@ class configuration extends moodleform {
 
         $mform =& $this->_form;
         $roadmap = $this->_customdata['roadmap'];
+        $colorpatterns = $this->_customdata['colorpatterns'];
 
         $mform->addElement('header', 'header_learningobjectives', get_string('courselearningobjectives', 'roadmap'));
 
@@ -117,9 +118,6 @@ class configuration extends moodleform {
         $mform->addElement('header', 'header_appearance', get_string('appearance', 'roadmap'));
 
         // Phase color pattern drown selector.
-        $colorpatterns = [
-            0 => 'All Secondary Brand Colors (Default)',
-        ];
         $mform->addElement('select', 'phasecolorpattern', get_string('phasecolorpattern', 'roadmap'), $colorpatterns);
         $mform->setDefault('phasecolorpattern', $roadmap->colors);
         $mform->setType('phasecolorpattern', PARAM_INT);

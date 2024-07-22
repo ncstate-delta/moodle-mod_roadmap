@@ -117,4 +117,49 @@ class external extends external_api {
             ]
         );
     }
+
+
+    /**
+     * Fetch the course modules with activity completion and expected completion time.
+     *
+     * @param   int     $colorid  The ID of the color set being fetched
+     * @return  array             An array of hex colors as strings
+     */
+    public static function fetch_color_pattern($colorid) {
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
+
+        $params = self::validate_parameters(self::fetch_color_pattern_parameters(), [
+            'colorid'   => $colorid,
+        ]);
+
+        $colors = \roadmap_color_sets($params['colorid']);
+
+        return $colors;
+    }
+
+    /**
+     * The parameters for fetch_color_pattern.
+     *
+     * @return external_function_parameters
+     */
+    public static function fetch_color_pattern_parameters() {
+        return new external_function_parameters([
+            'colorid'   => new external_value(PARAM_INT, 'Color ID'),
+        ]);
+    }
+
+    /**
+     * The return configuration for fetch_color_pattern.
+     *
+     * @return external_multiple_structure
+     */
+    public static function fetch_color_pattern_returns() {
+        return new external_multiple_structure(
+            new external_single_structure([
+                    'color'      => new external_value(PARAM_RAW, 'Color Hex Value'),
+                ], 'Colors')
+        );
+    }
+
 }

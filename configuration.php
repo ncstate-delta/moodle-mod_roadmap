@@ -53,6 +53,7 @@ $configuration = new mod_roadmap\form\configuration($url->out(false), [
     'course' => $course,
     'cm' => $cm,
     'roadmap' => $roadmap,
+    'colorpatterns' => roadmap_color_set_names(),
 ], 'post', '', ['id' => 'mformroadmap']);
 
 // Form cancelled.
