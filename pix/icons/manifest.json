@@ -16,6 +16,7 @@
     { "id": 17, "file": "icon-17", "name": "File Pencil" },
     { "id": 18, "file": "icon-18", "name": "File Timer" },
     { "id": 26, "file": "icon-26", "name": "Files" },
+    { "id": 74, "file": "icon-74", "name": "Notepad" },
     { "id": 32, "file": "icon-32", "name": "Open Book" },
     { "id": 10, "file": "icon-10", "name": "Paper Check" }
   ]},
@@ -47,7 +48,13 @@
     { "id": 58, "file": "icon-58", "name": "Flow Chart" }
   ]},
 
-  { "id": 3, "name":  "Person", "icons":  [
+  { "id": 3, "name":  "Media", "icons":  [
+    { "id": 75, "file": "icon-75", "name": "Film Play" },
+    { "id": 76, "file": "icon-76", "name": "Film Strip" },
+    { "id": 77, "file": "icon-77", "name": "Film Clapper" }
+  ]},
+
+  { "id": 4, "name":  "Person", "icons":  [
     { "id": 48, "file": "icon-48", "name": "Audience" },
     { "id": 51, "file": "icon-51", "name": "High Five" },
     { "id": 49, "file": "icon-49", "name": "Raising Hand" },
@@ -57,7 +64,7 @@
     { "id": 63, "file": "icon-63", "name": "Person Thought" }
   ]},
 
-  { "id": 4, "name":  "STEM", "icons":  [
+  { "id": 5, "name":  "STEM", "icons":  [
     { "id": 64, "file": "icon-64", "name": "Atom" },
     { "id": 65, "file": "icon-65", "name": "Binary Digits" },
     { "id": 66, "file": "icon-66", "name": "DNA Helix" },
@@ -67,7 +74,7 @@
     { "id": 70, "file": "icon-70", "name": "Variables" }
   ]},
 
-  { "id": 5, "name":  "Tech", "icons":  [
+  { "id": 6, "name":  "Tech", "icons":  [
     { "id": 7,  "file": "icon-7",  "name": "Discuss Bubbles" },
     { "id": 9,  "file": "icon-9",  "name": "Discuss Messages" },
     { "id": 2,  "file": "icon-2",  "name": "Laptop" },
@@ -79,8 +86,9 @@
     { "id": 72, "file": "icon-72", "name": "Screens" }
   ]},
 
-  { "id": 6, "name":  "Other", "icons":  [
+  { "id": 7, "name":  "Other", "icons":  [
     { "id": 23, "file": "icon-23", "name": "Backpack" },
+    { "id": 73, "file": "icon-73", "name": "Coffee" },
     { "id": 34, "file": "icon-34", "name": "Cresent" },
     { "id": 29, "file": "icon-29", "name": "Light Bulb" },
     { "id": 27, "file": "icon-27", "name": "Magnifier" },
