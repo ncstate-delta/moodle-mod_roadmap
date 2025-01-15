@@ -359,7 +359,6 @@ function roadmap_list_activities($course, $includesections = true) {
                         $coursemodules[] = $coursemodule;
                     }
                 }
-                asort($coursemodules);
                 $sectioninfo['coursemodules'] = $coursemodules;
                 $results[] = $sectioninfo;
             }
