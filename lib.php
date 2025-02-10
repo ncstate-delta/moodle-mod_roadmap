@@ -143,9 +143,24 @@ function roadmap_cm_info_view(cm_info $cm) {
 
     $colorindex = 0;
 
+    if (!empty($roadmap->learningobjectives)) {
+        $clodata = json_decode($roadmap->learningobjectives);
+
+        if (isset($clodata->learningobjectives)) {
+            $number = 1;
+            foreach ($clodata->learningobjectives as $learningobjective) {
+                $learningobjective->prefix = $roadmap->cloprefix;
+                $learningobjective->number = $number;
+                $number += 1;
+            }
+            $clocontent = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clodata);
+        }
+    }
+
     $data = new \stdClass();
     $data->phases = [];
     $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id], 'sort');
+
     foreach ($phases as $phase) {
         $phase->color = $colorset[$colorindex];
 
@@ -160,10 +175,14 @@ function roadmap_cm_info_view(cm_info $cm) {
         foreach ($cycles as $cycle) {
             $cycle->indicatorcolor = $phase->color;
 
+            $learningobjectivenumbers = [];
             if (isset($cycle->learningobjectives) && $cycle->learningobjectives !== '') {
-                $learningobjectivenumbers = [];
-                foreach (explode(",", $cycle->learningobjectives) as $loids) {
-                    $learningobjectivenumbers[] = $loids + 1;
+                if (isset($clodata->learningobjectives)) {
+                    foreach ($clodata->learningobjectives as $learningobjective) {
+                        if (in_array($learningobjective->id, explode(',', $cycle->learningobjectives))) {
+                            $learningobjectivenumbers[] = $learningobjective->index + 1;
+                        }
+                    }
                 }
                 $cycle->learningobjectives = implode(", ", $learningobjectivenumbers);
             }
@@ -281,20 +300,6 @@ function roadmap_cm_info_view(cm_info $cm) {
             $phase->cycles[] = $cycle;
         }
         $data->phases[] = $phase;
-    }
-
-    if (!empty($roadmap->learningobjectives)) {
-        $clodata = json_decode($roadmap->learningobjectives);
-
-        if (isset($clodata->learningobjectives)) {
-            $number = 1;
-            foreach ($clodata->learningobjectives as $learningobjective) {
-                $learningobjective->prefix = $roadmap->cloprefix;
-                $learningobjective->number = $number;
-                $number += 1;
-            }
-            $clocontent = $OUTPUT->render_from_template('mod_roadmap/view_learningobjectives', $clodata);
-        }
     }
 
     if ($roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) > 0) {

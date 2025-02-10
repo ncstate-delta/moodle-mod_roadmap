@@ -91,6 +91,9 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
             $('.learningobjective-down-control').unbind('click').click(function(e) {
                 LearningObjectivesConfig.prototype.downLearningObjective(e);
             });
+            $('input[name="cloprefix"]').unbind('change').change(function() {
+                LearningObjectivesConfig.prototype.refreshChecklists();
+            });
         };
 
         LearningObjectivesConfig.prototype.saveConfig = function() {
@@ -100,6 +103,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                 let lonode = $('#learningobjective-container').children('.learningobjective')[index];
                 let id = $(lonode).data('id');
                 let name = $(lonode).find('input.learning-objective-name').val();
+                $(lonode).find('span.number').html(index + 1);
                 arrlo.push({index: index, id: id, name: name});
             });
             $('input[name="learningobjectivesconfiguration"]').val(JSON.stringify({learningobjectives: arrlo}));
@@ -128,6 +132,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
 
                 // Remove all inputs
                 $(e).empty();
+                let prefix = $('input[name="cloprefix"]').val();
 
                 // Re-add inputs and remark any selected.
                 config.learningobjectives.forEach(function(learningobjective) {
@@ -135,7 +140,8 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                     $('<input/>').attr('type', 'checkbox').attr('value', learningobjective.id)
                         .attr('class', 'form-control')
                         .attr('checked', ($.inArray(learningobjective.id, selectedIds) >= 0)).appendTo(li);
-                    $('<span>').text(' ' + learningobjective.name).appendTo(li);
+                    $('<span>').text(' ' + prefix + ' ' + (learningobjective.index + 1) + ': ' +
+                        learningobjective.name).appendTo(li);
                 });
             });
         };
