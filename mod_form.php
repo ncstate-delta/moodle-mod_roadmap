@@ -28,7 +28,7 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
 /**
- * Roadmap settings form.
+ * Course Roadmap settings form.
  *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}

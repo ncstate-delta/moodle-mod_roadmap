@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle the configuration of the roadmap.
+ * Handle the configuration of the course roadmap.
  *
  * @module     mod_roadmap/roadmapconfig
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>

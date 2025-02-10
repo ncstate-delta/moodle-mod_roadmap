@@ -1,5 +1,5 @@
 /**
- * Roadmap configuration data fetching.
+ * Course Roadmap configuration data fetching.
  *
  * @module     mod_roadmap/configurationdata
  * @copyright  2024 Steve Bader <smbader@ncsu.edu>

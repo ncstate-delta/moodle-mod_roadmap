@@ -16,7 +16,7 @@ Feature: Teacher can add, sort, edit, and delete learning objectives.
 
   @javascript
   Scenario: Adding three learning objectives, sorting them, then deleting one.
-    When I add a "Roadmap" to section "1"
+    When I add a "Course Roadmap" to section "1"
     And I set the following fields to these values:
       | Name | Example Roadmap |
     And I press "Save and display"

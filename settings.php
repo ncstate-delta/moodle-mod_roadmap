@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file is required by Moodle but unused by Roadmap
+ * This file is required by Moodle but unused by Course Roadmap
  *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}

@@ -16,9 +16,9 @@ Feature: Teacher can add roadmap to course
 
   @javascript
   Scenario: Adding a course roadmap to the course.
-    When I add a "Roadmap" to section "1"
+    When I add a "Course Roadmap" to section "1"
     And I set the following fields to these values:
-      | Name | Example Roadmap |
+      | Name | Example Course Roadmap |
     And I press "Save and display"
     And I should see "Roadmap Configuration"
     And I expand all fieldsets

@@ -22,21 +22,21 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['modulename'] = 'Roadmap';
-$string['modulenameplural'] = 'Roadmaps';
-$string['pluginname'] = 'Roadmap';
-$string['pluginadministration'] = 'Roadmap administration';
-$string['roadmapconfiguration'] = 'Roadmap Configuration';
+$string['modulename'] = 'Course Roadmap';
+$string['modulenameplural'] = 'Course Roadmaps';
+$string['pluginname'] = 'Course Roadmap';
+$string['pluginadministration'] = 'Course Roadmap Administration';
+$string['roadmapconfiguration'] = 'Course Roadmap Configuration';
 
-$string['roadmap:addinstance'] = 'Add a new roadmap';
-$string['roadmap:view'] = 'View roadmap';
-$string['roadmap:configure'] = 'Configure roadmap';
+$string['roadmap:addinstance'] = 'Add a new course roadmap';
+$string['roadmap:view'] = 'View course roadmap';
+$string['roadmap:configure'] = 'Configure course roadmap';
 
 // Form Strings.
 $string['appearance'] = 'Appearance';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
 $string['learningobjectives'] = 'Course Learning Objectives';
-$string['editroadmap'] = 'Edit Roadmap';
+$string['editroadmap'] = 'Edit Course Roadmap';
 
 $string['selecticon'] = 'Select Step Icon';
 $string['chooseactivities'] = 'Choose Activities for Step Completion';

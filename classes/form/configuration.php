@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
 /**
- * Class to configure a roadmap.
+ * Class to configure a course roadmap.
  *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}

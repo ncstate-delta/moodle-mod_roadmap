@@ -23,7 +23,7 @@
  */
 
 /**
- * List of features supported in Roadmap module
+ * List of features supported in Course Roadmap module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */

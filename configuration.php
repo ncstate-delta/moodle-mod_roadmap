@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Prints roadmap configuration form
+ * Prints course roadmap configuration form
  *
  * @package   mod_roadmap
  * @copyright 2020 NC State DELTA {@link http://delta.ncsu.edu}

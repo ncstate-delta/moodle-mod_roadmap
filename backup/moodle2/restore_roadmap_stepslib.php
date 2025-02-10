@@ -27,12 +27,12 @@
  */
 
 /**
- * Structure step to restore one roadmap activity
+ * Structure step to restore one course roadmap activity
  */
 class restore_roadmap_activity_structure_step extends restore_activity_structure_step {
 
     /**
-     * Define the structure for the roadmap activity
+     * Define the structure for the course roadmap activity
      * @return array paths of activity structure.
      */
     protected function define_structure() {

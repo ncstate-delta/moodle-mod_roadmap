@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle the view of the roadmap.
+ * Handle the view of the course roadmap.
  *
  * @module     mod_roadmap/roadmapview
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>

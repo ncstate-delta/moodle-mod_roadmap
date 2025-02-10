@@ -25,7 +25,7 @@
 namespace mod_roadmap\output;
 
 /**
- * Mobile output class for Roadmap module
+ * Mobile output class for Course Roadmap module
  *
  * @copyright  2023 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
