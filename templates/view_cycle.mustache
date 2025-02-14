@@ -35,10 +35,12 @@
         {{/steps}}
     </div>
 {{# learningobjectives }}
-    <div class="roadmap-topic-row">
-        <div class="roadmap-topic-container">
-            <span class="title">{{ prefix }}:</span>
-            <span class="learningobjectives">{{ learningobjectives }}</span>
+    <div class="{{ clodecoration }}">
+        <div class="roadmap-topic-row {{ cloalignment }}">
+            <div class="roadmap-topic-container">
+                <span class="title">{{ prefix }}:</span>
+                <span class="learningobjectives">{{ learningobjectives }}</span>
+            </div>
         </div>
     </div>
 {{/ learningobjectives }}

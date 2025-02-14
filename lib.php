@@ -297,6 +297,11 @@ function roadmap_cm_info_view(cm_info $cm) {
                 $cycle->steps[] = $step;
             }
             $cycle->prefix = $roadmap->cloprefix;
+            $cycle->cloalignment = ($roadmap->cloalignment == 0 ? 'left' :
+                ($roadmap->cloalignment == 1 ? 'center' : 'right' ));
+            $cycle->clodecoration = ($roadmap->clodecoration == 0 ? 'none' :
+                ($roadmap->clodecoration == 1 ? 'line' : 'bracket' ));
+
             $phase->cycles[] = $cycle;
         }
         $data->phases[] = $phase;

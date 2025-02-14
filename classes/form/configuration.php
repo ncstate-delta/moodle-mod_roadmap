@@ -64,8 +64,8 @@ class configuration extends moodleform {
         $mform->setType('displayposition', PARAM_INT);
 
         $cyclealignment = [
-            0 => 'Center (Default)',
-            1 => 'Left',
+            0 => 'Left (Default)',
+            1 => 'Center',
             2 => 'Right',
         ];
         $mform->addElement('select', 'cyclealignment', get_string('cyclealignment', 'roadmap'), $cyclealignment);
