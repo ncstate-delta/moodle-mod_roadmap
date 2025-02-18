@@ -38,7 +38,7 @@
     }
 }}
 <div data-cycleid="{{ id }}" data-cycleindex="{{ index }}" class="cycle-wrapper">
-    <div class="row">
+    <div class="row bg-light">
         <div class="cycle-controls">
             <a class="cycle-collapse-control" href="">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
             <a class="cycle-up-control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
@@ -66,11 +66,14 @@
                 <ul class="chk-learning-objectives"></ul>
             </div>
         </div>
+        <div class="step-container-controls">
+            <strong>Steps</strong>
+            <a class="add-cycle-step" href="#" ><i class="fa-solid fa-plus"></i> Add</a>
+            <a href="#" data-action="collapse_all_steps" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
+            <a href="#" data-action="expand_all_steps" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
+        </div>
         <div class="cycle-steps-container">
             {{> mod_roadmap/configuration_steps }}
-        </div>
-        <div class="step-wrapper">
-            <a class="add-cycle-step" href="#" >Add a new step</a>
         </div>
         <input class="cycle-configuration" type="hidden" value="{{ configuration }}">
     </div>

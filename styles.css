@@ -217,33 +217,64 @@
 /* Configuration CSS */
 
 /* -- Phase */
-
-#mformroadmap .phase-wrapper {
-    padding: 0 0 20px 0;
+#mformroadmap #phase-container .expand-collapse-controls img.icon {
+    width: 24px;
+    height: 24px;
+    margin: 0px 7px;
 }
 
-#mformroadmap .cycle-wrapper,
+#mformroadmap .phase-wrapper {
+    padding: 20px 0 0px 0;
+    border-right: 10px solid #e9e9e9;
+}
+
+#mformroadmap .cycle-wrapper {
+    padding: 20px 0 0 100px;
+    border-right: 10px solid #ececec;
+    margin-right:2px;
+}
+
 #mformroadmap .step-wrapper {
     padding: 20px 0 0 100px;
+    border-right: 10px solid #efefef;
+    margin-right:2px;
 }
 
 #mformroadmap .phase-wrapper > div.row,
 #mformroadmap .cycle-wrapper > div.row,
 #mformroadmap .step-wrapper > div.row {
     border-bottom: 1px solid #efefef;
+    padding-top: 0px;
+    margin-right: 0px;
 }
 
 #mformroadmap .phase-container,
 #mformroadmap .cycle-container,
 #mformroadmap .step-container {
     padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#mformroadmap .step-container {
+    border-bottom: 1px solid #eee;
 }
 
 #mformroadmap .phase-controls,
-#mformroadmap .cycle-controls {
+#mformroadmap .cycle-controls,
+#mformroadmap .step-controls {
     float: left;
     width: 125px;
     padding-top: 6px;
+    margin-left: 10px;
+}
+
+#mformroadmap .phase-container-controls > a,
+#mformroadmap .cycle-container-controls > a,
+#mformroadmap .step-container-controls > a {
+    margin: 0px 6px 0px 30px;
+    float: right;
+    font-size: 14px;
+    line-height: 25px;
 }
 
 #mformroadmap .phase-header-title,
@@ -251,13 +282,37 @@
 #mformroadmap .step-header-title {
     float: left;
     font-size: 1.2rem;
-    font-weight: 400;
+    font-weight: bold;
+    padding-top: 3px;
 }
 
 #mformroadmap .phase-header-title > span,
 #mformroadmap .cycle-header-title > span,
 #mformroadmap .step-header-title > span {
     color: #999;
+}
+
+#mformroadmap .phase-container-controls,
+#mformroadmap .cycle-container-controls,
+#mformroadmap .step-container-controls {
+    height: 37px;
+    padding: 6px 6px 6px 10px;
+    border-right: 10px;
+    margin: 0 0 0 -15px;
+    background: #e9e9e9;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    line-height: 25px;
+}
+
+#mformroadmap .cycle-container-controls {
+    margin: 0 2px 0 80px;
+    background: #ececec;
+}
+
+#mformroadmap .step-container-controls {
+    margin: 0 2px 0 80px;
+    background: #efefef;
 }
 
 #mformroadmap .phase-label {

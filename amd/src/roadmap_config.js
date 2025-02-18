@@ -139,6 +139,17 @@ define(['jquery',
                         RoadmapConfig.prototype.downStep(e);
                     });
 
+                    $('.expand-collapse-controls .collapse_everything').click(function(e) {
+                        RoadmapConfig.prototype.collapseEverything(e);
+                    });
+                    $('.expand-collapse-controls .expand_everything').click(function(e) {
+                        RoadmapConfig.prototype.expandEverything(e);
+                    });
+
+                    // Instead of binding and unbinding specific elements over and over as they are created,
+                    // This event will capture all clicks, always and based on data we can determine the action.
+                    $('#roadmapconfiguration').click(RoadmapConfig.prototype.clickHandler);
+
                     learningobjectives.refreshChecklists();
 
                     stepiconselect.rebindButtons();
@@ -153,6 +164,32 @@ define(['jquery',
                     require(['theme_boost/loader']);
                     return null;
                 }).fail(notification.exception);
+        };
+
+        RoadmapConfig.prototype.clickHandler = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var thisnode = $(event.target);
+            var action = thisnode.data('action');
+
+            if (action == 'collapse_all_phases') {
+                RoadmapConfig.prototype.collapsePhases();
+            } else if (action == 'expand_all_phases') {
+                RoadmapConfig.prototype.expandPhases();
+            } else if (action == 'collapse_all_cycles') {
+                RoadmapConfig.prototype.collapseCycles(thisnode.parent('.cycle-container-controls')
+                    .next('.phase-cycles-container'));
+            } else if (action == 'expand_all_cycles') {
+                RoadmapConfig.prototype.expandCycles(thisnode.parent('.cycle-container-controls')
+                    .next('.phase-cycles-container'));
+            } else if (action == 'collapse_all_steps') {
+                RoadmapConfig.prototype.collapseSteps(thisnode.parent('.step-container-controls')
+                    .next('.cycle-steps-container'));
+            } else if (action == 'expand_all_steps') {
+                RoadmapConfig.prototype.expandSteps(thisnode.parent('.step-container-controls')
+                    .next('.cycle-steps-container'));
+            }
         };
 
         RoadmapConfig.prototype.bindConfigSave = function() {
@@ -327,6 +364,56 @@ define(['jquery',
                     cyclesave.rebindInputs();
                     return null;
                 }).fail(notification.exception);
+        };
+
+        //* New expand all and contract all functionality *//
+        RoadmapConfig.prototype.expandPhases = function() {
+            RoadmapConfig.prototype.expandChildrenClass($('#roadmapconfiguration'), 'phase');
+        };
+
+        RoadmapConfig.prototype.expandCycles = function(node) {
+            RoadmapConfig.prototype.expandChildrenClass(node, 'cycle');
+        };
+
+        RoadmapConfig.prototype.expandSteps = function(node) {
+            RoadmapConfig.prototype.expandChildrenClass(node, 'step');
+        };
+
+        RoadmapConfig.prototype.collapsePhases = function() {
+            var node = $('#roadmapconfiguration');
+            RoadmapConfig.prototype.collapseCycles(node);
+            RoadmapConfig.prototype.collapseChildrenClass(node, 'phase');
+        };
+
+        RoadmapConfig.prototype.collapseCycles = function(node) {
+            RoadmapConfig.prototype.collapseSteps(node);
+            RoadmapConfig.prototype.collapseChildrenClass(node, 'cycle');
+        };
+
+        RoadmapConfig.prototype.collapseSteps = function(node) {
+            RoadmapConfig.prototype.collapseChildrenClass(node, 'step');
+        };
+
+        RoadmapConfig.prototype.expandChildrenClass = function(parentNode, groupingName) {
+
+            parentNode.find('a.' + groupingName + '-collapse-control').each(function () {
+                var wrapper = $(this).closest('.' + groupingName + '-wrapper');
+                var container = wrapper.children('.' + groupingName + '-container');
+                if (container.hasClass( "hide" )) {
+                    $(this).click();
+                }
+            });
+        };
+
+        RoadmapConfig.prototype.collapseChildrenClass = function(parentNode, groupingName) {
+
+            parentNode.find('a.' + groupingName + '-collapse-control').each(function () {
+                var wrapper = $(this).closest('.' + groupingName + '-wrapper');
+                var container = wrapper.children('.' + groupingName + '-container');
+                if (container.hasClass( "visible" )) {
+                    $(this).click();
+                }
+            });
         };
 
         RoadmapConfig.prototype.collapsePhase = function(event) {

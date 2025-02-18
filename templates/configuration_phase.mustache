@@ -42,7 +42,7 @@
     }
 }}
 <div data-phaseid="{{ id }}" data-phaseindex="{{ index }}" data-phasecolor="{{ color }}" class="phase-wrapper">
-    <div class="row">
+    <div class="row bg-light">
         <div class="phase-controls">
             <a class="phase-collapse-control" href="">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
             <a class="phase-up-control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
@@ -56,11 +56,14 @@
             <div class="col-md-1 col-form-label">Title</div>
             <div class="col-md-11 form-inline"><input class="phase-title form-control" type="text" value="{{ title }}"></div>
         </div>
+        <div class="cycle-container-controls">
+            <strong>Cycles</strong>
+            <a class="add-phase-cycle" href="#" ><i class="fa-solid fa-plus"></i> Add</a>
+            <a href="#" data-action="collapse_all_cycles" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
+            <a href="#" data-action="expand_all_cycles" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
+        </div>
         <div class="phase-cycles-container" class="">
             {{> mod_roadmap/configuration_cycles }}
-        </div>
-        <div class="cycle-wrapper">
-            <a class="add-phase-cycle" href="#" >Add a new cycle</a>
         </div>
         <input class="phase-configuration" type="hidden" value="{{ configuration }}">
     </div>

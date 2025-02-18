@@ -43,6 +43,12 @@
         }]
     }
 }}
+<div class="phase-container-controls">
+    <strong>Phases</strong>
+    <a id="add-phase" href="#" ><i class="fa-solid fa-plus"></i> Add</a>
+    <a href="#" data-action="collapse_all_phases" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
+    <a href="#" data-action="expand_all_phases" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
+</div>
 <div id="phase-container" class="">
     {{# phases }}
         {{> mod_roadmap/configuration_phase }}
@@ -52,5 +58,4 @@
     <input id="phase-deletes" type="hidden" value="">
     <input id="cycle-deletes" type="hidden" value="">
     <input id="step-deletes" type="hidden" value="">
-    <a id="add-phase" href="#" >Add a new phase</a>
 </div>
