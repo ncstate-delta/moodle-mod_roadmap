@@ -37,6 +37,8 @@ $string['appearance'] = 'Appearance';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
 $string['learningobjectives'] = 'Course Learning Objectives';
 $string['editroadmap'] = 'Edit Course Roadmap';
+$string['configureanddownloadicons'] = 'Configure and Download Icons';
+$string['stepiconpreviewtoollink'] = '<a href="https://pages.github.ncsu.edu/delta-NMD/moodle-roadmap-icons-preview/" target="_blank">Step Icon Preview Tool</a>';
 
 $string['selecticon'] = 'Select Step Icon';
 $string['chooseactivities'] = 'Choose Activities for Step Completion';

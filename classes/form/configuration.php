@@ -122,6 +122,10 @@ class configuration extends moodleform {
         $mform->setDefault('phasecolorpattern', $roadmap->colors);
         $mform->setType('phasecolorpattern', PARAM_INT);
 
+        $mform->addElement('static', 'iconpreviewtool',
+            get_string('configureanddownloadicons', 'roadmap'),
+            get_string('stepiconpreviewtoollink', 'roadmap'));
+
         // Add js.
         $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
             ['#learningobjectives_panel',
