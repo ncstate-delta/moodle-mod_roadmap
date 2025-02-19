@@ -30,6 +30,7 @@ define(['jquery',
         'mod_roadmap/step_save',
         'mod_roadmap/cycle_save',
         'mod_roadmap/phase_save',
+        'mod_roadmap/repository',
     ],
     function(
         $,
@@ -42,6 +43,7 @@ define(['jquery',
         stepsave,
         cyclesave,
         phasesave,
+        roadmaprepository,
     ) {
 
         /**
@@ -150,6 +152,8 @@ define(['jquery',
                     // This event will capture all clicks, always and based on data we can determine the action.
                     $('#roadmapconfiguration').click(RoadmapConfig.prototype.clickHandler);
 
+                    RoadmapConfig.prototype.phaseColorChange($('select[name="phasecolorpattern"]'));
+
                     learningobjectives.refreshChecklists();
 
                     stepiconselect.rebindButtons();
@@ -164,6 +168,10 @@ define(['jquery',
                     require(['theme_boost/loader']);
                     return null;
                 }).fail(notification.exception);
+
+            $('select[name="phasecolorpattern"]').change(function(e) {
+                RoadmapConfig.prototype.phaseColorChange($(e.target));
+            });
         };
 
         RoadmapConfig.prototype.clickHandler = function(event) {
@@ -190,6 +198,31 @@ define(['jquery',
                 RoadmapConfig.prototype.expandSteps(thisnode.parent('.step-container-controls')
                     .next('.cycle-steps-container'));
             }
+        };
+
+        RoadmapConfig.prototype.phaseColorChange = function (node) {
+            var colorId = node.val();
+            RoadmapConfig.prototype.getColorSet(colorId);
+        };
+
+        RoadmapConfig.prototype.getColorSet = async(colorId) => {
+            $('.phase-color-display').remove();
+
+            const response = await roadmaprepository.fetchColorPattern(colorId);
+
+            var colorTable = $("<div>").addClass('phase-color-display');
+            response.forEach(function(color) {
+                colorTable.append('<div class="color" style="background-color:' + color + '"/></div>');
+            });
+
+            $('select[name="phasecolorpattern"]').parent().append(colorTable);
+
+            $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function (index) {
+                let numcolors = response.length;
+                let idxcolor = index % numcolors;
+
+                $(this).css('border-bottom', 'solid 1px ' + response[idxcolor] + '');
+            });
         };
 
         RoadmapConfig.prototype.bindConfigSave = function() {

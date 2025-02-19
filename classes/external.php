@@ -156,9 +156,7 @@ class external extends external_api {
      */
     public static function fetch_color_pattern_returns() {
         return new external_multiple_structure(
-            new external_single_structure([
-                    'color'      => new external_value(PARAM_RAW, 'Color Hex Value'),
-                ], 'Colors')
+            new external_value(PARAM_TEXT, 'phase color')
         );
     }
 

@@ -321,6 +321,17 @@
     width: 150px;
 }
 
+#mformroadmap .phase-color-display .color {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 5px;
+}
+
+#mformroadmap .phase-color-display {
+    margin: 3px 0 0 20px;
+}
+
 #mformroadmap #learningobjectives-container {
     padding: 0 20px 20px 20px;
 }
