@@ -175,9 +175,6 @@ define(['jquery',
         };
 
         RoadmapConfig.prototype.clickHandler = function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
             var thisnode = $(event.target);
             var action = thisnode.data('action');
 
