@@ -114,7 +114,7 @@
     border-top: none;
     border: none;
     background-color: transparent;
-    padding:2px 0px;
+    padding: 2px 0;
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .left {
@@ -139,10 +139,11 @@
 }
 
 #roadmap-phase-container .roadmap-phase .roadmap-cycle .bracket {
-    background-image: linear-gradient(#ddd, #ddd),
-                      linear-gradient(#ddd, #ddd),
-                      linear-gradient(#ddd, #ddd),
-                      linear-gradient(#ddd, #ddd);
+    background-image:
+        linear-gradient(#ddd, #ddd),
+        linear-gradient(#ddd, #ddd),
+        linear-gradient(#ddd, #ddd),
+        linear-gradient(#ddd, #ddd);
     background-repeat: no-repeat;
     background-size: 8px 2px;
     background-position: top left, top right, bottom left, bottom right;
@@ -220,32 +221,32 @@
 #mformroadmap #phase-container .expand-collapse-controls img.icon {
     width: 24px;
     height: 24px;
-    margin: 0px 7px;
+    margin: 0 7px;
 }
 
 #mformroadmap .phase-wrapper {
-    padding: 20px 0 0px 0;
+    padding: 20px 0 0 0;
     border-right: 10px solid #e9e9e9;
 }
 
 #mformroadmap .cycle-wrapper {
     padding: 20px 0 0 100px;
     border-right: 10px solid #ececec;
-    margin-right:2px;
+    margin-right: 2px;
 }
 
 #mformroadmap .step-wrapper {
     padding: 20px 0 0 100px;
     border-right: 10px solid #efefef;
-    margin-right:2px;
+    margin-right: 2px;
 }
 
 #mformroadmap .phase-wrapper > div.row,
 #mformroadmap .cycle-wrapper > div.row,
 #mformroadmap .step-wrapper > div.row {
     border-bottom: 1px solid #efefef;
-    padding-top: 0px;
-    margin-right: 0px;
+    padding-top: 0;
+    margin-right: 0;
 }
 
 #mformroadmap .phase-container,
@@ -271,7 +272,7 @@
 #mformroadmap .phase-container-controls > a,
 #mformroadmap .cycle-container-controls > a,
 #mformroadmap .step-container-controls > a {
-    margin: 0px 6px 0px 30px;
+    margin: 0 6px 0 30px;
     float: right;
     font-size: 14px;
     line-height: 25px;

@@ -128,7 +128,6 @@ function xmldb_roadmap_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024050600, 'roadmap');
     }
 
-
     if ($oldversion < 2024072000) {
         global $CFG;
 
@@ -144,7 +143,7 @@ function xmldb_roadmap_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Change column colors from char255 to integer
+        // Change column colors from char255 to integer.
         $table = new xmldb_table('roadmap');
         $field = new xmldb_field('colors', XMLDB_TYPE_INTEGER, 10, null, null, null, null,
             'learningobjectives');

@@ -104,7 +104,7 @@ function roadmap_delete_instance($id) {
  * this activity in a course listing.
  * See get_array_of_activities() in course/lib.php
  *
- * @param cm_info $coursemodule course module info.
+ * @param cm_info $cm course module info.
  * @return cached_cm_info|null
  */
 function roadmap_cm_info_view(cm_info $cm) {

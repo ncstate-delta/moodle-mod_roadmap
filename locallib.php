@@ -281,7 +281,7 @@ function roadmap_color_set_names() {
     $result = [];
     $colorsets = $DB->get_records('roadmap_colors');
 
-    foreach($colorsets as $colorset) {
+    foreach ($colorsets as $colorset) {
         $result[$colorset->id] = $colorset->name;
     }
 
@@ -301,7 +301,7 @@ function roadmap_color_sets($id = -1) {
         return $DB->get_records('roadmap_colors');
     }
 
-    if($colorset = $DB->get_record('roadmap_colors', ['id' => $id])) {
+    if ($colorset = $DB->get_record('roadmap_colors', ['id' => $id])) {
         return json_decode($colorset->colors);
     }
 

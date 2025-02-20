@@ -200,7 +200,7 @@ define(['jquery',
             }
         };
 
-        RoadmapConfig.prototype.phaseColorChange = function (node) {
+        RoadmapConfig.prototype.phaseColorChange = function(node) {
             var colorId = node.val();
             RoadmapConfig.prototype.getColorSet(colorId);
         };
@@ -217,7 +217,7 @@ define(['jquery',
 
             $('select[name="phasecolorpattern"]').parent().append(colorTable);
 
-            $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function (index) {
+            $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function(index) {
                 let numcolors = response.length;
                 let idxcolor = index % numcolors;
 
@@ -429,10 +429,10 @@ define(['jquery',
 
         RoadmapConfig.prototype.expandChildrenClass = function(parentNode, groupingName) {
 
-            parentNode.find('a.' + groupingName + '-collapse-control').each(function () {
+            parentNode.find('a.' + groupingName + '-collapse-control').each(function() {
                 var wrapper = $(this).closest('.' + groupingName + '-wrapper');
                 var container = wrapper.children('.' + groupingName + '-container');
-                if (container.hasClass( "hide" )) {
+                if (container.hasClass("hide")) {
                     $(this).click();
                 }
             });
@@ -440,10 +440,10 @@ define(['jquery',
 
         RoadmapConfig.prototype.collapseChildrenClass = function(parentNode, groupingName) {
 
-            parentNode.find('a.' + groupingName + '-collapse-control').each(function () {
+            parentNode.find('a.' + groupingName + '-collapse-control').each(function() {
                 var wrapper = $(this).closest('.' + groupingName + '-wrapper');
                 var container = wrapper.children('.' + groupingName + '-container');
-                if (container.hasClass( "visible" )) {
+                if (container.hasClass("visible")) {
                     $(this).click();
                 }
             });
