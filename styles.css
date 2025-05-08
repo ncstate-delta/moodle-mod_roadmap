@@ -196,6 +196,8 @@
     position: relative;
     width: 40px;
     height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     margin-right: 0;
 }
 
@@ -221,6 +223,8 @@
 #mformroadmap #phase-container .expand-collapse-controls img.icon {
     width: 24px;
     height: 24px;
+    max-width: 24px;
+    max-height: 24px;
     margin: 0 7px;
 }
 
@@ -356,6 +360,8 @@
 #mformroadmap .step-icon-display .icon {
     width: 50px;
     height: 50px;
+    max-width: 50px;
+    max-height: 50px;
 }
 
 #page-mod-roadmap-configuration .modal-body {
@@ -395,6 +401,8 @@
 #page-mod-roadmap-configuration .modal-body .icon-container img.icon {
     width: 50px;
     height: 50px;
+    max-width: 50px;
+    max-height: 50px;
     margin: 5px;
 }
 
@@ -425,6 +433,8 @@
     font-size: 16px;
     width: 80px;
     height: 80px;
+    max-width: 80px;
+    max-height: 80px;
     margin: 0;
     padding: 28px;
     box-sizing: content-box;
