@@ -49,7 +49,6 @@ class external extends external_api {
     public static function fetch_course_modules_for_steps($contextid, $courseid, $pageurl) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
-        require_once($CFG->libdir.'/outputcomponents.php');
 
         $params = self::validate_parameters(self::fetch_course_modules_for_steps_parameters(), [
             'context'   => $contextid,
