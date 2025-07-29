@@ -16,54 +16,66 @@
 /**
  * Handle the saving of phase data and rebinding of inputs.
  *
- * @module     mod_roadmap/stepiconselect
+ * @module     mod_roadmap/phase_save
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'],
-    function($) {
+define(['jquery'], function($) {
+    /**
+     * PhaseSave class handles saving and rebinding for roadmap phases.
+     * @class
+     */
+    class PhaseSave {
+        /**
+         * Rebinds all inputs related to phase and attaches save handlers.
+         */
+        rebindInputs() {
+            $('.phase-title').off('change').on('change', this.savePhase.bind(this));
+            $('.phase-cycles-container .cycle-wrapper .cycle-configuration')
+                .off('change').on('change', this.savePhase.bind(this));
+            // Initial save for all phases (for new fields added)
+            $('.phase-container').each((_, el) => {
+                this.savePhase({target: el});
+            });
+        }
 
-        var PhaseSave = function() {
-            // Do nothing.
-        };
-
-        PhaseSave.prototype.rebindInputs = function() {
-            $('.phase-title').unbind('change').change(this.savePhase.bind(this));
-            $('.phase-cycles-container .cycle-wrapper .cycle-configuration').unbind('change').change(this.savePhase.bind(this));
-            PhaseSave.prototype.savePhase(this);
-        };
-
-        PhaseSave.prototype.savePhase = function(event) {
-            var phaseContainer = $(event.target).closest('.phase-container');
-            var phaseCycles = [];
+        /**
+         * Saves the phase data to its hidden config input.
+         * @param {Event|Object} event Event or jQuery-wrapped element reference.
+         */
+        savePhase(event) {
+            // Support both event and direct call with element
+            const $phaseContainer = $(event.target).closest('.phase-container');
+            const phaseCycles = [];
             let index = 0;
-            $.each(phaseContainer.find('.phase-cycles-container .cycle-wrapper .cycle-configuration'), function() {
-                let cycleData = $(this).val();
-                if (cycleData == '') {
-                    cycleData = '{}';
-                }
+            $phaseContainer.find('.phase-cycles-container .cycle-wrapper .cycle-configuration').each(function() {
+                let cycleData = $(this).val() || '{}';
                 let cycleDataObj = JSON.parse(cycleData);
-                cycleDataObj.index = index;
-                index = index + 1;
+                cycleDataObj.index = index++;
                 phaseCycles.push(cycleDataObj);
             });
-            let title = phaseContainer.find('.fitem input.phase-title').val();
-            var phaseData = {
-                id: phaseContainer.closest('.phase-wrapper').data('phaseid'),
+            const title = $phaseContainer.find('.fitem input.phase-title').val();
+            const phaseData = {
+                id: $phaseContainer.closest('.phase-wrapper').data('phaseid'),
                 title: title,
                 cycles: phaseCycles,
             };
-            phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
-            phaseContainer.children('input.phase-configuration').val(JSON.stringify(phaseData)).triggerHandler("change");
-        };
+            $phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
+            $phaseContainer.children('input.phase-configuration')
+                .val(JSON.stringify(phaseData)).triggerHandler("change");
+        }
+    }
 
-        return {
-
-            init: function() {
-                return new PhaseSave();
-            },
-
-            rebindInputs: function() {
-                PhaseSave.prototype.rebindInputs();
-            }
-        };
-    });
+    // AMD export
+    const instance = new PhaseSave();
+    return {
+        /**
+         * Initialize PhaseSave (returns instance).
+         * @returns {PhaseSave}
+         */
+        init: function() { return instance; },
+        /**
+         * Rebinds all phase input handlers.
+         */
+        rebindInputs: function() { instance.rebindInputs(); }
+    };
+});

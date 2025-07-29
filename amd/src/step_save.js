@@ -16,86 +16,94 @@
 /**
  * Handle the saving of step data and rebinding of inputs.
  *
- * @module     mod_roadmap/stepsave
+ * @module     mod_roadmap/step_save
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery'],
-    function($) {
-
-        var StepSave = function() {
-            // Do nothing.
-        };
-
-        StepSave.prototype.rebindInputs = function() {
-            // Rebind any new fields with save step on change.
+define(['jquery'], function($) {
+    /**
+     * StepSave class handles saving and rebinding for roadmap steps.
+     * @class
+     */
+    class StepSave {
+        /**
+         * Rebinds all inputs related to step and attaches save handlers.
+         */
+        rebindInputs() {
             $('.roadmap-form-control-step')
-                .unbind('change')
-                .change(this.saveStep.bind(this));
-
-            // Run save step if a new field has been added.
-            StepSave.prototype.loadList();
-            StepSave.prototype.saveStep(this);
-        };
-
-        StepSave.prototype.loadList = function() {
-            var activityData = JSON.parse($('input[name="activity_data"]').val());
-            var listAreas = $('ul.step-completion-list');
-
-            $(listAreas).each(function(i, e) {
-
-                // Get the configuration line from the local hidden field
-                var stepCompletionModules = $(this).closest('.step-activity-container').find('.step-completion-modules').val();
-                var selectedIds = stepCompletionModules.split(',');
-
-                $(e).children('li').remove();
-                // Use the selected ids to get course module information
-                activityData.activities.forEach(function(activity) {
-                    if ($.inArray(activity.id, selectedIds) >= 0) {
-                        var li = $('<li/>').attr('data-id', activity.id).appendTo($(e));
-                        $('<span>').text(activity.name).appendTo(li);
-                        $(e).append(li);
-                    }
-                });
+                .off('change').on('change', this.saveStep.bind(this));
+            this.loadList();
+            // Initial save for all steps (for new fields added)
+            $('.step-container').each((_, el) => {
+                this.saveStep({target: el});
             });
-        };
+        }
 
-        StepSave.prototype.saveStep = function(event) {
-            // Find step container that we are saving data from.
-            var stepContainer = $(event.target).closest('.step-container');
+        /**
+         * Loads and renders the completion activity list for each step.
+         */
+        loadList() {
+            const activityData = JSON.parse($('input[name="activity_data"]').val() || '{}');
+            $('ul.step-completion-list').each(function() {
+                const $list = $(this);
+                // Get the configuration line from the local hidden field
+                const stepCompletionModules = $list.closest('.step-activity-container')
+                    .find('.step-completion-modules').val() || '';
+                const selectedIds = stepCompletionModules.split(',').filter(x => x);
 
+                $list.empty();
+                if (activityData.activities && Array.isArray(activityData.activities)) {
+                    activityData.activities.forEach(function(activity) {
+                        if (selectedIds.includes(activity.id)) {
+                            const li = $('<li/>').attr('data-id', activity.id);
+                            $('<span>').text(activity.name).appendTo(li);
+                            $list.append(li);
+                        }
+                    });
+                }
+            });
+        }
+
+        /**
+         * Saves the step data to its hidden config input.
+         * @param {Event|Object} event Event or jQuery-wrapped element reference.
+         */
+        saveStep(event) {
+            // Support both event and direct call with element
+            const $stepContainer = $(event.target).closest('.step-container');
             // Link single activity check box option.
-            var linksingleactivity = 0;
-            if (stepContainer.find('.fitem input.chk-single-activity-link').prop("checked") == true) {
-                linksingleactivity = 1;
-            }
+            const linksingleactivity = $stepContainer.find('.fitem input.chk-single-activity-link')
+                .prop("checked") ? 1 : 0;
 
-            // Save rollover text and use to set the step header title.
-            let rollovertext = stepContainer.find('.fitem input.step-rollovertext').val();
+            const rollovertext = $stepContainer.find('.fitem input.step-rollovertext').val();
 
-            // Step data object collection.
-            var stepData = {
-                id: stepContainer.closest('.step-wrapper').data('stepid'),
+            const stepData = {
+                id: $stepContainer.closest('.step-wrapper').data('stepid'),
                 rollovertext: rollovertext,
-                stepicon: stepContainer.find('.fitem input.step-icon').val(),
-                completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),
+                stepicon: $stepContainer.find('.fitem input.step-icon').val(),
+                completionmodules: $stepContainer.find('.fitem input.step-completion-modules').val(),
                 linksingleactivity: linksingleactivity,
-                pagelink: stepContainer.find('.fitem input.step-single-activity-link').val(),
-                completionexpectedcmid: stepContainer.find('.fitem input.expectedcomplete-coursemoduleid').val(),
-                completionexpecteddatetime: stepContainer.find('.fitem input.expectedcomplete-datetime').val(),
+                pagelink: $stepContainer.find('.fitem input.step-single-activity-link').val(),
+                completionexpectedcmid: $stepContainer.find('.fitem input.expectedcomplete-coursemoduleid').val(),
+                completionexpecteddatetime: $stepContainer.find('.fitem input.expectedcomplete-datetime').val(),
             };
 
-            // Set the header title with the new step roll over text and save the step data object as json to config.
-            stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
-            stepContainer.children('input.step-configuration').val(JSON.stringify(stepData)).triggerHandler("change");
-        };
+            $stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
+            $stepContainer.children('input.step-configuration')
+                .val(JSON.stringify(stepData)).triggerHandler("change");
+        }
+    }
 
-        return {
-            init: function() {
-                return new StepSave();
-            },
-
-            rebindInputs: function() {
-                StepSave.prototype.rebindInputs();
-            }
-        };
-    });
+    // AMD export
+    const instance = new StepSave();
+    return {
+        /**
+         * Initialize StepSave (returns instance).
+         * @returns {StepSave}
+         */
+        init: function() { return instance; },
+        /**
+         * Rebinds all step input handlers.
+         */
+        rebindInputs: function() { instance.rebindInputs(); }
+    };
+});
