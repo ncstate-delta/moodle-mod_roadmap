@@ -40,10 +40,10 @@
 <div data-cycleid="{{ id }}" data-cycleindex="{{ index }}" class="cycle-wrapper">
     <div class="row bg-light">
         <div class="cycle-controls">
-            <a class="cycle-collapse-control" href="">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
-            <a class="cycle-up-control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
-            <a class="cycle-down-control" href="" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
-            <a class="cycle-delete-control" href="" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
+            <a data-action="cycle_collapse_control" href="" onclick="return false;">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
+            <a data-action="cycle_up_control" href="" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
+            <a data-action="cycle_down_control" href="" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
+            <a data-action="cycle_delete_control" href="" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
         </div>
         <div class="cycle-header-title">{{# title }} {{ title }} {{/ title }} {{^ title }} Untitled Cycle {{/ title }}</div>
     </div>
@@ -68,7 +68,7 @@
         </div>
         <div class="step-container-controls">
             <strong>Steps</strong>
-            <a class="add-cycle-step" href="#" ><i class="fa-solid fa-plus"></i> Add</a>
+            <a href="#" data-action="add_cycle_step" onclick="return false;"><i class="fa-solid fa-plus"></i> Add</a>
             <a href="#" data-action="collapse_all_steps" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
             <a href="#" data-action="expand_all_steps" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
         </div>

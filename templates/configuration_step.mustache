@@ -32,10 +32,10 @@
 <div data-stepid="{{ id }}" class="step-wrapper">
     <div class="row bg-light">
         <div class="step-controls">
-            <a class="step-collapse-control">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
-            <a class="step-up-control" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
-            <a class="step-down-control" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
-            <a class="step-delete-control" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
+            <a data-action="step_collapse_control" onclick="return false;">{{# pix }} t/collapsed, moodle, Expand {{/ pix }}</a>
+            <a data-action="step_up_control" onclick="return false;">{{# pix }} t/up, core, Up {{/ pix }}</a>
+            <a data-action="step_down_control" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
+            <a data-action="step_delete_control" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
         </div>
         <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} Untitled Step {{/ rollovertext }}</div>
     </div>
