@@ -32,6 +32,8 @@ define([
     'mod_roadmap/cycle_save',
     'mod_roadmap/phase_save',
     'mod_roadmap/repository',
+    'core/modal_delete_cancel',
+    'core/modal_events'
 ], (
     $,
     notification,
@@ -43,11 +45,38 @@ define([
     stepSave,
     cycleSave,
     phaseSave,
-    roadmapRepo
+    roadmapRepo,
+    ModalDeleteCancel,
+    ModalEvents
 ) => {
 
-    // Helper: Confirm dialog wrapper
-    const confirmDialog = (msg) => window.confirm(msg);
+    /**
+     * Shows a Moodle delete confirmation modal and resolves to true if confirmed, false otherwise.
+     * @param {string} message The message to show.
+     * @param {string} [title='Confirm delete'] The modal title.
+     * @returns {Promise<boolean>}
+     */
+    function showDeleteConfirmModal(message, title = 'Confirm delete') {
+        return new Promise((resolve) => {
+            ModalDeleteCancel.create({
+                title: title,
+                body: message
+            }).then(function(modal) {
+                modal.show();
+                modal.getRoot().on(ModalEvents.delete, function() {
+                    resolve(true);
+                    modal.hide();
+                });
+                modal.getRoot().on(ModalEvents.cancel, function() {
+                    resolve(false);
+                    modal.hide();
+                });
+                modal.getRoot().on(ModalEvents.hidden, function() {
+                    modal.destroy();
+                });
+            });
+        });
+    }
 
     // Helper: Find the max ID for a given type
     const getMaxValue = (dataType) => {
@@ -161,10 +190,9 @@ define([
                 case 'collapse_all_phases': return this.collapsePhases();
                 case 'expand_all_phases': return this.expandPhases();
                 case 'collapse_all_cycles':
-                    // FIX: robustly find the phase-cycles-container for this phase
-                    return this.collapseCycles($node.closest('.phase-wrapper').find('.phase-cycles-container').first());
+                    return this.collapseCycles($node.closest('.phase-wrapper')
+                        .find('.phase-cycles-container').first());
                 case 'expand_all_cycles':
-                    // FIX: robustly find the phase-cycles-container for this phase
                     return this.expandCycles($node.closest('.phase-wrapper')
                         .find('.phase-cycles-container').first());
                 case 'collapse_all_steps': return this.collapseSteps($node.parent('.step-container-controls')
@@ -259,7 +287,13 @@ define([
             const config = JSON.parse($('input[name="roadmapconfiguration"]').val());
             const nextIndex = config.phases.length;
             const maxPhaseId = getMaxValue('phase');
-            const newPhase = { id: maxPhaseId + 1, index: nextIndex, number: nextIndex + 1 };
+            const newPhase = {
+                id: maxPhaseId + 1,
+                index: nextIndex,
+                number: nextIndex + 1,
+                title: 'Phase ' + (nextIndex + 1),
+                subtitle: 'Subtitle ' + (nextIndex + 1)
+            };
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
 
@@ -268,6 +302,8 @@ define([
                     templates.appendNodeContents('#phase-container', html, js);
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
+                    // Ensure color pattern is applied to new phase
+                    this.phaseColorChange($('select[name="phasecolorpattern"]'));
                 }).fail(notification.exception);
         }
 
@@ -280,7 +316,13 @@ define([
             const $cycleContainer = $phaseContainer.children('.phase-cycles-container');
             const nextCycleIndex = $cycleContainer.children('.cycle-wrapper').length;
             const maxCycleId = getMaxValue('cycle');
-            const newCycle = { id: maxCycleId + 1, index: nextCycleIndex, number: nextCycleIndex + 1 };
+            const newCycle = {
+                id: maxCycleId + 1,
+                index: nextCycleIndex,
+                number: nextCycleIndex + 1,
+                title: 'Cycle ' + (nextCycleIndex + 1),
+                subtitle: 'Subtitle ' + (nextCycleIndex + 1)
+            };
 
             templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then((html, js) => {
@@ -307,7 +349,7 @@ define([
                 index: nextStepIndex,
                 number: nextStepIndex + 1,
                 stepicon: 'icon-10',
-                iconurl: `${iconUrl}?name=icon-10&percent=100&flags=n`,
+                iconurl: `${iconUrl}?name=icon-10&percent=100&flags=n`
             };
 
             templates.render('mod_roadmap/configuration_step', newStep)
@@ -410,13 +452,18 @@ define([
          * @param {Object} $node The jQuery node for the delete control.
          */
         deletePhase($node) {
-            if (confirmDialog('Are you sure you want to delete this Phase?')) {
-                const $wrapper = $node.closest('.phase-wrapper');
-                const phaseId = $wrapper.data('phaseid');
-                $('#phase-deletes').val($('#phase-deletes').val() + phaseId + ',');
-                $wrapper.remove();
-                this.configSave();
-            }
+            showDeleteConfirmModal('Are you sure you want to delete this Phase?', 'Confirm delete')
+                .then((confirmed) => {
+                    if (confirmed) {
+                        const $wrapper = $node.closest('.phase-wrapper');
+                        const phaseId = $wrapper.data('phaseid');
+                        $('#phase-deletes').val($('#phase-deletes').val() + phaseId + ',');
+                        $wrapper.remove();
+                        this.configSave();
+                        // Update color pattern after removal for consistency
+                        this.phaseColorChange($('select[name="phasecolorpattern"]'));
+                    }
+                });
         }
 
         /**
@@ -424,14 +471,17 @@ define([
          * @param {Object} $node The jQuery node for the delete control.
          */
         deleteCycle($node) {
-            if (confirmDialog('Are you sure you want to delete this Cycle?')) {
-                const $wrapper = $node.closest('.cycle-wrapper');
-                const $phaseContainer = $node.closest('.phase-container');
-                const cycleId = $wrapper.data('cycleid');
-                $('#cycle-deletes').val($('#cycle-deletes').val() + cycleId + ',');
-                $wrapper.remove();
-                $phaseContainer.find('.phase-title').triggerHandler('change');
-            }
+            showDeleteConfirmModal('Are you sure you want to delete this Cycle?', 'Confirm delete')
+                .then((confirmed) => {
+                    if (confirmed) {
+                        const $wrapper = $node.closest('.cycle-wrapper');
+                        const $phaseContainer = $node.closest('.phase-container');
+                        const cycleId = $wrapper.data('cycleid');
+                        $('#cycle-deletes').val($('#cycle-deletes').val() + cycleId + ',');
+                        $wrapper.remove();
+                        $phaseContainer.find('.phase-title').triggerHandler('change');
+                    }
+                });
         }
 
         /**
@@ -439,14 +489,17 @@ define([
          * @param {Object} $node The jQuery node for the delete control.
          */
         deleteStep($node) {
-            if (confirmDialog('Are you sure you want to delete this Step?')) {
-                const $wrapper = $node.closest('.step-wrapper');
-                const $cycleContainer = $node.closest('.cycle-container');
-                const stepId = $wrapper.data('stepid');
-                $('#step-deletes').val($('#step-deletes').val() + stepId + ',');
-                $wrapper.remove();
-                $cycleContainer.find('.cycle-title').triggerHandler('change');
-            }
+            showDeleteConfirmModal('Are you sure you want to delete this Step?', 'Confirm delete')
+                .then((confirmed) => {
+                    if (confirmed) {
+                        const $wrapper = $node.closest('.step-wrapper');
+                        const $cycleContainer = $node.closest('.cycle-container');
+                        const stepId = $wrapper.data('stepid');
+                        $('#step-deletes').val($('#step-deletes').val() + stepId + ',');
+                        $wrapper.remove();
+                        $cycleContainer.find('.cycle-title').triggerHandler('change');
+                    }
+                });
         }
 
         // ---- Move up/down ----
@@ -455,11 +508,13 @@ define([
             const $wrapper = $node.closest('.phase-wrapper');
             moveWrapper($wrapper, 'up');
             this.configSave();
+            this.phaseColorChange($('select[name="phasecolorpattern"]'));
         }
         downPhase($node) {
             const $wrapper = $node.closest('.phase-wrapper');
             moveWrapper($wrapper, 'down');
             this.configSave();
+            this.phaseColorChange($('select[name="phasecolorpattern"]'));
         }
         upCycle($node) {
             const $wrapper = $node.closest('.cycle-wrapper');
