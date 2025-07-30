@@ -50,39 +50,32 @@ define([
     ModalEvents
 ) => {
 
-    /**
-     * Shows a Moodle delete confirmation modal and resolves to true if confirmed, false otherwise.
-     * @param {string} message The message to show.
-     * @param {string} [title='Confirm delete'] The modal title.
-     * @returns {Promise<boolean>}
-     */
-    function showDeleteConfirmModal(message, title = 'Confirm delete') {
-        return new Promise((resolve) => {
-            ModalDeleteCancel.create({
-                title: title,
-                body: message
-            }).then(function(modal) {
+    const showDeleteConfirmModal = (message, title = 'Confirm delete') => {
+        return ModalDeleteCancel.create({
+            title,
+            body: message
+        }).then(modal => {
+            return new Promise(resolve => {
                 modal.show();
-                modal.getRoot().on(ModalEvents.delete, function() {
+                modal.getRoot().on(ModalEvents.delete, () => {
                     resolve(true);
                     modal.hide();
                 });
-                modal.getRoot().on(ModalEvents.cancel, function() {
+                modal.getRoot().on(ModalEvents.cancel, () => {
                     resolve(false);
                     modal.hide();
                 });
-                modal.getRoot().on(ModalEvents.hidden, function() {
+                modal.getRoot().on(ModalEvents.hidden, () => {
                     modal.destroy();
                 });
             });
         });
-    }
+    };
 
-    // Helper: Find the max ID for a given type
-    const getMaxValue = (dataType) => {
-        let ids = [];
-        $(`.${dataType}-wrapper`).each(function () {
-            const id = parseInt($(this).data(`${dataType}id`));
+    const getMaxValue = dataType => {
+        const ids = [];
+        $(`.${dataType}-wrapper`).each(function() {
+            const id = parseInt($(this).data(`${dataType}id`), 10);
             if (!isNaN(id)) {
                 ids.push(id);
             }
@@ -90,7 +83,6 @@ define([
         return ids.length ? Math.max(...ids) : 0;
     };
 
-    // Helper: Move wrapper up/down
     const moveWrapper = ($wrapper, direction) => {
         if (direction === 'up') {
             const $prev = $wrapper.prev();
@@ -105,25 +97,19 @@ define([
         }
     };
 
-    // Main class for roadmap config UI logic
+    let colorPatternCache = {};
+
     class RoadmapConfig {
-        /**
-         * @param {String} inputSelector - Selector where config UI is injected.
-         * @param {String} inputConfig - Selector for hidden config input.
-         */
         constructor(inputSelector, inputConfig) {
             this.inputSelector = inputSelector;
             this.configContainer = $(inputConfig);
             this.initForm();
         }
 
-        /**
-         * (Re)Initializes the roadmap configuration UI.
-         */
         initForm() {
             let inputConfigVal = this.configContainer.val();
             if (!inputConfigVal) {
-                inputConfigVal = JSON.stringify({ phases: [] });
+                inputConfigVal = JSON.stringify({phases: []});
                 this.configContainer.val(inputConfigVal);
             }
             let config;
@@ -131,34 +117,30 @@ define([
                 config = JSON.parse(inputConfigVal);
             } catch (e) {
                 notification.exception(e);
-                config = { phases: [] };
+                config = {phases: []};
             }
 
-            // Attach serialized config for template rendering
-            for (const phase of config.phases) {
+            config.phases.forEach(phase => {
                 phase.configuration = JSON.stringify(phase);
-                for (const cycle of (phase.cycles || [])) {
+                (phase.cycles || []).forEach(cycle => {
                     cycle.configuration = JSON.stringify(cycle);
-                    for (const step of (cycle.steps || [])) {
+                    (cycle.steps || []).forEach(step => {
                         step.configuration = JSON.stringify(step);
-                    }
-                }
-            }
+                    });
+                });
+            });
 
-            // Render UI
             templates.render('mod_roadmap/configuration_phases', config)
-                .then((html, js) => {
-                    templates.prependNodeContents(this.inputSelector, html, js);
+                .then(html => {
+                    templates.prependNodeContents(this.inputSelector, html);
 
-                    // Bind all event handlers
                     this.bindExpandCollapseControls();
 
-                    // Delegated event binding for dynamic elements
                     $('#roadmapconfiguration')
                         .off('click', 'a[data-action]')
-                        .on('click', 'a[data-action]', (e) => this.clickHandler(e));
+                        .on('click', 'a[data-action]', e => this.clickHandler(e));
 
-                    this.phaseColorChange($('select[name="phasecolorpattern"]')); // Initial display
+                    this.phaseColorChange($('select[name="phasecolorpattern"]'));
 
                     learningObjectives.refreshChecklists();
                     stepIconSelect.rebindButtons();
@@ -170,31 +152,23 @@ define([
 
                     require(['theme_boost/loader']);
                 })
-                .fail(notification.exception);
+                .catch(notification.exception);
 
-            // Color pattern changes (live preview)
-            $('select[name="phasecolorpattern"]').off('change').on('change', (e) => {
+            $('select[name="phasecolorpattern"]').off('change').on('change', e => {
                 this.phaseColorChange($(e.target));
             });
         }
 
-        /**
-         * Handles all roadmap action links via event delegation.
-         * @param {Event} event The event object.
-         */
         clickHandler(event) {
             const $node = $(event.currentTarget);
             const action = $node.data('action');
-            // All possible actions:
             switch (action) {
                 case 'collapse_all_phases': return this.collapsePhases();
                 case 'expand_all_phases': return this.expandPhases();
-                case 'collapse_all_cycles':
-                    return this.collapseCycles($node.closest('.phase-wrapper')
-                        .find('.phase-cycles-container').first());
-                case 'expand_all_cycles':
-                    return this.expandCycles($node.closest('.phase-wrapper')
-                        .find('.phase-cycles-container').first());
+                case 'collapse_all_cycles': return this.collapseCycles($node.closest('.phase-wrapper')
+                    .find('.phase-cycles-container').first());
+                case 'expand_all_cycles': return this.expandCycles($node.closest('.phase-wrapper')
+                    .find('.phase-cycles-container').first());
                 case 'collapse_all_steps': return this.collapseSteps($node.parent('.step-container-controls')
                     .next('.cycle-steps-container'));
                 case 'expand_all_steps': return this.expandSteps($node.parent('.step-container-controls')
@@ -214,61 +188,51 @@ define([
                 case 'add_cycle_step': return this.addStep($node);
                 case 'step_up_control': return this.upStep($node);
                 case 'step_down_control': return this.downStep($node);
+                default: return undefined;
             }
         }
 
-        /**
-         * Show phase color pattern preview and update UI.
-         * @param {Object} $node The jQuery node for the color selector.
-         */
-        async phaseColorChange($node) {
+        phaseColorChange($node) {
             const colorId = $node.val();
-            this.getColorSet(colorId);
+            if (colorPatternCache[colorId]) {
+                this.applyColorSet(colorPatternCache[colorId]);
+                return;
+            }
+            return roadmapRepo.fetchColorPattern(colorId)
+                .then(colors => {
+                    colorPatternCache[colorId] = colors;
+                    this.applyColorSet(colors);
+                    return colors;
+                })
+                .catch(notification.exception);
         }
 
-        /**
-         * Fetch and display a color pattern for phase UI.
-         * @param {string|number} colorId The color pattern identifier.
-         */
-        async getColorSet(colorId) {
+        applyColorSet(colors) {
             $('.phase-color-display').remove();
-            let colors = [];
-            try {
-                colors = await roadmapRepo.fetchColorPattern(colorId);
-            } catch (e) {
-                notification.exception(e);
-            }
             const $colorTable = $('<div>').addClass('phase-color-display');
-            for (const color of colors) {
+            colors.forEach(color => {
                 $colorTable.append(`<div class="color" style="background-color:${color}"></div>`);
-            }
+            });
             $('select[name="phasecolorpattern"]').parent().append($colorTable);
 
-            // Color border for each phase
-            $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function (i) {
+            $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function(i) {
                 const numColors = colors.length;
                 const idxColor = i % numColors;
                 $(this).css('border-bottom', `solid 1px ${colors[idxColor]}`);
             });
         }
 
-        /**
-         * Binds config save to all phase configuration changes.
-         */
         bindConfigSave() {
             $('input.phase-configuration').off('change').on('change', () => this.configSave());
         }
 
-        /**
-         * Serializes the whole roadmap config and saves to hidden input.
-         */
         configSave() {
             const $phaseContainer = $('#phase-container');
             const roadmapData = [];
             let index = 0;
-            $phaseContainer.find('.phase-wrapper .phase-configuration').each(function () {
-                let phaseData = $(this).val() || '{}';
-                let phaseDataObj = JSON.parse(phaseData);
+            $phaseContainer.find('.phase-wrapper .phase-configuration').each(function() {
+                const phaseData = $(this).val() || '{}';
+                const phaseDataObj = JSON.parse(phaseData);
                 phaseDataObj.index = index++;
                 roadmapData.push(phaseDataObj);
             });
@@ -276,13 +240,10 @@ define([
                 phases: roadmapData,
                 phaseDeletes: $('#phase-deletes').val(),
                 cycleDeletes: $('#cycle-deletes').val(),
-                stepDeletes: $('#step-deletes').val(),
+                stepDeletes: $('#step-deletes').val()
             }));
         }
 
-        /**
-         * Add a new phase.
-         */
         addPhase() {
             const config = JSON.parse($('input[name="roadmapconfiguration"]').val());
             const nextIndex = config.phases.length;
@@ -291,26 +252,21 @@ define([
                 id: maxPhaseId + 1,
                 index: nextIndex,
                 number: nextIndex + 1,
-                title: 'Phase ' + (nextIndex + 1),
-                subtitle: 'Subtitle ' + (nextIndex + 1)
+                title: `Phase ${nextIndex + 1}`,
+                subtitle: `Subtitle ${nextIndex + 1}`
             };
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
-
-            templates.render('mod_roadmap/configuration_phase', newPhase)
-                .then((html, js) => {
-                    templates.appendNodeContents('#phase-container', html, js);
+            return templates.render('mod_roadmap/configuration_phase', newPhase)
+                .then(html => {
+                    templates.appendNodeContents('#phase-container', html);
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
-                    // Ensure color pattern is applied to new phase
                     this.phaseColorChange($('select[name="phasecolorpattern"]'));
-                }).fail(notification.exception);
+                })
+                .catch(notification.exception);
         }
 
-        /**
-         * Add a new cycle to a phase.
-         * @param {Object} $node The jQuery node that triggered the add cycle action.
-         */
         addCycle($node) {
             const $phaseContainer = $node.closest('.phase-container');
             const $cycleContainer = $phaseContainer.children('.phase-cycles-container');
@@ -320,23 +276,19 @@ define([
                 id: maxCycleId + 1,
                 index: nextCycleIndex,
                 number: nextCycleIndex + 1,
-                title: 'Cycle ' + (nextCycleIndex + 1),
-                subtitle: 'Subtitle ' + (nextCycleIndex + 1)
+                title: `Cycle ${nextCycleIndex + 1}`,
+                subtitle: `Subtitle ${nextCycleIndex + 1}`
             };
-
-            templates.render('mod_roadmap/configuration_cycle', newCycle)
-                .then((html, js) => {
-                    templates.appendNodeContents($cycleContainer, html, js);
+            return templates.render('mod_roadmap/configuration_cycle', newCycle)
+                .then(html => {
+                    templates.appendNodeContents($cycleContainer, html);
                     learningObjectives.refreshChecklists();
                     cycleSave.rebindInputs();
                     phaseSave.rebindInputs();
-                }).fail(notification.exception);
+                })
+                .catch(notification.exception);
         }
 
-        /**
-         * Add a new step to a cycle.
-         * @param {Object} $node The jQuery node that triggered the add step action.
-         */
         addStep($node) {
             const $cycleContainer = $node.closest('.cycle-container');
             const $stepsContainer = $cycleContainer.children('.cycle-steps-container');
@@ -351,39 +303,31 @@ define([
                 stepicon: 'icon-10',
                 iconurl: `${iconUrl}?name=icon-10&percent=100&flags=n`
             };
-
-            templates.render('mod_roadmap/configuration_step', newStep)
-                .then((html, js) => {
-                    templates.appendNodeContents($stepsContainer, html, js);
+            return templates.render('mod_roadmap/configuration_step', newStep)
+                .then(html => {
+                    templates.appendNodeContents($stepsContainer, html);
                     stepIconSelect.rebindButtons();
                     stepActivitySelect.rebindButtons();
                     stepSave.rebindInputs();
                     cycleSave.rebindInputs();
-                }).fail(notification.exception);
+                })
+                .catch(notification.exception);
         }
 
-        // ---- Expand/Collapse controls ----
-
         bindExpandCollapseControls() {
-            $('.expand-collapse-controls .collapse_everything').off('click').on('click', (e) => {
+            $('.expand-collapse-controls .collapse_everything').off('click').on('click', e => {
                 e.preventDefault();
                 this.collapseEverything();
             });
-            $('.expand-collapse-controls .expand_everything').off('click').on('click', (e) => {
+            $('.expand-collapse-controls .expand_everything').off('click').on('click', e => {
                 e.preventDefault();
                 this.expandEverything();
             });
         }
 
-        expandPhases() {
-            this.expandChildrenClass($('#roadmapconfiguration'), 'phase');
-        }
-        expandCycles(node) {
-            this.expandChildrenClass(node, 'cycle');
-        }
-        expandSteps(node) {
-            this.expandChildrenClass(node, 'step');
-        }
+        expandPhases() { this.expandChildrenClass($('#roadmapconfiguration'), 'phase'); }
+        expandCycles(node) { this.expandChildrenClass(node, 'cycle'); }
+        expandSteps(node) { this.expandChildrenClass(node, 'step'); }
         collapsePhases() {
             const node = $('#roadmapconfiguration');
             this.collapseCycles(node);
@@ -393,11 +337,9 @@ define([
             this.collapseSteps(node);
             this.collapseChildrenClass(node, 'cycle');
         }
-        collapseSteps(node) {
-            this.collapseChildrenClass(node, 'step');
-        }
+        collapseSteps(node) { this.collapseChildrenClass(node, 'step'); }
         expandChildrenClass($parent, className) {
-            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function () {
+            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
                 const $wrapper = $(this).closest(`.${className}-wrapper`);
                 const $container = $wrapper.children(`.${className}-container`);
                 if ($container.hasClass('hide')) {
@@ -406,7 +348,7 @@ define([
             });
         }
         collapseChildrenClass($parent, className) {
-            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function () {
+            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
                 const $wrapper = $(this).closest(`.${className}-wrapper`);
                 const $container = $wrapper.children(`.${className}-container`);
                 if ($container.hasClass('visible')) {
@@ -415,66 +357,47 @@ define([
             });
         }
 
-        /**
-         * Collapse a single phase.
-         * @param {Object} $node The jQuery node for the control.
-         */
         collapsePhase($node) {
             const $wrapper = $node.closest('.phase-wrapper');
             const $container = $wrapper.children('.phase-container');
             expandContract.expandCollapse($container, $node);
         }
-
-        /**
-         * Collapse a single cycle.
-         * @param {Object} $node The jQuery node for the control.
-         */
         collapseCycle($node) {
             const $wrapper = $node.closest('.cycle-wrapper');
             const $container = $wrapper.children('.cycle-container');
             expandContract.expandCollapse($container, $node);
         }
-
-        /**
-         * Collapse a single step.
-         * @param {Object} $node The jQuery node for the control.
-         */
         collapseStep($node) {
             const $wrapper = $node.closest('.step-wrapper');
             const $container = $wrapper.children('.step-container');
             expandContract.expandCollapse($container, $node);
         }
 
-        // ---- Deletion ----
-
-        /**
-         * Delete a phase.
-         * @param {Object} $node The jQuery node for the delete control.
-         */
         deletePhase($node) {
-            showDeleteConfirmModal('Are you sure you want to delete this Phase?', 'Confirm delete')
-                .then((confirmed) => {
+            return showDeleteConfirmModal('Are you sure you want to delete this Phase?', 'Confirm delete')
+                .then(confirmed => {
                     if (confirmed) {
                         const $wrapper = $node.closest('.phase-wrapper');
+                        if (!$wrapper.length) {
+                            return;
+                        }
                         const phaseId = $wrapper.data('phaseid');
                         $('#phase-deletes').val($('#phase-deletes').val() + phaseId + ',');
                         $wrapper.remove();
                         this.configSave();
-                        // Update color pattern after removal for consistency
                         this.phaseColorChange($('select[name="phasecolorpattern"]'));
                     }
                 });
         }
 
-        /**
-         * Delete a cycle.
-         * @param {Object} $node The jQuery node for the delete control.
-         */
         deleteCycle($node) {
-            showDeleteConfirmModal('Are you sure you want to delete this Cycle?', 'Confirm delete')
-                .then((confirmed) => {
+            return showDeleteConfirmModal('Are you sure you want to delete this Cycle?', 'Confirm delete')
+                .then(confirmed => {
                     if (confirmed) {
                         const $wrapper = $node.closest('.cycle-wrapper');
+                        if (!$wrapper.length) {
+                            return;
+                        }
                         const $phaseContainer = $node.closest('.phase-container');
                         const cycleId = $wrapper.data('cycleid');
                         $('#cycle-deletes').val($('#cycle-deletes').val() + cycleId + ',');
@@ -484,15 +407,14 @@ define([
                 });
         }
 
-        /**
-         * Delete a step.
-         * @param {Object} $node The jQuery node for the delete control.
-         */
         deleteStep($node) {
-            showDeleteConfirmModal('Are you sure you want to delete this Step?', 'Confirm delete')
-                .then((confirmed) => {
+            return showDeleteConfirmModal('Are you sure you want to delete this Step?', 'Confirm delete')
+                .then(confirmed => {
                     if (confirmed) {
                         const $wrapper = $node.closest('.step-wrapper');
+                        if (!$wrapper.length) {
+                            return;
+                        }
                         const $cycleContainer = $node.closest('.cycle-container');
                         const stepId = $wrapper.data('stepid');
                         $('#step-deletes').val($('#step-deletes').val() + stepId + ',');
@@ -501,8 +423,6 @@ define([
                     }
                 });
         }
-
-        // ---- Move up/down ----
 
         upPhase($node) {
             const $wrapper = $node.closest('.phase-wrapper');
@@ -541,24 +461,11 @@ define([
             $cycleContainer.find('.cycle-title').triggerHandler('change');
         }
 
-        // ---- Expand/collapse everything ----
-        expandEverything() {
-            this.expandPhases();
-        }
-        collapseEverything() {
-            this.collapsePhases();
-        }
+        expandEverything() { this.expandPhases(); }
+        collapseEverything() { this.collapsePhases(); }
     }
 
     return {
-        /**
-         * Main initialisation.
-         * @param {String} inputSelector The hidden input field selector.
-         * @param {String} inputConfig The hidden input configuration.
-         * @return {Object} RoadmapConfig instance
-         */
-        init: function (inputSelector, inputConfig) {
-            return new RoadmapConfig(inputSelector, inputConfig);
-        }
+        init: (inputSelector, inputConfig) => new RoadmapConfig(inputSelector, inputConfig)
     };
 });
