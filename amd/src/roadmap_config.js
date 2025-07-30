@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Handle the configuration of the roadmap. Modernized version.
+ * Handle the configuration of the roadmap.
  *
  * @module     mod_roadmap/roadmapconfig
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
@@ -131,8 +131,8 @@ define([
             });
 
             templates.render('mod_roadmap/configuration_phases', config)
-                .then(html => {
-                    templates.prependNodeContents(this.inputSelector, html);
+                .then((html, js) => {
+                    templates.prependNodeContents(this.inputSelector, html, js);
 
                     this.bindExpandCollapseControls();
 
@@ -258,8 +258,8 @@ define([
             config.phases.push(newPhase);
             $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
             return templates.render('mod_roadmap/configuration_phase', newPhase)
-                .then(html => {
-                    templates.appendNodeContents('#phase-container', html);
+                .then((html, js) => {
+                    templates.appendNodeContents('#phase-container', html, js);
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
                     this.phaseColorChange($('select[name="phasecolorpattern"]'));
@@ -280,8 +280,8 @@ define([
                 subtitle: `Subtitle ${nextCycleIndex + 1}`
             };
             return templates.render('mod_roadmap/configuration_cycle', newCycle)
-                .then(html => {
-                    templates.appendNodeContents($cycleContainer, html);
+                .then((html, js) => {
+                    templates.appendNodeContents($cycleContainer, html, js);
                     learningObjectives.refreshChecklists();
                     cycleSave.rebindInputs();
                     phaseSave.rebindInputs();
@@ -304,8 +304,8 @@ define([
                 iconurl: `${iconUrl}?name=icon-10&percent=100&flags=n`
             };
             return templates.render('mod_roadmap/configuration_step', newStep)
-                .then(html => {
-                    templates.appendNodeContents($stepsContainer, html);
+                .then((html, js) => {
+                    templates.appendNodeContents($stepsContainer, html, js);
                     stepIconSelect.rebindButtons();
                     stepActivitySelect.rebindButtons();
                     stepSave.rebindInputs();

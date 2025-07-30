@@ -128,10 +128,11 @@ class behat_mod_roadmap extends behat_question_base {
         // Multiple phases can be added by TableNode.
         foreach ($data as $row) {
             // Create a new phase by clicking link.
-            $this->execute('behat_general::click_link', 'Add a new phase');
-            $this->execute('behat_general::assert_page_contains_text', 'Untitled Phase');
+            $addphasexpath = $this->get_xpath_for_add_phase_link();
+            $this->execute('behat_general::click_link', [$addphasexpath, "xpath_element"]);
+            $this->execute('behat_general::assert_page_contains_text', 'Phase 1');
 
-            $heading = "Untitled Phase";
+            $heading = "Phase 1";
 
             // Expand the new phase.
             $phasewrapperxpath = $this->get_xpath_for_phase_wrapper($heading);
@@ -164,6 +165,16 @@ class behat_mod_roadmap extends behat_question_base {
      * @param string $xpathphasewrapper
      * @return string
      */
+    protected function get_xpath_for_add_phase_link() {
+        return "//div[contains(@class, 'phase-container-controls')" .
+            "/descendant::a[contains(@data-action, 'add_phase')]";
+    }
+
+    /**
+     * Return the xpath for phase title field with wrapper xpath
+     * @param string $xpathphasewrapper
+     * @return string
+     */
     protected function get_xpath_for_phase_title($xpathphasewrapper) {
         return $xpathphasewrapper . "/descendant::input[contains(@class, 'phase-title')]";
     }
@@ -175,7 +186,7 @@ class behat_mod_roadmap extends behat_question_base {
      */
     protected function get_xpath_for_phase_moveup_button($xpathphasewrapper) {
         return $xpathphasewrapper . "/descendant::div[contains(@class, 'phase-controls')]" .
-            "/descendant::a[contains(@class, 'phase-up-control')]";
+            "/descendant::a[contains(@data-action, 'phase_collapse_control')]";
     }
 
     /**
