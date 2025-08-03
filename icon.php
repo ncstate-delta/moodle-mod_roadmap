@@ -29,7 +29,7 @@ require_login();
 
 $name = required_param('name', PARAM_TEXT);
 $percent = required_param('percent', PARAM_FLOAT);
-$color = optional_param('color', '666', PARAM_TEXT);
+$color = optional_param('color', '#666', PARAM_TEXT);
 $flags = optional_param('flags', '', PARAM_ALPHA);
 
 /*
@@ -43,81 +43,66 @@ $flags = optional_param('flags', '', PARAM_ALPHA);
 
 $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $name . '.svg';
 if (file_exists($iconfilename)) {
-    $circ = 3.14 * 2 * 116.18;
-    $dashoffset = 116.18 - (116.18 * ($percent / 100));
-
     $color = verify_hex($color);
 
-    $iconfilecontents = file_get_contents($iconfilename);
     if ($percent < 100) {
         $bgcolor = '#aaa';
     } else {
         $bgcolor = $color;
     }
 
-    $output = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
-    $output .= '    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">';
-    $output .= '        <circle cx="20" cy="20" r="15" fill="' . $bgcolor . '"></circle>';
-    $output .= '        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 40 40">';
-    $output .= $iconfilecontents;
-    $output .= '        </svg>';
+    $iconfilecontents = file_get_contents($iconfilename);
 
-    $output .= '        <svg class="icon-extras"
-                             xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 40 40"
-                             style="position:absolute;top:0;left:0;"
-                             >';
+    $output = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="15" fill="' . $bgcolor . '"/>
+    <g transform="translate(5, 5)" fill="#fff">
+        ' . trim($iconfilecontents) . '
+    </g>
+    <g class="icon-extras">
+        <g fill="none" transform="rotate(-90 20 20)">';
 
-    $output .= '        <g transform="translate(5,5) rotate(-90 15 15)">';
-    if (strpos(strtolower($flags), 'n') === false) {
-        $output .= '            <circle class="circle-bg"
-                                        stroke="#ccc"
-                                        fill="none"
-                                        stroke-width="3"
-                                        cx="15"
-                                        cy="15"
-                                        r="17.5">
-                                </circle>';
-        $output .= '            <circle class="roadmap-circle-progress"
-                                        stroke="' . $color . '"
-                                        fill="none"
-                                        stroke-width="3"
-                                        stroke-dasharray="116.18"
-                                        stroke-dashoffset="';
-        $output .= $dashoffset . '" cx="15" cy="15" r="17.5"></circle>';
-    }
-    $output .= '            <circle class="circle-bg"
-                                    stroke="#fff"
-                                    fill="none"
-                                    stroke-width="0.6"
-                                    cx="15" cy="15"
-                                    r="15.5">
-                            </circle>';
-    $output .= '        </g>';
+    // Show the progress bar.
+    if (stripos($flags, 'n') === false) {
+        $radius = 17.5;
+        // Circumference = 2 * pi * radius.
+        $dasharray = round(2 * M_PI * $radius, 2);
+        $dashoffset = $dasharray * (100 - $percent) / 100;
 
-
-    if (strpos(strtolower($flags), 'a') !== false) {
-        $output .= '        <g transform="translate(28.5,0) scale(.8 .8)">';
-        $output .= '            <circle style="fill:#c00;" cx="7" cy="7" r="7"></circle>';
-        $output .= '            <circle style="fill:#fff;" cx="7" cy="10.99" r="1.12"></circle>';
-        $output .= '            <path style="fill:#fff;"
-                                      d="M6.38,3.88c0-.82.28-1.49,1.12-1.49s1.12.67,1.12,1.49c0,
-                                      1.69-.5,4.88-1.12,4.88S6.38,5.57,6.38,3.88Z"
-                                      transform="translate(-0.5 -0.5)"></path>';
-        $output .= '        </g>';
-    } else if (strpos(strtolower($flags), 's') !== false) {
-        $output .= '        <g transform="translate(24,-2) scale(1.2 1.2)">';
-        $output .= '            <polygon points="4.29 9.3 1.07 6.17 5.51 5.52 7.5 1.5 9.48 5.52 13.93
-                                                 6.17 10.71 9.3 11.47 13.72 7.5 11.63 3.53 13.72 4.29 9.3"
-                                         fill="#ff9000"
-                                         stroke="#fff"
-                                         stroke-width=".5">
-                                </polygon>';
-        $output .= '        </g>';
+        $output .= '
+            <circle class="circle-bg" stroke="#ccc" stroke-width="3" cx="20" cy="20" r="' . $radius . '"/>
+            <circle class="roadmap-circle-progress"
+                stroke="' . $color . '" stroke-width="3"
+                stroke-dasharray="' . $dasharray . '" stroke-dashoffset="' . $dashoffset . '"
+                cx="20" cy="20" r="' . $radius . '"/>';
     }
 
-    $output .= '    </svg>';
-    $output .= '</svg>';
+    $output .= '
+            <circle class="circle-bg" stroke="#fff" cx="20" cy="20" r="15.5"/>
+        </g>';
+
+    if (stripos($flags, 'a') !== false) {
+        // Show an alert.
+        $output .= '
+        <g transform="translate(28.5, 0) scale(.8 .8)">
+            <circle fill="#c00" cx="7" cy="7" r="7"/>
+            <circle fill="#fff" cx="7" cy="10.99" r="1.12"/>
+            <path fill="#fff" d="M5.88 3.38c0-.82.28-1.49 1.12-1.49s1.12.67 1.12
+                1.49c0 1.69-.5 4.88-1.12 4.88S5.88 5.07 5.88 3.38Z"/>
+        </g>';
+    } else if (stripos($flags, 's') !== false) {
+        // Show a star.
+        $output .= '
+        <polygon points="4.29 9.3 1.07 6.17 5.51 5.52 7.5 1.5 9.48 5.52 13.93
+            6.17 10.71 9.3 11.47 13.72 7.5 11.63 3.53 13.72 4.29 9.3"
+            fill="#ff9000"
+            stroke="#fff"
+            stroke-width=".5"
+            transform="translate(24, -2) scale(1.2 1.2)"/>';
+    }
+
+    $output .= '
+    </g>
+</svg>';
 
     // Add the proper header.
     header('Content-Type: image/svg+xml');
@@ -138,13 +123,12 @@ if (file_exists($iconfilename)) {
  * @param string $color The expected hex color.
  * @return string a cleaned up ready-to-use hex color string.
  */
-function verify_hex ($color) {
-
-    if (substr($color, -1) != '#') {
+function verify_hex($color) {
+    if (substr($color, 0, 1) !== '#') {
         $color = '#' . $color;
     }
 
-    if (preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color)) {
+    if (preg_match('/^#([A-Fa-f0-9]{3}){1,2}$/', $color)) {
         return $color;
     }
 
