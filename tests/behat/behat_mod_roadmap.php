@@ -129,13 +129,11 @@ class behat_mod_roadmap extends behat_question_base {
         foreach ($data as $row) {
             // Create a new phase by clicking link.
             $addphasexpath = $this->get_xpath_for_add_phase_link();
-            $this->execute('behat_general::click_link', [$addphasexpath, "xpath_element"]);
-            $this->execute('behat_general::assert_page_contains_text', 'Phase 1');
+            $this->execute('behat_general::wait_until_exists', [$addphasexpath, "xpath_element"]);
+            $this->execute('behat_general::i_click_on', [$addphasexpath, "xpath_element"]);
 
-            $heading = "Phase 1";
-
-            // Expand the new phase.
-            $phasewrapperxpath = $this->get_xpath_for_phase_wrapper($heading);
+            // Now find the last phase added. It will be the last in the list.
+            $phasewrapperxpath = "//div[contains(@class, 'phase-wrapper')][last()]";
             $expandphasexpath  = $this->get_xpath_for_phase_expand_button($phasewrapperxpath);
             $this->execute("behat_general::i_click_on", [$expandphasexpath, "xpath_element"]);
 
@@ -166,8 +164,7 @@ class behat_mod_roadmap extends behat_question_base {
      * @return string
      */
     protected function get_xpath_for_add_phase_link() {
-        return "//div[contains(@class, 'phase-container-controls')" .
-            "/descendant::a[contains(@data-action, 'add_phase')]";
+        return "//a[@data-action='add_phase'][1]";
     }
 
     /**
@@ -186,7 +183,7 @@ class behat_mod_roadmap extends behat_question_base {
      */
     protected function get_xpath_for_phase_moveup_button($xpathphasewrapper) {
         return $xpathphasewrapper . "/descendant::div[contains(@class, 'phase-controls')]" .
-            "/descendant::a[contains(@data-action, 'phase_collapse_control')]";
+            "/descendant::a[contains(@data-action, 'phase_up_control')]";
     }
 
     /**
@@ -196,7 +193,7 @@ class behat_mod_roadmap extends behat_question_base {
      */
     protected function get_xpath_for_phase_expand_button($xpathphasewrapper) {
         return $xpathphasewrapper . "/descendant::div[contains(@class, 'phase-controls')]" .
-            "/descendant::a[contains(@class, 'phase-collapse-control')]";
+            "/descendant::a[contains(@data-action, 'phase_collapse_control')]";
     }
 
     /**
