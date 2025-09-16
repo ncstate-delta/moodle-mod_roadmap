@@ -15,18 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * mod_roadmap data generator
- *
- * @package    mod_roadmap
- * @category   test
- * @copyright  2025 Steve Bader
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-defined('MOODLE_INTERNAL') || die();
-
-
-/**
  * Course Roadmap module data generator class
  *
  * @package    mod_roadmap
@@ -36,9 +24,34 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mod_roadmap_generator extends testing_module_generator {
 
-    public function create_instance($record = null, array $options = null) {
-        $record = (array)$record;
-        $record['showdescription'] = 1;
+    /**
+     * Create a new instance of the roadmap module.
+     *
+     * @param array|null $record Data for the new instance.
+     * @param array|null $options Additional options for instance creation.
+     * @return stdClass The created instance record.
+     * @throws coding_exception If the user lacks required capabilities or if output is initialized during module creation.
+     */
+    public function create_instance($record = null, ?array $options = null) {
+        $record = (object)(array)$record;
+
+        $defaultsettings = [
+            'name' => 'Test Course Roadmap',
+            'introformat' => 1,
+            'timemodified' => time(),
+            'clolearningobjectives' => '{"learningobjectives":[]}',
+            'clodisplayposition' => 0,
+            'cloalignment' => 0,
+            'clodecoration' => 0,
+            'cloprefix' => 'CLO',
+        ];
+
+        foreach ($defaultsettings as $name => $value) {
+            if (!isset($record->{$name})) {
+                $record->{$name} = $value;
+            }
+        }
+
         return parent::create_instance($record, $options);
     }
 }

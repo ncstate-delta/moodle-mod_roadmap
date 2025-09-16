@@ -59,9 +59,11 @@ define(['jquery'], function($) {
                 title: title,
                 cycles: phaseCycles,
             };
+
             $phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
             $phaseContainer.children('input.phase-configuration')
-                .val(JSON.stringify(phaseData)).triggerHandler("change");
+                .val(JSON.stringify(phaseData))
+                .triggerHandler("change");
         }
     }
 
@@ -72,10 +74,14 @@ define(['jquery'], function($) {
          * Initialize PhaseSave (returns instance).
          * @returns {PhaseSave}
          */
-        init: function() { return instance; },
+        init: function() {
+            return instance;
+        },
         /**
          * Rebinds all phase input handlers.
          */
-        rebindInputs: function() { instance.rebindInputs(); }
+        rebindInputs: function() {
+            instance.rebindInputs();
+        }
     };
 });

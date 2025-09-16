@@ -97,13 +97,15 @@ function roadmap_configuration_edit($roadmapid) {
 function roadmap_delete_phase($phaseid) {
     global $DB;
 
-    // Delete cycles and cascade delete steps.
-    $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phaseid]);
-    foreach ($cycles as $cycle) {
-        roadmap_delete_cycle($cycle->id);
-    }
+    if (!empty($phaseid)) {
+        // Delete cycles and cascade delete steps.
+        $cycles = $DB->get_records('roadmap_cycle', ['phaseid' => $phaseid]);
+        foreach ($cycles as $cycle) {
+            roadmap_delete_cycle($cycle->id);
+        }
 
-    $DB->delete_records('roadmap_phase', ['id' => $phaseid]);
+        $DB->delete_records('roadmap_phase', ['id' => $phaseid]);
+    }
 }
 
 /**
@@ -115,10 +117,12 @@ function roadmap_delete_phase($phaseid) {
 function roadmap_delete_cycle($cycleid) {
     global $DB;
 
-    // Delete all child steps of the cycle.
-    $DB->delete_records('roadmap_step', ['cycleid' => $cycleid]);
-    // Delete the cycle itself.
-    $DB->delete_records('roadmap_cycle', ['id' => $cycleid]);
+    if (!empty($cycleid)) {
+        // Delete all child steps of the cycle.
+        $DB->delete_records('roadmap_step', ['cycleid' => $cycleid]);
+        // Delete the cycle itself.
+        $DB->delete_records('roadmap_cycle', ['id' => $cycleid]);
+    }
 }
 
 /**
@@ -160,7 +164,9 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
     if (property_exists($data, 'stepDeletes')) {
         $stepdeletes = explode(',', $data->stepDeletes);
         foreach ($stepdeletes as $stepdelete) {
-            $DB->delete_records('roadmap_step', ['id' => $stepdelete]);
+            if (!empty($stepdelete)) {
+                $DB->delete_records('roadmap_step', ['id' => $stepdelete]);
+            }
         }
     }
 

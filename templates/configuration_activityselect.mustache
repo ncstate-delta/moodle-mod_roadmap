@@ -19,10 +19,36 @@
 
     Example context (json):
     {
-        "activities": [{
-            "name": "Activity Name"
-            "coursemoduleid": "1"
-        }]
+        "sections": [
+            {
+                "name": "Section 1",
+                "coursemodules": [
+                    {
+                        "id": "1",
+                        "completionexpecteddatetime": "1694476800",
+                        "completionexpectedreadable": "2025-09-12",
+                        "name": "Activity 1"
+                    },
+                    {
+                        "id": "2",
+                        "completionexpecteddatetime": "1694563200",
+                        "completionexpectedreadable": "2025-09-13",
+                        "name": "Activity 2"
+                    }
+                ]
+            },
+            {
+                "name": "Section 2",
+                "coursemodules": [
+                    {
+                        "id": "3",
+                        "completionexpecteddatetime": "1694649600",
+                        "completionexpectedreadable": "2025-09-14",
+                        "name": "Activity 3"
+                    }
+                ]
+            }
+        ]
     }
 }}
 <p>Select one or more activities below that must be marked complete in order for this step to be completed.
@@ -56,4 +82,4 @@ Clicking on an item will toggle whether or not it is selected.</p>
         {{{customdatefields}}}
     </div>
 </div>
-<input type="hidden" id="step-id" name="step-id" />
+<input type="hidden" id="step-id" name="step-id">

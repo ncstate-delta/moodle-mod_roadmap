@@ -89,7 +89,8 @@ define(['jquery'], function($) {
 
             $stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
             $stepContainer.children('input.step-configuration')
-                .val(JSON.stringify(stepData)).triggerHandler("change");
+                .val(JSON.stringify(stepData))
+                .triggerHandler("change");
         }
     }
 
@@ -100,10 +101,14 @@ define(['jquery'], function($) {
          * Initialize StepSave (returns instance).
          * @returns {StepSave}
          */
-        init: function() { return instance; },
+        init: function() {
+            return instance;
+        },
         /**
          * Rebinds all step input handlers.
          */
-        rebindInputs: function() { instance.rebindInputs(); }
+        rebindInputs: function() {
+            instance.rebindInputs();
+        }
     };
 });

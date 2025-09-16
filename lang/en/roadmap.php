@@ -22,38 +22,32 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['modulename'] = 'Course Roadmap';
-$string['modulenameplural'] = 'Course Roadmaps';
-$string['pluginname'] = 'Course Roadmap';
-$string['pluginadministration'] = 'Course Roadmap Administration';
-$string['roadmapconfiguration'] = 'Course Roadmap Configuration';
-
-$string['roadmap:addinstance'] = 'Add a new course roadmap';
-$string['roadmap:view'] = 'View course roadmap';
-$string['roadmap:configure'] = 'Configure course roadmap';
-
-// Form Strings.
+$string['addnew'] = 'Add New';
 $string['appearance'] = 'Appearance';
-$string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
-$string['learningobjectives'] = 'Course Learning Objectives';
-$string['editroadmap'] = 'Edit Course Roadmap';
-$string['configureanddownloadicons'] = 'Configure and Download Icons';
-$string['stepiconpreviewtoollink'] = '<a href="https://pages.github.ncsu.edu/delta-NMD/moodle-roadmap-icons-preview/" target="_blank">Step Icon Preview Tool</a>';
-
-$string['selecticon'] = 'Select Step Icon';
 $string['chooseactivities'] = 'Choose Activities for Step Completion';
-$string['saveselection'] = 'Save Selection';
-
-$string['phasecolorpattern'] = 'Phase Color Pattern';
-$string['displayposition'] = 'CLO Display Position';
+$string['cloprefix'] = 'CLO Prefix';
+$string['configureanddownloadicons'] = 'Configure and Download Icons';
+$string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
+$string['cycle'] = 'Cycle';
 $string['cyclealignment'] = 'Cycle CLO Alignment';
 $string['cycledecoration'] = 'Cycle CLO Decoration';
-$string['cloprefix'] = 'CLO Prefix';
-
-$string['addnew'] = 'Add New';
-$string['phase'] = 'Phase';
-$string['phases'] = 'Phases';
-$string['cycle'] = 'Cycle';
 $string['cycles'] = 'Cycles';
+$string['displayposition'] = 'CLO Display Position';
+$string['editroadmap'] = 'Edit Course Roadmap';
+$string['learningobjectives'] = 'Course Learning Objectives';
+$string['modulename'] = 'Course Roadmap';
+$string['modulenameplural'] = 'Course Roadmaps';
+$string['phase'] = 'Phase';
+$string['phasecolorpattern'] = 'Phase Color Pattern';
+$string['phases'] = 'Phases';
+$string['pluginadministration'] = 'Course Roadmap Administration';
+$string['pluginname'] = 'Course Roadmap';
+$string['roadmap:addinstance'] = 'Add a new course roadmap';
+$string['roadmap:configure'] = 'Configure course roadmap';
+$string['roadmap:view'] = 'View course roadmap';
+$string['roadmapconfiguration'] = 'Course Roadmap Configuration';
+$string['saveselection'] = 'Save Selection';
+$string['selecticon'] = 'Select Step Icon';
 $string['step'] = 'step';
+$string['stepiconpreviewtoollink'] = '<a href="https://pages.github.ncsu.edu/delta-NMD/moodle-roadmap-icons-preview/" target="_blank">Step Icon Preview Tool</a>';
 $string['steps'] = 'Steps';

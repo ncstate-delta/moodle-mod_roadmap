@@ -74,7 +74,8 @@ define(['jquery'], function($) {
 
             $cycleContainer.closest('.cycle-wrapper').find('.cycle-header-title').html(title);
             $cycleContainer.children('input.cycle-configuration')
-                .val(JSON.stringify(cycleData)).triggerHandler("change");
+                .val(JSON.stringify(cycleData))
+                .triggerHandler("change");
         }
     }
 
@@ -85,10 +86,14 @@ define(['jquery'], function($) {
          * Initialize CycleSave (returns instance).
          * @returns {CycleSave}
          */
-        init: function() { return instance; },
+        init: function() {
+            return instance;
+        },
         /**
          * Rebinds all cycle input handlers.
          */
-        rebindInputs: function() { instance.rebindInputs(); }
+        rebindInputs: function() {
+            instance.rebindInputs();
+        }
     };
 });

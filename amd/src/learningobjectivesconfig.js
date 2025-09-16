@@ -41,10 +41,10 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
          *
          * @method showConfig
          */
-        LearningObjectivesConfig.prototype.showConfig = function() {
+        LearningObjectivesConfig.prototype.showConfig = async function() {
             var self = this;
             var inputConfigVal = this.configContainer.val();
-            if (inputConfigVal == '') {
+            if (inputConfigVal === '') {
                 inputConfigVal = JSON.stringify({'learningobjectives': []});
                 this.configContainer.val(inputConfigVal);
             }
@@ -53,29 +53,28 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                 learningobjective.number = learningobjective.index + 1;
             });
 
-            // Dish up the form.
-            templates.render('mod_roadmap/configuration_learningobjectives', config)
-                .then(function(html, js) {
-                    templates.prependNodeContents(self.inputSelector, html, js);
+            try {
+                const {html, js} = await templates.renderForPromise('mod_roadmap/configuration_learningobjectives', config);
+                await templates.prependNodeContents(self.inputSelector, html, js);
 
-                    $('#add-learning-objective').click(function(e) {
-                        e.preventDefault();
+                $('#add-learning-objective').click(async function(e) {
+                    e.preventDefault();
+                    var nextloIndex = $('#learningobjective-container').children('.learningobjective').length;
+                    var newLo = {id: nextloIndex, number: nextloIndex + 1};
+                    try {
+                        const {html, js} = await templates.renderForPromise('mod_roadmap/configuration_learningobjective', newLo);
+                        await templates.appendNodeContents('#learningobjective-container', html, js);
+                        LearningObjectivesConfig.prototype.rebindInputs();
+                        LearningObjectivesConfig.prototype.saveConfig();
+                    } catch (err) {
+                        notification.exception(err);
+                    }
+                });
 
-                        var nextloIndex = $('#learningobjective-container').children('.learningobjective').length;
-                        var newLo = {id: nextloIndex, number: nextloIndex + 1};
-
-                        templates.render('mod_roadmap/configuration_learningobjective', newLo)
-                            .then(function(html, js) {
-                                templates.appendNodeContents('#learningobjective-container', html, js);
-                                LearningObjectivesConfig.prototype.rebindInputs();
-                                LearningObjectivesConfig.prototype.saveConfig();
-                                return null;
-                            }).fail(notification.exception);
-                    });
-
-                    LearningObjectivesConfig.prototype.rebindInputs();
-                    return null;
-                }).fail(notification.exception);
+                LearningObjectivesConfig.prototype.rebindInputs();
+            } catch (err) {
+                notification.exception(err);
+            }
         };
 
         LearningObjectivesConfig.prototype.rebindInputs = function() {
@@ -121,7 +120,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
             $(chkAreas).each(function(i, e) {
                 let selectedIds = [];
                 let configVal = $(this).closest('.cycle-container').children('.cycle-configuration').val();
-                if (configVal != '') {
+                if (configVal !== '') {
                     // Get the configuration line from the local hidden field
                     let stepConfig = JSON.parse(configVal);
                     if (!stepConfig.learningobjectives) {
@@ -149,12 +148,15 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
         LearningObjectivesConfig.prototype.deleteLearningObjective = function(event) {
             event.preventDefault();
             event.stopPropagation();
-            if (window.confirm("Are you sure you want to delete this Learning Objective?")) {
-                var thisnode = $(event.currentTarget);
-                var loItem = thisnode.closest('.learningobjective');
-                loItem.remove();
-                LearningObjectivesConfig.prototype.saveConfig();
-            }
+            notification.confirm(
+                'Are you sure you want to delete this Learning Objective?',
+                function() {
+                    var thisnode = $(event.currentTarget);
+                    var loItem = thisnode.closest('.learningobjective');
+                    loItem.remove();
+                    LearningObjectivesConfig.prototype.saveConfig();
+                }
+            );
         };
 
         LearningObjectivesConfig.prototype.upLearningObjective = function(event) {

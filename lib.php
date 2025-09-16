@@ -28,22 +28,21 @@
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
 function roadmap_supports($feature) {
-    switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
-        case FEATURE_NO_VIEW_LINK:
-            return true;
-        case FEATURE_MOD_INTRO:
-            return true;
-        case FEATURE_BACKUP_MOODLE2:
-            return true;
-        case FEATURE_SHOW_DESCRIPTION:
-            return true;
-        case FEATURE_MOD_PURPOSE:
-            return MOD_PURPOSE_INTERFACE;
-        default:
-            return false;
-    }
+    $features = [
+        FEATURE_IDNUMBER                => false,
+        FEATURE_GROUPS                  => false,
+        FEATURE_GROUPINGS               => false,
+        FEATURE_MOD_INTRO               => true,
+        FEATURE_COMPLETION_TRACKS_VIEWS => false,
+        FEATURE_GRADE_HAS_GRADE         => false,
+        FEATURE_GRADE_OUTCOMES          => false,
+        FEATURE_MOD_ARCHETYPE           => MOD_ARCHETYPE_RESOURCE,
+        FEATURE_BACKUP_MOODLE2          => true,
+        FEATURE_NO_VIEW_LINK            => true,
+        FEATURE_MOD_PURPOSE             => MOD_PURPOSE_CONTENT,
+    ];
+
+    return $features[$feature] ?? null;
 }
 
 /**
@@ -307,12 +306,12 @@ function roadmap_cm_info_view(cm_info $cm) {
         $data->phases[] = $phase;
     }
 
-    if ($roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) > 0) {
+    if (!empty($roadmap->learningobjectives) && $roadmap->clodisplayposition == 0 && count($clodata->learningobjectives) > 0) {
         $content .= $clocontent;
     }
 
     $content .= $OUTPUT->render_from_template('mod_roadmap/view_phases', $data);
-    if ($roadmap->clodisplayposition == 1 && count($clodata->learningobjectives) > 0) {
+    if (!empty($roadmap->learningobjectives) && $roadmap->clodisplayposition == 1 && count($clodata->learningobjectives) > 0) {
         $content .= $clocontent;
     }
 

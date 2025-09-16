@@ -30,7 +30,7 @@
             <h6>{{ name }}</h6><hr />
             {{# icons }}
                 <div class="icon-container">
-                    <img class="icon" data-iconname="{{ name }}"  data-iconfilename="{{ file }}" src="{{ iconurl }}" />
+                    <img class="icon" data-iconname="{{ name }}"  data-iconfilename="{{ file }}" src="{{ iconurl }}">
                 </div>
             {{/ icons }}
         {{/ categories }}
@@ -53,11 +53,11 @@
             <span class="img-ontime">
                 {{# pix }} icons/{{ selectedicon.file }} , mod_roadmap, {{ selectedicon.name }} {{/ pix }}
             </span>
-            <input type="hidden" id="current-selected-icon" name="current-selected-icon" />
+            <input type="hidden" id="current-selected-icon" name="current-selected-icon">
         </div>
     {{/ selectedicon }}
-    <input type="hidden" id="icon-url" name="icon-url" />
-    <input type="hidden" id="step-id" name="step-id" />
+    <input type="hidden" id="icon-url" name="icon-url">
+    <input type="hidden" id="step-id" name="step-id">
 </div>
 
 

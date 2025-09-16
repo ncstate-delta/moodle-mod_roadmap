@@ -11,9 +11,10 @@ Feature: Teacher can add, sort, edit, and delete learning objectives.
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher | C1 | editingteacher |
-    And the following "activities" exist:
-      | activity | course | section | name |
-      | roadmap    | C1     | 1       | Course Roadmap |
+    And the following "activity" exists:
+      | activity           | roadmap             |
+      | course             | C1                  |
+      | name               | Test Course Roadmap |
 
   @javascript
   Scenario: Adding three learning objectives, sorting them, then deleting one.

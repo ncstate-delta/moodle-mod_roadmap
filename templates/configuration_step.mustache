@@ -39,18 +39,24 @@
         </div>
         <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} Untitled Step {{/ rollovertext }}</div>
     </div>
-    <div class="hide step-container" aria-expanded="true">
+    <div class="hide step-container" aria-expanded="true" role="region">
         <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label">Rollover Text</div>
-            <div class="col-md-9 form-inline"><input class="step-rollovertext form-control roadmap-form-control-step" type="text" value="{{ rollovertext }}"></div>
+            <div class="col-md-3 col-form-label"><label for="step-{{ id }}-rollovertext">Rollover Text</label></div>
+            <div class="col-md-9 form-inline"><input id="step-{{ id }}-rollovertext" class="step-rollovertext form-control roadmap-form-control-step" type="text" value="{{ rollovertext }}"></div>
         </div>
-        <div class="form-group row fitem step-icon-container">
-            <div class="col-md-3 form-inline">
+        <!-- Icon display and input -->
+        <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label">
                 <button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector btn btn-secondary" data-stepid="{{ id }}">Select Icon for Step</button>
             </div>
-            <div class="col-md-9 col-form-label step-icon-display">
-                <img class="icon step-icon roadmap-form-control-step"  data-iconfilename="{{ stepicon }}" src="{{ iconurl }}" />
-                <input class="step-icon roadmap-form-control-step" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}" />
+            <div class="col-md-9 form-inline step-icon-display">
+                {{# iconurl }}
+                <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="{{ iconurl }}" alt="">
+                {{/ iconurl }}
+                {{^ iconurl }}
+                <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="/pix/spacer.gif" alt="">
+                {{/ iconurl }}
+                <input class="step-icon roadmap-form-control-step" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}">
             </div>
         </div>
         <div class="form-group row fitem step-activity-container">
@@ -59,23 +65,25 @@
             </div>
             <div class="col-md-9 col-form-label">Completion tied to activities:
                 <ul id="step-{{ id }}-completion-list" class="step-completion-list"></ul>
-                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control roadmap-form-control-step" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}" />
+                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control roadmap-form-control-step" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}">
             </div>
         </div>
         <div class="form-group row fitem">
             <div class="col-md-3 col-form-label">Expected completed on</div>
             <div id="step-{{ id }}-expectedcomplete-readable" class="col-md-9 form-inline">{{ completionexpectedreadable }}</div>
-            <input id="step-{{ id }}-expectedcomplete-datetime" class="expectedcomplete-datetime" data-stepid="{{ id }}" type="hidden" value="{{ completionexpecteddatetime }}" />
-            <input id="step-{{ id }}-expectedcomplete-coursemoduleid" class="expectedcomplete-coursemoduleid" data-stepid="{{ id }}" type="hidden" value="{{ completionexpectedcmid }}" />
+            <input id="step-{{ id }}-expectedcomplete-datetime" class="expectedcomplete-datetime" data-stepid="{{ id }}" type="hidden" value="{{ completionexpecteddatetime }}">
+            <input id="step-{{ id }}-expectedcomplete-coursemoduleid" class="expectedcomplete-coursemoduleid" data-stepid="{{ id }}" type="hidden" value="{{ completionexpectedcmid }}">
         </div>
         <div class="form-group row fitem">
+            <div class="col-md-3 col-form-label"></div>
             <div class="col-form-label">
                 <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link roadmap-form-control-step" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
-                If completion is tied to a single activity, also link to that activity</div>
+                <label for="step-{{ id }}-chk-single-activity-link">If completion is tied to a single activity, also link to that activity</label>
+            </div>
         </div>
         <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label">Link to Page</div>
-            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}" ></div>
+            <label for="step-{{ id }}-single-activity-link" class="col-md-3 col-form-label">Link to Page</label>
+            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}"></div>
         </div>
         <input class="step-configuration" type="hidden" value="{{ configuration }}">
     </div>

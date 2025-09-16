@@ -151,6 +151,7 @@ define([
                     this.bindConfigSave();
 
                     require(['theme_boost/loader']);
+                    return null;
                 })
                 .catch(notification.exception);
 
@@ -162,34 +163,51 @@ define([
         clickHandler(event) {
             const $node = $(event.currentTarget);
             const action = $node.data('action');
-            switch (action) {
-                case 'collapse_all_phases': return this.collapsePhases();
-                case 'expand_all_phases': return this.expandPhases();
-                case 'collapse_all_cycles': return this.collapseCycles($node.closest('.phase-wrapper')
-                    .find('.phase-cycles-container').first());
-                case 'expand_all_cycles': return this.expandCycles($node.closest('.phase-wrapper')
-                    .find('.phase-cycles-container').first());
-                case 'collapse_all_steps': return this.collapseSteps($node.parent('.step-container-controls')
-                    .next('.cycle-steps-container'));
-                case 'expand_all_steps': return this.expandSteps($node.parent('.step-container-controls')
-                    .next('.cycle-steps-container'));
-                case 'phase_collapse_control': return this.collapsePhase($node);
-                case 'cycle_collapse_control': return this.collapseCycle($node);
-                case 'step_collapse_control': return this.collapseStep($node);
-                case 'phase_delete_control': return this.deletePhase($node);
-                case 'cycle_delete_control': return this.deleteCycle($node);
-                case 'step_delete_control': return this.deleteStep($node);
-                case 'add_phase': return this.addPhase();
-                case 'phase_up_control': return this.upPhase($node);
-                case 'phase_down_control': return this.downPhase($node);
-                case 'add_phase_cycle': return this.addCycle($node);
-                case 'cycle_up_control': return this.upCycle($node);
-                case 'cycle_down_control': return this.downCycle($node);
-                case 'add_cycle_step': return this.addStep($node);
-                case 'step_up_control': return this.upStep($node);
-                case 'step_down_control': return this.downStep($node);
-                default: return undefined;
+            const actionMap = {
+                'collapse_all_phases': () => this.collapsePhases(),
+                'expand_all_phases': () => this.expandPhases(),
+                'collapse_all_cycles': () =>
+                    this.collapseCycles(
+                        $node.closest('.phase-wrapper')
+                            .find('.phase-cycles-container')
+                            .first()
+                    ),
+                'expand_all_cycles': () =>
+                    this.expandCycles(
+                        $node.closest('.phase-wrapper')
+                            .find('.phase-cycles-container')
+                            .first()
+                    ),
+                'collapse_all_steps': () =>
+                    this.collapseSteps(
+                        $node.parent('.step-container-controls')
+                            .next('.cycle-steps-container')
+                    ),
+                'expand_all_steps': () =>
+                    this.expandSteps(
+                        $node.parent('.step-container-controls')
+                            .next('.cycle-steps-container')
+                    ),
+                'phase_collapse_control': () => this.collapsePhase($node),
+                'cycle_collapse_control': () => this.collapseCycle($node),
+                'step_collapse_control': () => this.collapseStep($node),
+                'phase_delete_control': () => this.deletePhase($node),
+                'cycle_delete_control': () => this.deleteCycle($node),
+                'step_delete_control': () => this.deleteStep($node),
+                'add_phase': () => this.addPhase(),
+                'phase_up_control': () => this.upPhase($node),
+                'phase_down_control': () => this.downPhase($node),
+                'add_phase_cycle': () => this.addCycle($node),
+                'cycle_up_control': () => this.upCycle($node),
+                'cycle_down_control': () => this.downCycle($node),
+                'add_cycle_step': () => this.addStep($node),
+                'step_up_control': () => this.upStep($node),
+                'step_down_control': () => this.downStep($node)
+            };
+            if (actionMap[action]) {
+                return actionMap[action]();
             }
+            return undefined;
         }
 
         phaseColorChange($node) {
@@ -198,7 +216,7 @@ define([
                 this.applyColorSet(colorPatternCache[colorId]);
                 return;
             }
-            return roadmapRepo.fetchColorPattern(colorId)
+            roadmapRepo.fetchColorPattern(colorId)
                 .then(colors => {
                     colorPatternCache[colorId] = colors;
                     this.applyColorSet(colors);
@@ -245,7 +263,8 @@ define([
         }
 
         addPhase() {
-            const config = JSON.parse($('input[name="roadmapconfiguration"]').val());
+            const $roadmapConfigInput = $('input[name="roadmapconfiguration"]');
+            const config = JSON.parse($roadmapConfigInput.val());
             const nextIndex = config.phases.length;
             const maxPhaseId = getMaxValue('phase');
             const newPhase = {
@@ -256,13 +275,14 @@ define([
                 subtitle: `Subtitle ${nextIndex + 1}`
             };
             config.phases.push(newPhase);
-            $('input[name="roadmapconfiguration"]').val(JSON.stringify(config));
+            $roadmapConfigInput.val(JSON.stringify(config));
             return templates.render('mod_roadmap/configuration_phase', newPhase)
                 .then((html, js) => {
                     templates.appendNodeContents('#phase-container', html, js);
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
                     this.phaseColorChange($('select[name="phasecolorpattern"]'));
+                    return null;
                 })
                 .catch(notification.exception);
         }
@@ -285,6 +305,7 @@ define([
                     learningObjectives.refreshChecklists();
                     cycleSave.rebindInputs();
                     phaseSave.rebindInputs();
+                    return null;
                 })
                 .catch(notification.exception);
         }
@@ -310,6 +331,7 @@ define([
                     stepActivitySelect.rebindButtons();
                     stepSave.rebindInputs();
                     cycleSave.rebindInputs();
+                    return null;
                 })
                 .catch(notification.exception);
         }
@@ -325,9 +347,15 @@ define([
             });
         }
 
-        expandPhases() { this.expandChildrenClass($('#roadmapconfiguration'), 'phase'); }
-        expandCycles(node) { this.expandChildrenClass(node, 'cycle'); }
-        expandSteps(node) { this.expandChildrenClass(node, 'step'); }
+        expandPhases() {
+            this.expandChildrenClass($('#roadmapconfiguration'), 'phase');
+        }
+        expandCycles(node) {
+            this.expandChildrenClass(node, 'cycle');
+        }
+        expandSteps(node) {
+            this.expandChildrenClass(node, 'step');
+        }
         collapsePhases() {
             const node = $('#roadmapconfiguration');
             this.collapseCycles(node);
@@ -337,7 +365,9 @@ define([
             this.collapseSteps(node);
             this.collapseChildrenClass(node, 'cycle');
         }
-        collapseSteps(node) { this.collapseChildrenClass(node, 'step'); }
+        collapseSteps(node) {
+            this.collapseChildrenClass(node, 'step');
+        }
         expandChildrenClass($parent, className) {
             $parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
                 const $wrapper = $(this).closest(`.${className}-wrapper`);
@@ -379,14 +409,16 @@ define([
                     if (confirmed) {
                         const $wrapper = $node.closest('.phase-wrapper');
                         if (!$wrapper.length) {
-                            return;
+                            return null;
                         }
                         const phaseId = $wrapper.data('phaseid');
-                        $('#phase-deletes').val($('#phase-deletes').val() + phaseId + ',');
+                        const $phaseDeletes = $('#phase-deletes');
+                        $phaseDeletes.val($phaseDeletes.val() + phaseId + ',');
                         $wrapper.remove();
                         this.configSave();
                         this.phaseColorChange($('select[name="phasecolorpattern"]'));
                     }
+                    return null;
                 });
         }
 
@@ -396,14 +428,16 @@ define([
                     if (confirmed) {
                         const $wrapper = $node.closest('.cycle-wrapper');
                         if (!$wrapper.length) {
-                            return;
+                            return null;
                         }
                         const $phaseContainer = $node.closest('.phase-container');
                         const cycleId = $wrapper.data('cycleid');
-                        $('#cycle-deletes').val($('#cycle-deletes').val() + cycleId + ',');
+                        const $cycleDeletes = $('#cycle-deletes');
+                        $cycleDeletes.val($cycleDeletes.val() + cycleId + ',');
                         $wrapper.remove();
                         $phaseContainer.find('.phase-title').triggerHandler('change');
                     }
+                    return null;
                 });
         }
 
@@ -413,14 +447,16 @@ define([
                     if (confirmed) {
                         const $wrapper = $node.closest('.step-wrapper');
                         if (!$wrapper.length) {
-                            return;
+                            return null;
                         }
                         const $cycleContainer = $node.closest('.cycle-container');
                         const stepId = $wrapper.data('stepid');
-                        $('#step-deletes').val($('#step-deletes').val() + stepId + ',');
+                        const $stepDeletes = $('#step-deletes');
+                        $stepDeletes.val($stepDeletes.val() + stepId + ',');
                         $wrapper.remove();
                         $cycleContainer.find('.cycle-title').triggerHandler('change');
                     }
+                    return null;
                 });
         }
 
@@ -461,8 +497,12 @@ define([
             $cycleContainer.find('.cycle-title').triggerHandler('change');
         }
 
-        expandEverything() { this.expandPhases(); }
-        collapseEverything() { this.collapsePhases(); }
+        expandEverything() {
+            this.expandPhases();
+        }
+        collapseEverything() {
+            this.collapsePhases();
+        }
     }
 
     return {

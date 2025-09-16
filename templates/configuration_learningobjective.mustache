@@ -26,6 +26,11 @@
         "name": "Course Learning Objective 1"
     }
 }}
+{{!
+    This template is a table row partial and must only be used inside a <table>
+    (e.g., inside <tbody> in configuration_learningobjectives.mustache).
+    Rendering this template standalone will produce invalid HTML.
+}}
 <tr class="learningobjective" data-id="{{ id }}">
     <td class="col-8">
         <span class="number">{{ number }}</span>. <input class="learning-objective-name form-control " type="text" value="{{ name }}" >

@@ -12,8 +12,8 @@ Feature: Teacher can add roadmap to course
       | user | course | role |
       | teacher | C1 | editingteacher |
     And the following "activities" exist:
-      | activity | course | section | name |
-      | roadmap    | C1     | 1       | Course Roadmap |
+      | activity | course | name                 |
+      | roadmap  | C1     | Test Course Roadmap  |
 
   @javascript
   Scenario: Adding a course roadmap to the course.

@@ -25,5 +25,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_roadmap'; // Full name of the plugin (used for diagnostics).
-$plugin->version  = 2025021000;    // The current module version (Date: YYYYMMDDXX).
+$plugin->version  = 2025021002;    // The current module version (Date: YYYYMMDDXX).
 $plugin->requires = 2022032200;    // Requires this Moodle version.

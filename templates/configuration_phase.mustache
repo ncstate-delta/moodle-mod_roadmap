@@ -51,7 +51,7 @@
         </div>
         <div class="phase-header-title">{{# title }} {{ title }} {{/ title }} {{^ title }} Untitled Phase {{/ title }}</div>
     </div>
-    <div class="phase-container hide" aria-expanded="false">
+    <div class="phase-container hide" aria-expanded="false" role="region">
         <div class="form-group row fitem">
             <div class="col-md-1 col-form-label">Title</div>
             <div class="col-md-11 form-inline"><input class="phase-title form-control" type="text" value="{{ title }}"></div>
@@ -62,7 +62,7 @@
             <a data-action="collapse_all_cycles" href="#" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
             <a data-action="expand_all_cycles" href="#" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
         </div>
-        <div class="phase-cycles-container" class="">
+        <div class="phase-cycles-container">
             {{> mod_roadmap/configuration_cycles }}
         </div>
         <input class="phase-configuration" type="hidden" value="{{ configuration }}">

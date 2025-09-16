@@ -160,7 +160,6 @@ class behat_mod_roadmap extends behat_question_base {
 
     /**
      * Return the xpath for phase title field with wrapper xpath
-     * @param string $xpathphasewrapper
      * @return string
      */
     protected function get_xpath_for_add_phase_link() {

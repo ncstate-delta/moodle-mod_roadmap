@@ -49,12 +49,12 @@
     <a href="#" data-action="collapse_all_phases" onclick="return false;"><i class="fa-solid fa-angles-up"></i> Collapse</a>
     <a href="#" data-action="expand_all_phases" onclick="return false;"><i class="fa-solid fa-angles-down"></i> Expand</a>
 </div>
-<div id="phase-container" class="">
+<div id="phase-container">
     {{# phases }}
         {{> mod_roadmap/configuration_phase }}
     {{/ phases }}
 </div>
-<div class="">
+<div>
     <input id="phase-deletes" type="hidden" value="">
     <input id="cycle-deletes" type="hidden" value="">
     <input id="step-deletes" type="hidden" value="">
