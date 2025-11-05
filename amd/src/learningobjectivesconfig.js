@@ -137,7 +137,6 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
                 config.learningobjectives.forEach(function(learningobjective) {
                     var li = $('<li/>').attr('data-id', learningobjective.id).appendTo($(e));
                     $('<input/>').attr('type', 'checkbox').attr('value', learningobjective.id)
-                        .attr('class', 'form-control')
                         .attr('checked', ($.inArray(learningobjective.id, selectedIds) >= 0)).appendTo(li);
                     $('<span>').text(' ' + prefix + ' ' + (learningobjective.index + 1) + ': ' +
                         learningobjective.name).appendTo(li);

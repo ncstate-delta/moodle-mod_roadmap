@@ -31,7 +31,9 @@ define(['jquery'], function($) {
         rebindInputs() {
             $('.roadmap-form-control-step')
                 .off('change').on('change', this.saveStep.bind(this));
+
             this.loadList();
+
             // Initial save for all steps (for new fields added)
             $('.step-container').each((_, el) => {
                 this.saveStep({target: el});
@@ -60,6 +62,25 @@ define(['jquery'], function($) {
                         }
                     });
                 }
+                const singleActivitySection = $(this).closest('.step-container').find('.single-activity-link-container');
+                const linkPageContainer = $(this).closest('.step-container').find('.link-to-page-container');
+
+                if (selectedIds.length === 1) {
+                    // Show and enable when exactly one activity is selected
+                    singleActivitySection.show();
+
+                    const linksingleactivity = $(this).closest('.step-container').find('.fitem input.chk-single-activity-link')
+                        .prop("checked") ? 1 : 0;
+                    if (linksingleactivity) {
+                        linkPageContainer.show();
+                    } else {
+                        linkPageContainer.hide();
+                    }
+                } else {
+                    // Hide and uncheck when 0 or more than 1 activity is selected
+                    singleActivitySection.hide();
+                    linkPageContainer.hide();
+                }
             });
         }
 
@@ -70,6 +91,9 @@ define(['jquery'], function($) {
         saveStep(event) {
             // Support both event and direct call with element
             const $stepContainer = $(event.target).closest('.step-container');
+
+            this.updateLinkToPage(event);
+
             // Link single activity check box option.
             const linksingleactivity = $stepContainer.find('.fitem input.chk-single-activity-link')
                 .prop("checked") ? 1 : 0;
@@ -91,6 +115,25 @@ define(['jquery'], function($) {
             $stepContainer.children('input.step-configuration')
                 .val(JSON.stringify(stepData))
                 .triggerHandler("change");
+        }
+
+        /**
+         * Updates the link to page field based on selected activity.
+         * @param {Event} event Change event.
+         */
+        updateLinkToPage(event) {
+
+            const stepContainer = $(event.target).closest('.step-container');
+            const linksingleactivity = stepContainer.find('.fitem input.chk-single-activity-link')
+                .prop("checked") ? 1 : 0;
+
+            const linkPageContainer = stepContainer.find('.link-to-page-container');
+            if (linksingleactivity) {
+                linkPageContainer.show();
+            } else {
+                linkPageContainer.hide();
+            }
+
         }
     }
 

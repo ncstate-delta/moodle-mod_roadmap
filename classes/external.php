@@ -37,7 +37,6 @@ use core_external\external_value;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class external extends external_api {
-
     /**
      * Fetch the course modules with activity completion and expected completion time.
      *
@@ -64,12 +63,12 @@ class external extends external_api {
 
         $dateto = time() + YEARSECS;
         $customexpectedcomplete =
-              \html_writer::div(\html_writer::select_time('months', 'tomonth', $dateto), 'form-group fitem mt-2')
-            . \html_writer::div(\html_writer::select_time('days', 'today', $dateto), 'form-group fitem mt-2 ml-2')
-            . \html_writer::div(\html_writer::select_time('years', 'toyear', $dateto), 'form-group fitem mt-2 ml-2')
-            . \html_writer::div(\html_writer::select_time('hours', 'tohour', $dateto), 'form-group fitem mt-2 ml-4 mr-1')
+              \html_writer::div(\html_writer::select_time('months', 'tomonth', $dateto), 'mb-3 fitem mt-2')
+            . \html_writer::div(\html_writer::select_time('days', 'today', $dateto), 'mb-3 fitem mt-2 ml-2')
+            . \html_writer::div(\html_writer::select_time('years', 'toyear', $dateto), 'mb-3 fitem mt-2 ml-2')
+            . \html_writer::div(\html_writer::select_time('hours', 'tohour', $dateto), 'mb-3 fitem mt-2 ml-4 mr-1')
             . '<strong>:</strong>'
-            . \html_writer::div(\html_writer::select_time('minutes', 'tominute', $dateto), 'form-group fitem mt-2 ml-1');
+            . \html_writer::div(\html_writer::select_time('minutes', 'tominute', $dateto), 'mb-3 fitem mt-2 ml-1');
 
         // TODO: Pull all course modules that have activity completion in the same order displayed
         // displayed on the course index.  Also pull the expected completion date if it exists.
@@ -112,7 +111,7 @@ class external extends external_api {
                         ),
                     ], 'Sections')
                 ),
-                'customdatefields' => new external_value( PARAM_RAW, 'Custom Date Fields'),
+                'customdatefields' => new external_value(PARAM_RAW, 'Custom Date Fields'),
             ]
         );
     }
@@ -158,5 +157,4 @@ class external extends external_api {
             new external_value(PARAM_TEXT, 'phase color')
         );
     }
-
 }

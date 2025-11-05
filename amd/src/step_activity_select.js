@@ -62,7 +62,7 @@ define([
         ];
 
         trigger.off('click').on('click', function(e) {
-            let stepId = $(e.target).data('stepid');
+            let stepId = $(e.target).parent('.btn_completion_selector').data('stepid');
 
             Str.get_strings(stringkeys).then(function(strings) {
                 return Promise.all([

@@ -60,7 +60,7 @@ define([
             ];
 
             trigger.off('click').on('click', function(e) {
-                let stepId = $(e.target).data('stepid');
+                let stepId = $(e.target).parent('.btn_icon_selector').data('stepid');
 
                 Str.get_strings(stringkeys).then(function(strings) {
                     return Promise.all([
@@ -145,8 +145,6 @@ define([
             // Triggering a form submission will give JS validation scripts a chance to check for errors.
             modal.getRoot().on(ModalEvents.save, this.submitForm.bind(this));
 
-            modal.getRoot().on('submit', 'form', this.submitForm.bind(this));
-
             this.modal = modal;
 
             modal.show();
@@ -176,7 +174,7 @@ define([
             let stepId = $('#step-id').val();
 
             let inputStep = $('input[name="step-' + stepId + '-icon"]');
-            let imgStep = inputStep.parent('.step-icon-display').children('img').first();
+            let imgStep = inputStep.parent('.step-icon-display').find('img').first();
 
             imgStep.attr('src', iconUrl + '?name=' + iconFileName + '&percent=100&flags=n');
             imgStep.removeAttr('data-iconfilename').removeData('iconfilename');

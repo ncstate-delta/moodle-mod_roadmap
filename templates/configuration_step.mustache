@@ -40,50 +40,75 @@
         <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} Untitled Step {{/ rollovertext }}</div>
     </div>
     <div class="hide step-container" aria-expanded="true" role="region">
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label"><label for="step-{{ id }}-rollovertext">Rollover Text</label></div>
-            <div class="col-md-9 form-inline"><input id="step-{{ id }}-rollovertext" class="step-rollovertext form-control roadmap-form-control-step" type="text" value="{{ rollovertext }}"></div>
+        <div class="mb-3 row fitem">
+            <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0"><label for="step-{{ id }}-rollovertext">Rollover Text</label></div>
+            <div class="col-md-8 d-flex flex-wrap align-items-start felement"><input id="step-{{ id }}-rollovertext" class="step-rollovertext form-control roadmap-form-control-step" type="text" value="{{ rollovertext }}"></div>
         </div>
         <!-- Icon display and input -->
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label">
-                <button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector btn btn-secondary" data-stepid="{{ id }}">Select Icon for Step</button>
+        <div class="mb-3 row fitem">
+            <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0">
+                <label>Step Icon</label>
             </div>
-            <div class="col-md-9 form-inline step-icon-display">
-                {{# iconurl }}
-                <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="{{ iconurl }}" alt="">
-                {{/ iconurl }}
-                {{^ iconurl }}
-                <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="/pix/spacer.gif" alt="">
-                {{/ iconurl }}
+            <div class="d-flex flex-wrap align-items-start felement" style="flex-basis:min-content;">
+                <button type="button" id="step-{{ id }}-btn-icon-selector" class="btn_icon_selector btn btn-link p-0 ms-2" data-stepid="{{ id }}" title="Edit icon">
+                    {{# pix }} i/edit, core, Edit icon {{/ pix }}
+                </button>
+            </div>
+            <div class="col-md-7 d-flex flex-wrap align-items-start felement step-icon-display">
+                <div class="step-icon-preview me-2">
+                    {{# iconurl }}
+                    <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="{{ iconurl }}" alt="">
+                    {{/ iconurl }}
+                    {{^ iconurl }}
+                    <img class="icon step-icon roadmap-form-control-step" data-iconfilename="{{ stepicon }}" src="/pix/spacer.gif" alt="">
+                    {{/ iconurl }}
+                </div>
                 <input class="step-icon roadmap-form-control-step" name="step-{{ id }}-icon" type="hidden" value="{{ stepicon }}">
             </div>
         </div>
-        <div class="form-group row fitem step-activity-container">
-            <div class="col-md-3 form-inline">
-                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector btn btn-secondary" data-stepid="{{ id }}">Select Completion Requirements</button>
+        <div class="mb-3 row fitem step-activity-container">
+            <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0">
+                <label>Completion Activities</label>
             </div>
-            <div class="col-md-9 col-form-label">Completion tied to activities:
-                <ul id="step-{{ id }}-completion-list" class="step-completion-list"></ul>
-                <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control roadmap-form-control-step" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}">
+            <div class="d-flex flex-wrap align-items-start felement" style="flex-basis:min-content;">
+                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector btn btn-link p-0 ms-2" data-stepid="{{ id }}" title="Edit completion requirements">
+                    {{# pix }} i/edit, core, Edit completion requirements {{/ pix }}
+                </button>
             </div>
-        </div>
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label">Expected completed on</div>
-            <div id="step-{{ id }}-expectedcomplete-readable" class="col-md-9 form-inline">{{ completionexpectedreadable }}</div>
-            <input id="step-{{ id }}-expectedcomplete-datetime" class="expectedcomplete-datetime" data-stepid="{{ id }}" type="hidden" value="{{ completionexpecteddatetime }}">
-            <input id="step-{{ id }}-expectedcomplete-coursemoduleid" class="expectedcomplete-coursemoduleid" data-stepid="{{ id }}" type="hidden" value="{{ completionexpectedcmid }}">
-        </div>
-        <div class="form-group row fitem">
-            <div class="col-md-3 col-form-label"></div>
-            <div class="col-form-label">
-                <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link roadmap-form-control-step" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
-                <label for="step-{{ id }}-chk-single-activity-link">If completion is tied to a single activity, also link to that activity</label>
+            <div class="col-md-7 d-flex flex-wrap align-items-start felement">
+                <div class="step-completion-display flex-grow-1">
+                    <ul id="step-{{ id }}-completion-list" class="step-completion-list"></ul>
+                    <input id="step-{{ id }}-completion-modules" class="step-completion-modules form-control roadmap-form-control-step" data-stepid="{{ id }}" type="hidden" value="{{ completionmodules }}">
+                </div>
             </div>
         </div>
-        <div class="form-group row fitem">
-            <label for="step-{{ id }}-single-activity-link" class="col-md-3 col-form-label">Link to Page</label>
-            <div class="col-md-9 form-inline"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}"></div>
+        <div class="mb-3 row fitem">
+            <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0">
+                <label>Expected completed on</label>
+            </div>
+            <div class="col-md-7 d-flex flex-wrap align-items-start felement">
+                <div id="step-{{ id }}-expectedcomplete-readable" class="col-md-9">{{ completionexpectedreadable }}</div>
+                <input id="step-{{ id }}-expectedcomplete-datetime" class="expectedcomplete-datetime" data-stepid="{{ id }}" type="hidden" value="{{ completionexpecteddatetime }}">
+                <input id="step-{{ id }}-expectedcomplete-coursemoduleid" class="expectedcomplete-coursemoduleid" data-stepid="{{ id }}" type="hidden" value="{{ completionexpectedcmid }}">
+            </div>
+        </div>
+
+        <div id="step-{{ id }}-single-activity-link-container" class="mb-3 row fitem single-activity-link-container">
+            <div class="col-md-4 col-form-label">
+                <label>Single Activity Link</label>
+            </div>
+            <div class="col-md-7 d-flex flex-wrap align-items-start felement">
+                <div class="form-check mb-2">
+                    <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link roadmap-form-control-step form-check-input" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
+                    <label for="step-{{ id }}-chk-single-activity-link" class="form-check-label">If completion is tied to a single activity, also link to that activity</label>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row fitem link-to-page-container">
+            <div class="col-md-4 col-form-label">
+                <label for="step-{{ id }}-single-activity-link">Link to Page</label>
+            </div>
+            <div class="col-md-7 d-flex flex-wrap align-items-start felement"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}"></div>
         </div>
         <input class="step-configuration" type="hidden" value="{{ configuration }}">
     </div>
