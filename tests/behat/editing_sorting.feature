@@ -1,4 +1,4 @@
-@mod @mod_roadmap
+@mod @mod_roadmap @mod_
 Feature: Teacher can sort phases, cycles, and steps
 
   Background:
@@ -31,20 +31,24 @@ Feature: Teacher can sort phases, cycles, and steps
       | Phase Title 3 |
       | Phase Title 4 |
       | Phase Title 2 |
+
     And I press "Save Configuration"
     When I am on "C1" course homepage
     And "Phase Title 1" "text" should appear before "Phase Title 3" "text"
     And "Phase Title 3" "text" should appear before "Phase Title 4" "text"
     And "Phase Title 4" "text" should appear before "Phase Title 2" "text"
+
     And I click on "Configure Roadmap" "link"
     And I expand all fieldsets
     And I move up phase "Phase Title 2"
     And I move up phase "Phase Title 2"
     And I press "Save Configuration"
+
     Then I am on "C1" course homepage
     And "Phase Title 1" "text" should appear before "Phase Title 2" "text"
     And "Phase Title 2" "text" should appear before "Phase Title 3" "text"
     And "Phase Title 3" "text" should appear before "Phase Title 4" "text"
+
     And I click on "Configure Roadmap" "link"
     And I expand all fieldsets
     And "Phase Title 1" "text" should appear before "Phase Title 2" "text"
