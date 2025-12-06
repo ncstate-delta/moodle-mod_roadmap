@@ -45,8 +45,8 @@ define(['jquery'], function($) {
          */
         loadList() {
             const activityData = JSON.parse($('input[name="activity_data"]').val() || '{}');
-            $('ul.step-completion-list').each(function() {
-                const $list = $(this);
+            $('ul.step-completion-list').each((_, el) => {
+                const $list = $(el);
                 // Get the configuration line from the local hidden field
                 const stepCompletionModules = $list.closest('.step-activity-container')
                     .find('.step-completion-modules').val() || '';
@@ -62,25 +62,7 @@ define(['jquery'], function($) {
                         }
                     });
                 }
-                const singleActivitySection = $(this).closest('.step-container').find('.single-activity-link-container');
-                const linkPageContainer = $(this).closest('.step-container').find('.link-to-page-container');
-
-                if (selectedIds.length === 1) {
-                    // Show and enable when exactly one activity is selected
-                    singleActivitySection.show();
-
-                    const linksingleactivity = $(this).closest('.step-container').find('.fitem input.chk-single-activity-link')
-                        .prop("checked") ? 1 : 0;
-                    if (linksingleactivity) {
-                        linkPageContainer.show();
-                    } else {
-                        linkPageContainer.hide();
-                    }
-                } else {
-                    // Hide and uncheck when 0 or more than 1 activity is selected
-                    singleActivitySection.hide();
-                    linkPageContainer.hide();
-                }
+                this.updateLinkToPage($list.closest('.step-container'));
             });
         }
 
@@ -92,7 +74,7 @@ define(['jquery'], function($) {
             // Support both event and direct call with element
             const $stepContainer = $(event.target).closest('.step-container');
 
-            this.updateLinkToPage(event);
+            this.updateLinkToPage($stepContainer);
 
             // Link single activity check box option.
             const linksingleactivity = $stepContainer.find('.fitem input.chk-single-activity-link')
@@ -119,21 +101,32 @@ define(['jquery'], function($) {
 
         /**
          * Updates the link to page field based on selected activity.
-         * @param {Event} event Change event.
+         * @param {stepContainer} stepContainer that needs input visibility needs to be evaluated.
          */
-        updateLinkToPage(event) {
+        updateLinkToPage(stepContainer) {
 
-            const stepContainer = $(event.target).closest('.step-container');
-            const linksingleactivity = stepContainer.find('.fitem input.chk-single-activity-link')
-                .prop("checked") ? 1 : 0;
-
+            const singleActivitySection = stepContainer.find('.single-activity-link-container');
             const linkPageContainer = stepContainer.find('.link-to-page-container');
-            if (linksingleactivity) {
-                linkPageContainer.show();
-            } else {
-                linkPageContainer.hide();
-            }
+            const chkSingleActivity = stepContainer.find('.fitem input.chk-single-activity-link');
+            const stepCompletionModules = stepContainer.find('.step-completion-modules').val() || '';
+            const selectedIds = stepCompletionModules.split(',').filter(x => x);
 
+            if (selectedIds.length === 1) {
+                // Show and enable when exactly one activity is selected.
+                singleActivitySection.show();
+                // Show or hide link input based on checkbox state.
+                if (chkSingleActivity.prop("checked")) {
+                    linkPageContainer.hide();
+                } else {
+                    linkPageContainer.show();
+                }
+            } else {
+                // Hide and uncheck when 0 or more than 1 activity is selected.
+                chkSingleActivity.prop('checked', false);
+                singleActivitySection.hide();
+                // If there isn't exactly one activity, always show the link input.
+                linkPageContainer.show();
+            }
         }
     }
 
