@@ -208,7 +208,6 @@ function roadmap_cm_info_view(cm_info $cm) {
                 }
 
                 if (!empty($step->completionmodules)) {
-
                     if (property_exists($step, 'completionexpecteddatetime')) {
                         $expectedcompletetime = (int)$step->completionexpecteddatetime;
                     } else {
@@ -230,11 +229,17 @@ function roadmap_cm_info_view(cm_info $cm) {
                         if ($step->completionexpectedcmid > 0 && $step->completionexpectedcmid == $cmid) {
                             if ($cmcheck->completionexpected != $step->completionexpecteddatetime) {
                                 $step->completionexpecteddatetime = $cmcheck->completionexpected;
-                                $DB->update_record('roadmap_step',
-                                    (object)['id' => $step->id, 'completionexpecteddatetime' => $cmcheck->completionexpected]);
+                                $DB->update_record(
+                                    'roadmap_step',
+                                    (object)[
+                                        'id' => $step->id,
+                                        'completionexpecteddatetime' => $cmcheck->completionexpected,
+                                    ]
+                                );
                             }
                         }
-                        if ($completiondata->completionstate == COMPLETION_INCOMPLETE ||
+                        if (
+                            $completiondata->completionstate == COMPLETION_INCOMPLETE ||
                             $completiondata->completionstate == COMPLETION_COMPLETE_FAIL
                         ) {
                             $step->incomplete = true;
@@ -244,16 +249,18 @@ function roadmap_cm_info_view(cm_info $cm) {
                         $cmidtotal++;
                     }
 
-                    if ($step->completionexpectedcmid != 0 &&
+                    if (
+                        $step->completionexpectedcmid != 0 &&
                         !$step->incomplete &&
-                        $completiondata->timemodified < $expectedcompletetime) {
-
+                        $completiondata->timemodified < $expectedcompletetime
+                    ) {
                         $flags .= 's';
-                    } else if ($step->completionexpectedcmid != 0 &&
+                    } else if (
+                        $step->completionexpectedcmid != 0 &&
                         $step->incomplete &&
                         time() + 86400 > $expectedcompletetime &&
-                        time() < $expectedcompletetime) {
-
+                        time() < $expectedcompletetime
+                    ) {
                         $flags .= 'a';
                     }
 
@@ -270,13 +277,11 @@ function roadmap_cm_info_view(cm_info $cm) {
                             $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
                         }
                     }
-
                 } else {
                     $step->incomplete = true;
                 }
 
                 if (!empty($step->stepicon)) {
-
                     $cmidpercent = 0;
                     if ($cmidtotal > 0) {
                         $cmidpercent = (int)($cmidcomplete / $cmidtotal * 100);

@@ -46,23 +46,23 @@ define(['jquery'], function($) {
         loadList() {
             const activityData = JSON.parse($('input[name="activity_data"]').val() || '{}');
             $('ul.step-completion-list').each((_, el) => {
-                const $list = $(el);
+                const list = $(el);
                 // Get the configuration line from the local hidden field
-                const stepCompletionModules = $list.closest('.step-activity-container')
+                const stepCompletionModules = list.closest('.step-activity-container')
                     .find('.step-completion-modules').val() || '';
                 const selectedIds = stepCompletionModules.split(',').filter(x => x);
 
-                $list.empty();
+                list.empty();
                 if (activityData.activities && Array.isArray(activityData.activities)) {
                     activityData.activities.forEach(function(activity) {
                         if (selectedIds.includes(activity.id)) {
                             const li = $('<li/>').attr('data-id', activity.id);
                             $('<span>').text(activity.name).appendTo(li);
-                            $list.append(li);
+                            list.append(li);
                         }
                     });
                 }
-                this.updateLinkToPage($list.closest('.step-container'));
+                this.updateLinkToPage(list.closest('.step-container'));
             });
         }
 
@@ -72,29 +72,29 @@ define(['jquery'], function($) {
          */
         saveStep(event) {
             // Support both event and direct call with element
-            const $stepContainer = $(event.target).closest('.step-container');
+            const stepContainer = $(event.target).closest('.step-container');
 
-            this.updateLinkToPage($stepContainer);
+            this.updateLinkToPage(stepContainer);
 
             // Link single activity check box option.
-            const linksingleactivity = $stepContainer.find('.fitem input.chk-single-activity-link')
+            const linksingleactivity = stepContainer.find('.fitem input.chk-single-activity-link')
                 .prop("checked") ? 1 : 0;
 
-            const rollovertext = $stepContainer.find('.fitem input.step-rollovertext').val();
+            const rollovertext = stepContainer.find('.fitem input.step-rollovertext').val();
 
             const stepData = {
-                id: $stepContainer.closest('.step-wrapper').data('stepid'),
+                id: stepContainer.closest('.step-wrapper').data('stepid'),
                 rollovertext: rollovertext,
-                stepicon: $stepContainer.find('.fitem input.step-icon').val(),
-                completionmodules: $stepContainer.find('.fitem input.step-completion-modules').val(),
+                stepicon: stepContainer.find('.fitem input.step-icon').val(),
+                completionmodules: stepContainer.find('.fitem input.step-completion-modules').val(),
                 linksingleactivity: linksingleactivity,
-                pagelink: $stepContainer.find('.fitem input.step-single-activity-link').val(),
-                completionexpectedcmid: $stepContainer.find('.fitem input.expectedcomplete-coursemoduleid').val(),
-                completionexpecteddatetime: $stepContainer.find('.fitem input.expectedcomplete-datetime').val(),
+                pagelink: stepContainer.find('.fitem input.step-single-activity-link').val(),
+                completionexpectedcmid: stepContainer.find('.fitem input.expectedcomplete-coursemoduleid').val(),
+                completionexpecteddatetime: stepContainer.find('.fitem input.expectedcomplete-datetime').val(),
             };
 
-            $stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
-            $stepContainer.children('input.step-configuration')
+            stepContainer.closest('.step-wrapper').find('.step-header-title').html(rollovertext);
+            stepContainer.children('input.step-configuration')
                 .val(JSON.stringify(stepData))
                 .triggerHandler("change");
         }

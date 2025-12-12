@@ -30,7 +30,6 @@ require_once($CFG->dirroot . '/mod/roadmap/backup/moodle2/restore_roadmap_stepsl
  * Roadmap restore task that provides all the settings and steps to perform one complete restore of the activity.
  */
 class restore_roadmap_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */

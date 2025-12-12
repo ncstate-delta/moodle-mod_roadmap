@@ -35,7 +35,6 @@ require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_roadmap_mod_form extends moodleform_mod {
-
     /**
      * Called to define this moodle form
      *
@@ -58,6 +57,5 @@ class mod_roadmap_mod_form extends moodleform_mod {
         // TODO: Hide activity completion section from mform here.
 
         $this->add_action_buttons();
-
     }
 }

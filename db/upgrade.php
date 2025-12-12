@@ -34,7 +34,6 @@ function xmldb_roadmap_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2022040700) {
-
         // Adding Phase table to database.
         $table = new xmldb_table('roadmap_phase');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
@@ -88,7 +87,6 @@ function xmldb_roadmap_upgrade($oldversion) {
     }
 
     if ($oldversion < 2024050600) {
-
         // Change name of completionexpected field to completionexpectedcmid.
         $table = new xmldb_table('roadmap_step');
         $field = new xmldb_field('expectedcomplete');
@@ -145,8 +143,16 @@ function xmldb_roadmap_upgrade($oldversion) {
 
         // Change column colors from char255 to integer.
         $table = new xmldb_table('roadmap');
-        $field = new xmldb_field('colors', XMLDB_TYPE_INTEGER, 10, null, null, null, null,
-            'learningobjectives');
+        $field = new xmldb_field(
+            'colors',
+            XMLDB_TYPE_INTEGER,
+            10,
+            null,
+            null,
+            null,
+            null,
+            'learningobjectives'
+        );
 
         // Launch change of type for field value.
         $dbman->change_field_type($table, $field);

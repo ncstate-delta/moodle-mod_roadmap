@@ -234,7 +234,6 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
 
             $stepsort = 0;
             foreach ($cycle->steps as $step) {
-
                 // Save the phase specific data.
                 $stepdata = [
                     'rollovertext' => (is_null($step->rollovertext) ? '' : $step->rollovertext),
@@ -367,7 +366,6 @@ function roadmap_list_activities($course, $includesections = true) {
     $completion = new completion_info($course);
 
     if ($completion->is_enabled()) {
-
         $modinfo = get_fast_modinfo($course);
         $cms = $modinfo->get_cms();
 
@@ -416,9 +414,7 @@ function roadmap_list_activities($course, $includesections = true) {
         }
         return $results;
     }
-
 }
-
 
 /**
  * Installs the five default color sets.

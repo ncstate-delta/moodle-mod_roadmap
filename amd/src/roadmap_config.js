@@ -83,16 +83,16 @@ define([
         return ids.length ? Math.max(...ids) : 0;
     };
 
-    const moveWrapper = ($wrapper, direction) => {
+    const moveWrapper = (wrapper, direction) => {
         if (direction === 'up') {
-            const $prev = $wrapper.prev();
-            if ($prev.length) {
-                $wrapper.insertBefore($prev);
+            const prev = wrapper.prev();
+            if (prev.length) {
+                wrapper.insertBefore(prev);
             }
         } else if (direction === 'down') {
-            const $next = $wrapper.next();
-            if ($next.length) {
-                $wrapper.insertAfter($next);
+            const next = wrapper.next();
+            if (next.length) {
+                wrapper.insertAfter(next);
             }
         }
     };
@@ -161,48 +161,48 @@ define([
         }
 
         clickHandler(event) {
-            const $node = $(event.currentTarget);
-            const action = $node.data('action');
+            const node = $(event.currentTarget);
+            const action = node.data('action');
             const actionMap = {
                 'collapse_all_phases': () => this.collapsePhases(),
                 'expand_all_phases': () => this.expandPhases(),
                 'collapse_all_cycles': () =>
                     this.collapseCycles(
-                        $node.closest('.phase-wrapper')
+                        node.closest('.phase-wrapper')
                             .find('.phase-cycles-container')
                             .first()
                     ),
                 'expand_all_cycles': () =>
                     this.expandCycles(
-                        $node.closest('.phase-wrapper')
+                        node.closest('.phase-wrapper')
                             .find('.phase-cycles-container')
                             .first()
                     ),
                 'collapse_all_steps': () =>
                     this.collapseSteps(
-                        $node.parent('.step-container-controls')
+                        node.parent('.step-container-controls')
                             .next('.cycle-steps-container')
                     ),
                 'expand_all_steps': () =>
                     this.expandSteps(
-                        $node.parent('.step-container-controls')
+                        node.parent('.step-container-controls')
                             .next('.cycle-steps-container')
                     ),
-                'phase_collapse_control': () => this.collapsePhase($node),
-                'cycle_collapse_control': () => this.collapseCycle($node),
-                'step_collapse_control': () => this.collapseStep($node),
-                'phase_delete_control': () => this.deletePhase($node),
-                'cycle_delete_control': () => this.deleteCycle($node),
-                'step_delete_control': () => this.deleteStep($node),
+                'phase_collapse_control': () => this.collapsePhase(node),
+                'cycle_collapse_control': () => this.collapseCycle(node),
+                'step_collapse_control': () => this.collapseStep(node),
+                'phase_delete_control': () => this.deletePhase(node),
+                'cycle_delete_control': () => this.deleteCycle(node),
+                'step_delete_control': () => this.deleteStep(node),
                 'add_phase': () => this.addPhase(),
-                'phase_up_control': () => this.upPhase($node),
-                'phase_down_control': () => this.downPhase($node),
-                'add_phase_cycle': () => this.addCycle($node),
-                'cycle_up_control': () => this.upCycle($node),
-                'cycle_down_control': () => this.downCycle($node),
-                'add_cycle_step': () => this.addStep($node),
-                'step_up_control': () => this.upStep($node),
-                'step_down_control': () => this.downStep($node)
+                'phase_up_control': () => this.upPhase(node),
+                'phase_down_control': () => this.downPhase(node),
+                'add_phase_cycle': () => this.addCycle(node),
+                'cycle_up_control': () => this.upCycle(node),
+                'cycle_down_control': () => this.downCycle(node),
+                'add_cycle_step': () => this.addStep(node),
+                'step_up_control': () => this.upStep(node),
+                'step_down_control': () => this.downStep(node)
             };
             if (actionMap[action]) {
                 return actionMap[action]();
@@ -210,8 +210,8 @@ define([
             return undefined;
         }
 
-        phaseColorChange($node) {
-            const colorId = $node.val();
+        phaseColorChange(node) {
+            const colorId = node.val();
             if (colorPatternCache[colorId]) {
                 this.applyColorSet(colorPatternCache[colorId]);
                 return;
@@ -227,11 +227,11 @@ define([
 
         applyColorSet(colors) {
             $('.phase-color-display').remove();
-            const $colorTable = $('<div>').addClass('phase-color-display');
+            const colorTable = $('<div>').addClass('phase-color-display');
             colors.forEach(color => {
-                $colorTable.append(`<div class="color" style="background-color:${color}"></div>`);
+                colorTable.append(`<div class="color" style="background-color:${color}"></div>`);
             });
-            $('select[name="phasecolorpattern"]').parent().append($colorTable);
+            $('select[name="phasecolorpattern"]').parent().append(colorTable);
 
             $('#roadmapconfiguration #phase-container > .phase-wrapper > div.row').each(function(i) {
                 const numColors = colors.length;
@@ -245,10 +245,10 @@ define([
         }
 
         configSave() {
-            const $phaseContainer = $('#phase-container');
+            const phaseContainer = $('#phase-container');
             const roadmapData = [];
             let index = 0;
-            $phaseContainer.find('.phase-wrapper .phase-configuration').each(function() {
+            phaseContainer.find('.phase-wrapper .phase-configuration').each(function() {
                 const phaseData = $(this).val() || '{}';
                 const phaseDataObj = JSON.parse(phaseData);
                 phaseDataObj.index = index++;
@@ -263,8 +263,8 @@ define([
         }
 
         addPhase() {
-            const $roadmapConfigInput = $('input[name="roadmapconfiguration"]');
-            const config = JSON.parse($roadmapConfigInput.val());
+            const roadmapConfigInput = $('input[name="roadmapconfiguration"]');
+            const config = JSON.parse(roadmapConfigInput.val());
             const nextIndex = config.phases.length;
             const maxPhaseId = getMaxValue('phase');
             const newPhase = {
@@ -275,10 +275,11 @@ define([
                 subtitle: `Subtitle ${nextIndex + 1}`
             };
             config.phases.push(newPhase);
-            $roadmapConfigInput.val(JSON.stringify(config));
+            roadmapConfigInput.val(JSON.stringify(config));
             return templates.render('mod_roadmap/configuration_phase', newPhase)
                 .then((html, js) => {
                     templates.appendNodeContents('#phase-container', html, js);
+
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
                     this.phaseColorChange($('select[name="phasecolorpattern"]'));
@@ -287,10 +288,10 @@ define([
                 .catch(notification.exception);
         }
 
-        addCycle($node) {
-            const $phaseContainer = $node.closest('.phase-container');
-            const $cycleContainer = $phaseContainer.children('.phase-cycles-container');
-            const nextCycleIndex = $cycleContainer.children('.cycle-wrapper').length;
+        addCycle(node) {
+            const phaseContainer = node.closest('.phase-container');
+            const cycleContainer = phaseContainer.children('.phase-cycles-container');
+            const nextCycleIndex = cycleContainer.children('.cycle-wrapper').length;
             const maxCycleId = getMaxValue('cycle');
             const newCycle = {
                 id: maxCycleId + 1,
@@ -301,7 +302,7 @@ define([
             };
             return templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then((html, js) => {
-                    templates.appendNodeContents($cycleContainer, html, js);
+                    templates.appendNodeContents(cycleContainer, html, js);
                     learningObjectives.refreshChecklists();
                     cycleSave.rebindInputs();
                     phaseSave.rebindInputs();
@@ -310,10 +311,10 @@ define([
                 .catch(notification.exception);
         }
 
-        addStep($node) {
-            const $cycleContainer = $node.closest('.cycle-container');
-            const $stepsContainer = $cycleContainer.children('.cycle-steps-container');
-            const nextStepIndex = $stepsContainer.children('.step-wrapper').length;
+        addStep(node) {
+            const cycleContainer = node.closest('.cycle-container');
+            const stepsContainer = cycleContainer.children('.cycle-steps-container');
+            const nextStepIndex = stepsContainer.children('.step-wrapper').length;
             const maxStepId = getMaxValue('step');
             const iconUrl = $('input[name="icon_url"]').val();
 
@@ -326,7 +327,7 @@ define([
             };
             return templates.render('mod_roadmap/configuration_step', newStep)
                 .then((html, js) => {
-                    templates.appendNodeContents($stepsContainer, html, js);
+                    templates.appendNodeContents(stepsContainer, html, js);
                     stepIconSelect.rebindButtons();
                     stepActivitySelect.rebindButtons();
                     stepSave.rebindInputs();
@@ -368,53 +369,53 @@ define([
         collapseSteps(node) {
             this.collapseChildrenClass(node, 'step');
         }
-        expandChildrenClass($parent, className) {
-            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
-                const $wrapper = $(this).closest(`.${className}-wrapper`);
-                const $container = $wrapper.children(`.${className}-container`);
-                if ($container.hasClass('hide')) {
+        expandChildrenClass(parent, className) {
+            parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
+                const wrapper = $(this).closest(`.${className}-wrapper`);
+                const container = wrapper.children(`.${className}-container`);
+                if (container.hasClass('hide')) {
                     $(this).click();
                 }
             });
         }
-        collapseChildrenClass($parent, className) {
-            $parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
-                const $wrapper = $(this).closest(`.${className}-wrapper`);
-                const $container = $wrapper.children(`.${className}-container`);
-                if ($container.hasClass('visible')) {
+        collapseChildrenClass(parent, className) {
+            parent.find(`a[data-action="${className}_collapse_control"]`).each(function() {
+                const wrapper = $(this).closest(`.${className}-wrapper`);
+                const container = wrapper.children(`.${className}-container`);
+                if (container.hasClass('visible')) {
                     $(this).click();
                 }
             });
         }
 
-        collapsePhase($node) {
-            const $wrapper = $node.closest('.phase-wrapper');
-            const $container = $wrapper.children('.phase-container');
-            expandContract.expandCollapse($container, $node);
+        collapsePhase(node) {
+            const wrapper = node.closest('.phase-wrapper');
+            const container = wrapper.children('.phase-container');
+            expandContract.expandCollapse(container, node);
         }
-        collapseCycle($node) {
-            const $wrapper = $node.closest('.cycle-wrapper');
-            const $container = $wrapper.children('.cycle-container');
-            expandContract.expandCollapse($container, $node);
+        collapseCycle(node) {
+            const wrapper = node.closest('.cycle-wrapper');
+            const container = wrapper.children('.cycle-container');
+            expandContract.expandCollapse(container, node);
         }
-        collapseStep($node) {
-            const $wrapper = $node.closest('.step-wrapper');
-            const $container = $wrapper.children('.step-container');
-            expandContract.expandCollapse($container, $node);
+        collapseStep(node) {
+            const wrapper = node.closest('.step-wrapper');
+            const container = wrapper.children('.step-container');
+            expandContract.expandCollapse(container, node);
         }
 
-        deletePhase($node) {
+        deletePhase(node) {
             return showDeleteConfirmModal('Are you sure you want to delete this Phase?', 'Confirm delete')
                 .then(confirmed => {
                     if (confirmed) {
-                        const $wrapper = $node.closest('.phase-wrapper');
-                        if (!$wrapper.length) {
+                        const wrapper = node.closest('.phase-wrapper');
+                        if (!wrapper.length) {
                             return null;
                         }
-                        const phaseId = $wrapper.data('phaseid');
-                        const $phaseDeletes = $('#phase-deletes');
-                        $phaseDeletes.val($phaseDeletes.val() + phaseId + ',');
-                        $wrapper.remove();
+                        const phaseId = wrapper.data('phaseid');
+                        const phaseDeletes = $('#phase-deletes');
+                        phaseDeletes.val(phaseDeletes.val() + phaseId + ',');
+                        wrapper.remove();
                         this.configSave();
                         this.phaseColorChange($('select[name="phasecolorpattern"]'));
                     }
@@ -422,79 +423,79 @@ define([
                 });
         }
 
-        deleteCycle($node) {
+        deleteCycle(node) {
             return showDeleteConfirmModal('Are you sure you want to delete this Cycle?', 'Confirm delete')
                 .then(confirmed => {
                     if (confirmed) {
-                        const $wrapper = $node.closest('.cycle-wrapper');
-                        if (!$wrapper.length) {
+                        const wrapper = node.closest('.cycle-wrapper');
+                        if (!wrapper.length) {
                             return null;
                         }
-                        const $phaseContainer = $node.closest('.phase-container');
-                        const cycleId = $wrapper.data('cycleid');
-                        const $cycleDeletes = $('#cycle-deletes');
-                        $cycleDeletes.val($cycleDeletes.val() + cycleId + ',');
-                        $wrapper.remove();
-                        $phaseContainer.find('.phase-title').triggerHandler('change');
+                        const phaseContainer = node.closest('.phase-container');
+                        const cycleId = wrapper.data('cycleid');
+                        const cycleDeletes = $('#cycle-deletes');
+                        cycleDeletes.val(cycleDeletes.val() + cycleId + ',');
+                        wrapper.remove();
+                        phaseContainer.find('.phase-title').triggerHandler('change');
                     }
                     return null;
                 });
         }
 
-        deleteStep($node) {
+        deleteStep(node) {
             return showDeleteConfirmModal('Are you sure you want to delete this Step?', 'Confirm delete')
                 .then(confirmed => {
                     if (confirmed) {
-                        const $wrapper = $node.closest('.step-wrapper');
-                        if (!$wrapper.length) {
+                        const wrapper = node.closest('.step-wrapper');
+                        if (!wrapper.length) {
                             return null;
                         }
-                        const $cycleContainer = $node.closest('.cycle-container');
-                        const stepId = $wrapper.data('stepid');
-                        const $stepDeletes = $('#step-deletes');
-                        $stepDeletes.val($stepDeletes.val() + stepId + ',');
-                        $wrapper.remove();
-                        $cycleContainer.find('.cycle-title').triggerHandler('change');
+                        const cycleContainer = node.closest('.cycle-container');
+                        const stepId = wrapper.data('stepid');
+                        const stepDeletes = $('#step-deletes');
+                        stepDeletes.val(stepDeletes.val() + stepId + ',');
+                        wrapper.remove();
+                        cycleContainer.find('.cycle-title').triggerHandler('change');
                     }
                     return null;
                 });
         }
 
-        upPhase($node) {
-            const $wrapper = $node.closest('.phase-wrapper');
-            moveWrapper($wrapper, 'up');
+        upPhase(node) {
+            const wrapper = node.closest('.phase-wrapper');
+            moveWrapper(wrapper, 'up');
             this.configSave();
             this.phaseColorChange($('select[name="phasecolorpattern"]'));
         }
-        downPhase($node) {
-            const $wrapper = $node.closest('.phase-wrapper');
-            moveWrapper($wrapper, 'down');
+        downPhase(node) {
+            const wrapper = node.closest('.phase-wrapper');
+            moveWrapper(wrapper, 'down');
             this.configSave();
             this.phaseColorChange($('select[name="phasecolorpattern"]'));
         }
-        upCycle($node) {
-            const $wrapper = $node.closest('.cycle-wrapper');
-            const $phaseContainer = $node.closest('.phase-container');
-            moveWrapper($wrapper, 'up');
-            $phaseContainer.find('.phase-title').triggerHandler('change');
+        upCycle(node) {
+            const wrapper = node.closest('.cycle-wrapper');
+            const phaseContainer = node.closest('.phase-container');
+            moveWrapper(wrapper, 'up');
+            phaseContainer.find('.phase-title').triggerHandler('change');
         }
-        downCycle($node) {
-            const $wrapper = $node.closest('.cycle-wrapper');
-            const $phaseContainer = $node.closest('.phase-container');
-            moveWrapper($wrapper, 'down');
-            $phaseContainer.find('.phase-title').triggerHandler('change');
+        downCycle(node) {
+            const wrapper = node.closest('.cycle-wrapper');
+            const phaseContainer = node.closest('.phase-container');
+            moveWrapper(wrapper, 'down');
+            phaseContainer.find('.phase-title').triggerHandler('change');
         }
-        upStep($node) {
-            const $wrapper = $node.closest('.step-wrapper');
-            const $cycleContainer = $node.closest('.cycle-container');
-            moveWrapper($wrapper, 'up');
-            $cycleContainer.find('.cycle-title').triggerHandler('change');
+        upStep(node) {
+            const wrapper = node.closest('.step-wrapper');
+            const cycleContainer = node.closest('.cycle-container');
+            moveWrapper(wrapper, 'up');
+            cycleContainer.find('.cycle-title').triggerHandler('change');
         }
-        downStep($node) {
-            const $wrapper = $node.closest('.step-wrapper');
-            const $cycleContainer = $node.closest('.cycle-container');
-            moveWrapper($wrapper, 'down');
-            $cycleContainer.find('.cycle-title').triggerHandler('change');
+        downStep(node) {
+            const wrapper = node.closest('.step-wrapper');
+            const cycleContainer = node.closest('.cycle-container');
+            moveWrapper(wrapper, 'down');
+            cycleContainer.find('.cycle-title').triggerHandler('change');
         }
 
         expandEverything() {

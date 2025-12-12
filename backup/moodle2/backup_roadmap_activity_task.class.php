@@ -30,7 +30,6 @@ require_once($CFG->dirroot . '/mod/roadmap/backup/moodle2/backup_roadmap_stepsli
  * Provides the steps to perform one complete backup of the Label instance
  */
 class backup_roadmap_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity
      */

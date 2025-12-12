@@ -64,7 +64,6 @@ if ($configuration->is_cancelled()) {
 // Get form data.
 $data = $configuration->get_submitted_data();
 if ($data) {
-
     // Update phase, cycle, step tables.
     roadmap_configuration_save($data->roadmapconfiguration, $roadmap->id);
 

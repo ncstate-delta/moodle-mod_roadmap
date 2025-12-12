@@ -26,13 +26,11 @@
  * Define all the backup steps that will be used by the backup_roadmap_activity_task
  */
 class backup_roadmap_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Define the structure for the roadmap activity
      * @return void
      */
     protected function define_structure() {
-
         // Define each element separated.
         $roadmap = new backup_nested_element('roadmap', ['id'], [
             'name', 'intro', 'introformat', 'timemodified', 'configuration', 'learningobjectives', 'colors',

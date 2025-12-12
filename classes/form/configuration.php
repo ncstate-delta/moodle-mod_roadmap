@@ -38,8 +38,6 @@ require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class configuration extends moodleform {
-
-
     /**
      * Form definition
      *
@@ -122,16 +120,23 @@ class configuration extends moodleform {
         $mform->setDefault('phasecolorpattern', $roadmap->colors);
         $mform->setType('phasecolorpattern', PARAM_INT);
 
-        $mform->addElement('static', 'iconpreviewtool',
+        $mform->addElement(
+            'static',
+            'iconpreviewtool',
             get_string('configureanddownloadicons', 'roadmap'),
-            get_string('stepiconpreviewtoollink', 'roadmap'));
+            get_string('stepiconpreviewtoollink', 'roadmap')
+        );
 
         // Add js.
-        $PAGE->requires->js_call_amd('mod_roadmap/configuration', 'init',
-            ['#learningobjectives_panel',
+        $PAGE->requires->js_call_amd(
+            'mod_roadmap/configuration',
+            'init',
+            [
+                '#learningobjectives_panel',
                 'input[name="learningobjectivesconfiguration"]',
                 '#roadmapconfiguration',
-                'input[name="roadmapconfiguration"]']
+                'input[name="roadmapconfiguration"]',
+            ]
         );
 
         $this->add_action_buttons(true, 'Save Configuration');

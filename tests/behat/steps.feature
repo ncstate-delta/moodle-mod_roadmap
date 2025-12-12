@@ -183,9 +183,9 @@ Feature: Step progress tracking based on activity completion.
     And I press "Save Configuration"
 
     When I am on "C1" course homepage
-    Then step with rollover text "Fourth Step" should appear before step with rollover text "Third Step"
-    And step with rollover text "Third Step" should appear before step with rollover text "Second Step"
-    And step with rollover text "Second Step" should appear before step with rollover text "First Step"
+    Then step rollover text "Fourth Step" should appear before step rollover text "Third Step"
+    And step rollover text "Third Step" should appear before step rollover text "Second Step"
+    And step rollover text "Second Step" should appear before step rollover text "First Step"
 
     And I click on "Configure Roadmap" "link"
     And I expand all fieldsets
@@ -200,6 +200,6 @@ Feature: Step progress tracking based on activity completion.
     And I press "Save Configuration"
 
     When I am on "C1" course homepage
-    And step with rollover text "First Step" should appear before step with rollover text "Second Step"
-    And step with rollover text "Second Step" should appear before step with rollover text "Third Step"
-    And step with rollover text "Third Step" should appear before step with rollover text "Fourth Step"
+    And step rollover text "First Step" should appear before step rollover text "Second Step"
+    And step rollover text "Second Step" should appear before step rollover text "Third Step"
+    And step rollover text "Third Step" should appear before step rollover text "Fourth Step"

@@ -48,32 +48,32 @@ define(['jquery'], function($) {
          */
         saveCycle(event) {
             // Support both event and direct call with element
-            const $cycleContainer = $(event.target).closest('.cycle-container');
+            const cycleContainer = $(event.target).closest('.cycle-container');
             const cycleLos = [];
-            $cycleContainer.find('.chk-learning-objectives input[type="checkbox"]').each(function() {
+            cycleContainer.find('.chk-learning-objectives input[type="checkbox"]').each(function() {
                 if ($(this).prop("checked")) {
                     cycleLos.push($(this).val());
                 }
             });
 
             const cycleSteps = [];
-            $cycleContainer.find('.cycle-steps-container .step-wrapper .step-configuration').each(function() {
+            cycleContainer.find('.cycle-steps-container .step-wrapper .step-configuration').each(function() {
                 let stepData = $(this).val() || '{}';
                 cycleSteps.push(JSON.parse(stepData));
             });
 
-            const title = $cycleContainer.find('.fitem input.cycle-title').val();
+            const title = cycleContainer.find('.fitem input.cycle-title').val();
             const cycleData = {
-                id: $cycleContainer.closest('.cycle-wrapper').data('cycleid'),
+                id: cycleContainer.closest('.cycle-wrapper').data('cycleid'),
                 title: title,
-                subtitle: $cycleContainer.find('.fitem input.cycle-subtitle').val(),
-                pagelink: $cycleContainer.find('.fitem input.cycle-pagelink').val(),
+                subtitle: cycleContainer.find('.fitem input.cycle-subtitle').val(),
+                pagelink: cycleContainer.find('.fitem input.cycle-pagelink').val(),
                 learningobjectives: cycleLos.join(","),
                 steps: cycleSteps,
             };
 
-            $cycleContainer.closest('.cycle-wrapper').find('.cycle-header-title').html(title);
-            $cycleContainer.children('input.cycle-configuration')
+            cycleContainer.closest('.cycle-wrapper').find('.cycle-header-title').html(title);
+            cycleContainer.children('input.cycle-configuration')
                 .val(JSON.stringify(cycleData))
                 .triggerHandler("change");
         }

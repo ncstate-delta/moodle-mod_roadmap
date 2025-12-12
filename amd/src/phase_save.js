@@ -44,27 +44,27 @@ define(['jquery'], function($) {
          */
         savePhase(event) {
             // Support both event and direct call with element
-            const $phaseContainer = $(event.target).closest('.phase-container');
+            const phaseContainer = $(event.target).closest('.phase-container');
             const phaseCycles = [];
             let index = 0;
-            $phaseContainer.find('.phase-cycles-container .cycle-wrapper .cycle-configuration').each(function() {
+            phaseContainer.find('.phase-cycles-container .cycle-wrapper .cycle-configuration').each(function() {
                 let cycleData = $(this).val() || '{}';
                 let cycleDataObj = JSON.parse(cycleData);
                 cycleDataObj.index = index++;
                 phaseCycles.push(cycleDataObj);
             });
-            const title = $phaseContainer.find('.fitem input.phase-title').val();
+            const title = phaseContainer.find('.fitem input.phase-title').val();
             const phaseData = {
-                id: $phaseContainer.closest('.phase-wrapper').data('phaseid'),
+                id: phaseContainer.closest('.phase-wrapper').data('phaseid'),
                 title: title,
                 cycles: phaseCycles,
             };
 
-            $phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
-            $phaseContainer.children('input.phase-configuration')
+            phaseContainer.closest('.phase-wrapper').find('.phase-header-title').html(title);
+            phaseContainer.children('input.phase-configuration')
                 .val(JSON.stringify(phaseData))
                 .triggerHandler("change");
-        }
+         }
     }
 
     // AMD export

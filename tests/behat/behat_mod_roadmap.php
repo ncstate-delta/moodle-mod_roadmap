@@ -184,17 +184,17 @@ class behat_mod_roadmap extends behat_question_base {
     }
 
     /**
-     * step with rollover text should appear before step with rollover text
+     * step rollover text should appear before step rollover text
      *
      *  Verifies that one step appears before another in the roadmap
      *
-     * @When /^step with rollover text "(?P<rollovertext1>(?:[^"]|\\")*)" should appear before step with rollover text "(?P<rollovertext2>(?:[^"]|\\")*)"$/
-     * @param String $rollovertext1 rollover text of the first step in order
-     * @param String $rollovertext2 rollover text of the second step in order
+     * @When /^step rollover text "(?P<r1>(?:[^"]|\\")*)" should appear before step rollover text "(?P<r2>(?:[^"]|\\")*)"$/
+     * @param String $r1 rollover text of the first step in order
+     * @param String $r2 rollover text of the second step in order
      */
-    public function step_with_rollover_text_should_appear_another($rollovertext1, $rollovertext2) {
-        $step1xpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($rollovertext1) . "')]";
-        $step2xpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($rollovertext2) . "')]";
+    public function step_with_rollover_text_should_appear_another($r1, $r2) {
+        $step1xpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($r1) . "')]";
+        $step2xpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($r2) . "')]";
 
         $this->execute("behat_general::should_exist", [$step1xpath, "xpath_element"]);
         $this->execute("behat_general::should_exist", [$step2xpath, "xpath_element"]);
@@ -202,15 +202,18 @@ class behat_mod_roadmap extends behat_question_base {
         // Step1 xpath should appear before step2 xpath in the page source.
         $pagesource = $this->getSession()->getDriver()->getWebDriver()->getPageSource();
 
-        $pos1 = strpos($pagesource, $rollovertext1);
-        $pos2 = strpos($pagesource, $rollovertext2);
+        $pos1 = strpos($pagesource, $r1);
+        $pos2 = strpos($pagesource, $r2);
 
         if ($pos1 === false || $pos2 === false) {
             throw new ExpectationException("One or both steps not found in page source.", $this->getSession());
         }
 
         if ($pos1 > $pos2) {
-            throw new ExpectationException("Step with rollover text \"{$rollovertext1}\" does not appear before \"{$rollovertext2}\".", $this->getSession());
+            throw new ExpectationException(
+                "Step with rollover text \"{$r1}\" does not appear before \"{$r2}\".",
+                $this->getSession()
+            );
         }
 
          return true;
@@ -448,24 +451,24 @@ class behat_mod_roadmap extends behat_question_base {
      */
     public function i_add_steps_to_last_cycle_with(TableNode $data) {
         foreach ($data as $row) {
-            // Find the last phase wrapper
+            // Find the last phase wrapper.
             $lastphasexpath = "//div[contains(@class, 'phase-wrapper')][last()]";
-            // Find the last cycle within that phase
+            // Find the last cycle within that phase.
             $lastcyclexpath = $lastphasexpath . "/descendant::div[contains(@class, 'cycle-wrapper')][last()]";
 
-            // Wait for the cycle to exist
+            // Wait for the cycle to exist.
             $this->execute('behat_general::wait_until_exists', [$lastcyclexpath, "xpath_element"]);
 
-            // Click add step button
+            // Click add step button.
             $addstepxpath = $lastcyclexpath . "/descendant::a[@data-action='add_cycle_step']";
             $this->wait_and_click($addstepxpath);
 
-            // Find the last step added and expand it
+            // Find the last step added and expand it.
             $laststepxpath = $lastcyclexpath . "/descendant::div[contains(@class, 'step-wrapper')][last()]";
             $expandstepxpath = $laststepxpath . "/descendant::a[@data-action='step_collapse_control']";
             $this->wait_and_click($expandstepxpath);
 
-            // Fill in step data
+            // Fill in step data.
             if (isset($row['rollovertext'])) {
                 $steprollovertextxpath = $laststepxpath . "/descendant::input[contains(@class, 'step-rollovertext')]";
                 $this->wait_and_set_field($steprollovertextxpath, $row['rollovertext']);
@@ -474,10 +477,12 @@ class behat_mod_roadmap extends behat_question_base {
                     $this->i_configure_step_to_require_completion_of($row['rollovertext'], $row['completionmodule']);
 
                     if (isset($row['pagelink'])) {
-                        $singlelinkcheckboxxpath = $laststepxpath . "/descendant::input[contains(@class, 'chk-single-activity-link')]";
+                        $singlelinkcheckboxxpath = $laststepxpath .
+                            "/descendant::input[contains(@class, 'chk-single-activity-link')]";
                         $this->wait_and_click($singlelinkcheckboxxpath);
 
-                        $steppagelinkxpath = $laststepxpath . "/descendant::input[contains(@class, 'step-single-activity-link')]";
+                        $steppagelinkxpath = $laststepxpath .
+                            "/descendant::input[contains(@class, 'step-single-activity-link')]";
                         $this->wait_and_set_field($steppagelinkxpath, $row['pagelink']);
                     }
                 }
@@ -499,12 +504,12 @@ class behat_mod_roadmap extends behat_question_base {
     /**
      * Check that step icon is displaying a certain percentage
      *
-     * @Then /^I should see step icon for "(?P<rollovertext>(?:[^"]|\\")*)" showing "(?P<percentage>(?:[^"]|\\")*)" percent completed/
-     * @param string $rollovertext the rollover text of the step
+     * @Then /^I should see step icon for "(?P<r1>(?:[^"]|\\")*)" showing "(?P<percentage>(?:[^"]|\\")*)" percent completed/
+     * @param string $r1 the rollover text of the step
      * @param string $percentage the expected completion percentage
      */
-    public function i_should_see_step_icon_showing_completion($rollovertext, $percentage) {
-        $stepxpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($rollovertext) . "')]";
+    public function i_should_see_step_icon_showing_completion($r1, $percentage) {
+        $stepxpath = "//div[contains(@class, 'roadmap-step') and contains(@title, '" . $this->escape($r1) . "')]";
         $this->execute("behat_general::should_exist", [$stepxpath, "xpath_element"]);
 
         // Check for completion percentage text.
@@ -538,7 +543,8 @@ class behat_mod_roadmap extends behat_question_base {
         $activitylist = explode(',', $activities);
         foreach ($activitylist as $activity) {
             $activity = trim($activity);
-            $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" . $this->escape($activity) . "']";
+            $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" .
+                $this->escape($activity) . "']";
             $this->wait_and_click($activitycheckboxxpath);
         }
 
@@ -605,7 +611,8 @@ class behat_mod_roadmap extends behat_question_base {
         // Wait for the modal content to load.
         $this->execute('behat_general::wait_until_exists', ["div#activity-select-window", "css_element"]);
 
-        $activityxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" . $this->escape($activityname) . "']";
+        $activityxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" .
+            $this->escape($activityname) . "']";
         $this->execute("behat_general::should_exist", [$activityxpath, "xpath_element"]);
     }
 
@@ -619,7 +626,8 @@ class behat_mod_roadmap extends behat_question_base {
         // Wait for the modal content to be fully loaded.
         $this->execute('behat_general::wait_until_exists', ["div#activity-select-window", "css_element"]);
 
-        $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" . $this->escape($activityname) . "']";
+        $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" .
+            $this->escape($activityname) . "']";
         $this->wait_and_click($activitycheckboxxpath);
     }
 
@@ -632,7 +640,8 @@ class behat_mod_roadmap extends behat_question_base {
         // Wait for the modal content to be fully loaded.
         $this->execute('behat_general::wait_until_exists', ["div#activity-select-window", "css_element"]);
 
-        $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" . $this->escape($activityname) . "']";
+        $activitycheckboxxpath = "//div[@id='activity-select-window']//input[@type='checkbox' and @data-name='" .
+            $this->escape($activityname) . "']";
         $this->execute('behat_general::wait_until_exists', [$activitycheckboxxpath, "xpath_element"]);
         // The checked xpath would be: $checkedxpath = $activitycheckboxxpath . "[@checked='checked']".
         $this->execute("behat_general::should_exist", [$activitycheckboxxpath, "xpath_element"]);
@@ -683,7 +692,10 @@ class behat_mod_roadmap extends behat_question_base {
         $activitylist = explode(',', $activities);
         foreach ($activitylist as $activity) {
             $activity = trim($activity);
-            $activitylistxpath = $stepxpath . "/descendant::ul[contains(@class, 'step-completion-list')]/descendant::li[contains(., '" . $this->escape($activity) . "')]";
+            $activitylistxpath = $stepxpath .
+                "/descendant::ul[contains(@class, 'step-completion-list')]/descendant::li[contains(., '" .
+                $this->escape($activity) .
+                "')]";
             $this->execute('behat_general::wait_until_exists', [$activitylistxpath, "xpath_element"]);
             $this->execute("behat_general::should_exist", [$activitylistxpath, "xpath_element"]);
         }

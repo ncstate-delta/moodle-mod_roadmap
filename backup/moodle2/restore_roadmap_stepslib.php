@@ -30,13 +30,11 @@
  * Structure step to restore one course roadmap activity
  */
 class restore_roadmap_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * Define the structure for the course roadmap activity
      * @return array paths of activity structure.
      */
     protected function define_structure() {
-
         $paths = [];
         $paths[] = new restore_path_element('roadmap', '/activity/roadmap');
         $paths[] = new restore_path_element('roadmap_phase', '/activity/roadmap/phases/phase');
@@ -146,13 +144,10 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
             $data = json_decode($roadmap->configuration);
 
             foreach ($data->phases as $phase) {
-
                 if (isset($phase->cycles)) {
                     foreach ($phase->cycles as $cycle) {
-
                         if (isset($cycle->steps)) {
                             foreach ($cycle->steps as $step) {
-
                                 $newcmids = [];
                                 if (!isset($step->completionmodules)) {
                                     $step->completionmodules = '';
@@ -160,13 +155,11 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
                                 $cmids = explode(',', $step->completionmodules);
                                 foreach ($cmids as $cmid) {
-
                                     $mapping = $this->get_mappingid('course_module', (int)$cmid);
                                     if ($mapping) {
                                         $newcmids[] = $mapping;
                                     }
                                 }
-
                                 $step->completionmodules = implode(',', $newcmids);
                             }
                         }
@@ -175,9 +168,7 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
             }
             $roadmap->configuration = json_encode($data);
             $DB->update_record('roadmap', $roadmap);
-
         } else {
-
             // Restore from 4.0 and later.
             $phases = $DB->get_records('roadmap_phase', ['roadmapid' => $roadmap->id]);
 
@@ -188,7 +179,6 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
                     $steps = $DB->get_records('roadmap_step', ['cycleid' => $cycle->id]);
 
                     foreach ($steps as $step) {
-
                         $newcmids = [];
                         if (!isset($step->completionmodules)) {
                             $step->completionmodules = '';
@@ -196,7 +186,6 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
 
                         $cmids = explode(',', $step->completionmodules);
                         foreach ($cmids as $cmid) {
-
                             if (!$mapping = $this->get_mappingid('course_module', (int)$cmid)) {
                                 continue;
                             }
@@ -218,8 +207,6 @@ class restore_roadmap_activity_structure_step extends restore_activity_structure
                     }
                 }
             }
-
         }
     }
-
 }
