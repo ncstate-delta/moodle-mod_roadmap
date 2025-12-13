@@ -49,5 +49,5 @@ $string['roadmapconfiguration'] = 'Course Roadmap Configuration';
 $string['saveselection'] = 'Save Selection';
 $string['selecticon'] = 'Select Step Icon';
 $string['step'] = 'step';
-$string['stepiconpreviewtoollink'] = '<a href="https://pages.github.ncsu.edu/delta-NMD/moodle-roadmap-icons-preview/" target="_blank">Step Icon Preview Tool</a>';
+$string['stepiconpreviewtoollink'] = '<a href="https://ncstate-delta.github.io/moodle-mod_roadmap-icons_preview/" target="_blank">Step Icon Preview Tool</a>';
 $string['steps'] = 'Steps';
