@@ -23,8 +23,6 @@
  */
 namespace mod_roadmap\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_roadmap module does not store any data.
  *
