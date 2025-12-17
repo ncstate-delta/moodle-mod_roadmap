@@ -25,22 +25,17 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/lib/formslib.php');
 
-$coursemoduleid = required_param('id', PARAM_INT);
-$cm = get_coursemodule_from_id('', $coursemoduleid, 0, false, MUST_EXIST);
-$context = context_module::instance($cm->id);
+$id = required_param('id', PARAM_INT);
 
-$params = ['id' => $cm->course];
-$course = $DB->get_record('course', $params, '*', MUST_EXIST);
+$url = new moodle_url('/mod/roadmap/configuration.php', ['id' => $id]);
+$PAGE->set_url($url);
 
-require_login($course);
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'roadmap');
+require_login($course, true, $cm);
 
-$urlparams = ['id' => $coursemoduleid];
-$url = new moodle_url('/mod/roadmap/configuration.php', $urlparams);
 $returnurl = new moodle_url('/course/view.php', ['id' => $course->id]);
-
 $title = get_string('roadmapconfiguration', 'mod_roadmap');
 
-$PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($cm->name);
 $PAGE->set_pagelayout('incourse');
