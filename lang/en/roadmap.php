@@ -42,6 +42,7 @@ $string['phasecolorpattern'] = 'Phase Color Pattern';
 $string['phases'] = 'Phases';
 $string['pluginadministration'] = 'Course Roadmap Administration';
 $string['pluginname'] = 'Course Roadmap';
+$string['privacy:metadata'] = 'The course roadmap plugin does not store any personal data.';
 $string['roadmap:addinstance'] = 'Add a new course roadmap';
 $string['roadmap:configure'] = 'Configure course roadmap';
 $string['roadmap:view'] = 'View course roadmap';
