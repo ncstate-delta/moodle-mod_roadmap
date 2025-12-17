@@ -30,7 +30,7 @@ $id = required_param('id', PARAM_INT);
 $url = new moodle_url('/mod/roadmap/configuration.php', ['id' => $id]);
 $PAGE->set_url($url);
 
-list($course, $cm) = get_course_and_cm_from_cmid($id, 'roadmap');
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'roadmap');
 require_login($course, true, $cm);
 
 $returnurl = new moodle_url('/course/view.php', ['id' => $course->id]);
