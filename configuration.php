@@ -62,20 +62,16 @@ if ($data) {
     // Update phase, cycle, step tables.
     roadmap_configuration_save($data->roadmapconfiguration, $roadmap->id);
 
-    $sql = "UPDATE {roadmap}
-                   SET configuration = ?,
-                       learningobjectives = ?,
-                       colors = ?,
-                       clodisplayposition = ?,
-                       cloalignment = ?,
-                       clodecoration = ?,
-                       cloprefix = ?
-                 WHERE id = ?";
-
     // Any saves from this version on will clear the configuration field.  Soon to be deprecated.
-    $DB->execute($sql, ['', $data->learningobjectivesconfiguration,
-        $data->phasecolorpattern, $data->displayposition, $data->cyclealignment, $data->cycledecoration,
-        $data->cloprefix, $roadmap->id]);
+    $roadmap->configuration = '';
+    $roadmap->learningobjectives = $data->learningobjectivesconfiguration;
+    $roadmap->colors = $data->phasecolorpattern;
+    $roadmap->clodisplayposition = $data->displayposition;
+    $roadmap->cloalignment = $data->cyclealignment;
+    $roadmap->clodecoration = $data->cycledecoration;
+    $roadmap->cloprefix = $data->cloprefix;
+
+    $DB->update_record('roadmap', $roadmap);
 
     redirect($returnurl, 'Configuration Saved Successfully.', null, \core\output\notification::NOTIFY_SUCCESS);
 }
