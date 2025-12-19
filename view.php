@@ -26,21 +26,14 @@ require_once("../../config.php");
 require_once("lib.php");
 
 $id = required_param('id', PARAM_INT); // Course Module ID.
-$url = new moodle_url('/mod/roadmap/view.php', ['id' => $id]);
 
+$url = new moodle_url('/mod/roadmap/view.php', ['id' => $id]);
 $PAGE->set_url($url);
 
-if (!$cm = get_coursemodule_from_id('roadmap', $id)) {
-    moodle_exception('invalidcoursemodule');
-}
-
-if (! $course = $DB->get_record("course", ["id" => $cm->course])) {
-    moodle_exception('coursemisconf');
-}
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'roadmap');
+require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
-
-require_course_login($course, false, $cm);
 
 // If allowed, forward to configuration page
 // Show configuration link if editing is on.
