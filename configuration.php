@@ -40,8 +40,6 @@ $PAGE->set_title($title);
 $PAGE->set_heading($cm->name);
 $PAGE->set_pagelayout('incourse');
 
-$output = $PAGE->get_renderer('mod_roadmap');
-
 $roadmap = $DB->get_record('roadmap', ['id' => $cm->instance], '*', MUST_EXIST);
 
 $configuration = new mod_roadmap\form\configuration($url->out(false), [
@@ -76,7 +74,7 @@ if ($data) {
     redirect($returnurl, 'Configuration Saved Successfully.', null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
-echo $output->header();
-echo $output->heading($title, 3);
+echo $OUTPUT->header();
+echo $OUTPUT->heading($title, 3);
 $configuration->display();
-echo $output->footer();
+echo $OUTPUT->footer();
