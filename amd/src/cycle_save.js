@@ -17,6 +17,7 @@
  * Handle the saving of cycle data and rebinding of inputs.
  *
  * @module     mod_roadmap/cycle_save
+ * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery'], function($) {

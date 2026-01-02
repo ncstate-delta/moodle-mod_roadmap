@@ -17,6 +17,7 @@
  * Handle opening a modal for activity selection.
  *
  * @module     mod_roadmap/stepactivityselect
+ * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define([
