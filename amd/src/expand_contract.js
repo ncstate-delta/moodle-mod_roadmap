@@ -17,6 +17,7 @@
  * Handle the expanding and contracting of roadmap nodes.
  *
  * @module     mod_roadmap/expand_contract
+ * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/url'], function($, url) {

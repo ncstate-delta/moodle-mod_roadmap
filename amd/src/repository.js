@@ -18,6 +18,7 @@
  *
  * @module     mod_roadmap/configurationdata
  * @copyright  2024 Steve Bader <smbader@ncsu.edu>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import {call as fetchMany} from 'core/ajax';
 import moodleConfig from 'core/config';
