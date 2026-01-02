@@ -274,7 +274,7 @@ function roadmap_cm_info_view(cm_info $cm) {
                     // Check for linksingleactivity and create link.
                     if ($step->linksingleactivity == 1 && count($cmids) == 1) {
                         if ($cmcheck = $DB->get_record('course_modules', ['id' => (int)$cmids[0]])) {
-                            $step->stepurl = get_activity_url((int)$cmids[0], $COURSE->id);
+                            $step->stepurl = roadmap_get_activity_url((int)$cmids[0], $COURSE->id);
                         }
                     }
                 } else {
@@ -343,7 +343,7 @@ function roadmap_cm_info_view(cm_info $cm) {
  * @param int $courseid Id of course where activity is located.
  * @return string URL to activity, blank if not allowed.
  */
-function get_activity_url($cmid, $courseid) {
+function roadmap_get_activity_url($cmid, $courseid) {
     $modinfo = get_fast_modinfo($courseid);
     if (!empty($modinfo->cms)) {
         $cm = $modinfo->get_cm($cmid);

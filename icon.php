@@ -43,7 +43,7 @@ $flags = optional_param('flags', '', PARAM_ALPHA);
 
 $iconfilename = $CFG->dirroot . '/mod/roadmap/pix/icons/' . $name . '.svg';
 if (file_exists($iconfilename)) {
-    $color = verify_hex($color);
+    $color = roadmap_verify_hex($color);
 
     if ($percent < 100) {
         $bgcolor = '#aaa';
@@ -123,7 +123,7 @@ if (file_exists($iconfilename)) {
  * @param string $color The expected hex color.
  * @return string a cleaned up ready-to-use hex color string.
  */
-function verify_hex($color) {
+function roadmap_verify_hex($color) {
     if (substr($color, 0, 1) !== '#') {
         $color = '#' . $color;
     }
