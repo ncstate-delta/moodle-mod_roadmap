@@ -23,9 +23,10 @@
  */
 
 $string['aboveroadmap'] = 'Above Roadmap (Default)';
-$string['activityselectionhelp'] = '<p>Select one or more activities below that must be marked complete in order for 
+$string['activityselectionhelp'] = '<p>Select one or more activities below that must be marked complete in order for
 this step to be completed. Clicking on an item will toggle whether or not it is selected.</p>';
 $string['addnew'] = 'Add New';
+$string['addnewclo'] = 'Add a course learning objective';
 $string['appearance'] = 'Appearance';
 $string['belowroadmap'] = 'Below Roadmap';
 $string['bracket'] = 'Bracket';
@@ -37,8 +38,8 @@ $string['configurationsaved'] = 'Configuration Saved Successfully';
 $string['configureanddownloadicons'] = 'Configure and Download Icons';
 $string['configureroadmap'] = 'Configure Roadmap';
 $string['confirmdelete'] = 'Confirm delete';
-$string['confirmdeletephase'] = 'Are you sure you want to delete this Phase?';
 $string['confirmdeletecycle'] = 'Are you sure you want to delete this Cycle?';
+$string['confirmdeletephase'] = 'Are you sure you want to delete this Phase?';
 $string['confirmdeletestep'] = 'Are you sure you want to delete this Step?';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
 $string['customexpectedcompletion'] = 'Custom Expected Completion Date';
@@ -54,10 +55,10 @@ $string['expectedcompleteon'] = 'Expected completed on';
 $string['expectedcompletionhelp'] = '<strong>Expected completion of all selected activities</strong>
 <p>The selected date below will be the expected completion of all activities selected for this step.
     If completed in time, the step will be awarded with a star.</p>';
+$string['learningobjectives'] = 'Course Learning Objectives';
 $string['left'] = 'Left (Default)';
 $string['line'] = 'Line';
 $string['linktopage'] = 'Link to Page';
-$string['learningobjectives'] = 'Course Learning Objectives';
 $string['modulename'] = 'Course Roadmap';
 $string['modulenameplural'] = 'Course Roadmaps';
 $string['noexpectedcompletion'] = 'No Expected Completion Date';
