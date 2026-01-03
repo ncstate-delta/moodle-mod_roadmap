@@ -178,7 +178,7 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
 
         // Save the phase specific data.
         $phasedata = [
-            'title' => (empty($phase->title) ? 'Phase ' . ($phasesort + 1) : $phase->title),
+            'title' => (empty($phase->title) ? get_string('phase', 'roadmap') . ' ' . ($phasesort + 1) : $phase->title),
             'sort' => $phasesort,
             'roadmapid' => $roadmapid,
         ];
@@ -207,7 +207,7 @@ function roadmap_configuration_save($configjson, $roadmapid, $conversion = false
 
             // Save the phase specific data.
             $cycledata = [
-                'title' => (empty($cycle->title) ? 'Cycle ' . ($cyclesort + 1) : $cycle->title),
+                'title' => (empty($cycle->title) ? get_string('cycle', 'roadmap') . ' ' . ($cyclesort + 1) : $cycle->title),
                 'subtitle' => $cycle->subtitle,
                 'pagelink' => $cycle->pagelink,
                 'learningobjectives' => $cycle->learningobjectives,

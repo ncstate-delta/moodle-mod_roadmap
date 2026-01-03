@@ -51,8 +51,7 @@
         ]
     }
 }}
-<p>Select one or more activities below that must be marked complete in order for this step to be completed.
-Clicking on an item will toggle whether or not it is selected.</p>
+{{#str}} activityselectionhelp, mod_roadmap {{/str}}
 <div id="activity-select-window">
     {{# sections }}
         <div class="section-header">
@@ -70,12 +69,10 @@ Clicking on an item will toggle whether or not it is selected.</p>
         {{/coursemodules}}
     {{/sections}}
 </div>
-<strong>Expected completion of all selected activities</strong>
-<p>The selected date below will be the expected completion of all activities selected for this step.
-    If completed in time, the step will be awarded with a star.</p>
+{{#str}} expectedcompletionhelp, mod_roadmap {{/str}}
 <select id="select-expected-activity-completion" class="form-control custom-select">
-    <option value="0">No Expected Completion Date</option>
-    <option value="-1">Custom Expected Completion Date</option>
+    <option value="0">{{#str}} noexpectedcompletion, mod_roadmap {{/str}}</option>
+    <option value="-1">{{#str}} customexpectedcompletion, mod_roadmap {{/str}}</option>
 </select>
 <div id="customExpectedDateContainer" class="c1 d-flex">
     <div class="fdate_time_selector d-flex flex-wrap align-items-center">

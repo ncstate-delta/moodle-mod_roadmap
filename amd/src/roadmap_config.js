@@ -24,6 +24,7 @@ define([
     'jquery',
     'core/notification',
     'core/templates',
+    'core/str',
     'mod_roadmap/expand_contract',
     'mod_roadmap/learningobjectivesconfig',
     'mod_roadmap/step_icon_select',
@@ -38,6 +39,7 @@ define([
     $,
     notification,
     templates,
+    getString,
     expandContract,
     learningObjectives,
     stepIconSelect,
@@ -50,7 +52,7 @@ define([
     ModalEvents
 ) => {
 
-    const showDeleteConfirmModal = (message, title = 'Confirm delete') => {
+    const showDeleteConfirmModal = (message, title = getString('confirmdelete', 'mod_roadmap')) => {
         return ModalDeleteCancel.create({
             title,
             body: message
@@ -271,15 +273,14 @@ define([
                 id: maxPhaseId + 1,
                 index: nextIndex,
                 number: nextIndex + 1,
-                title: `Phase ${nextIndex + 1}`,
-                subtitle: `Subtitle ${nextIndex + 1}`
+                title: `${getString('phase', 'mod_roadmap')} ${nextIndex + 1}`,
+                subtitle: `${getString('subtitle', 'mod_roadmap')} ${nextIndex + 1}`
             };
             config.phases.push(newPhase);
             roadmapConfigInput.val(JSON.stringify(config));
             return templates.render('mod_roadmap/configuration_phase', newPhase)
                 .then((html, js) => {
                     templates.appendNodeContents('#phase-container', html, js);
-
                     phaseSave.rebindInputs();
                     this.bindConfigSave();
                     this.phaseColorChange($('select[name="phasecolorpattern"]'));
@@ -297,8 +298,8 @@ define([
                 id: maxCycleId + 1,
                 index: nextCycleIndex,
                 number: nextCycleIndex + 1,
-                title: `Cycle ${nextCycleIndex + 1}`,
-                subtitle: `Subtitle ${nextCycleIndex + 1}`
+                title: `${getString('cycle', 'mod_roadmap')} ${nextCycleIndex + 1}`,
+                subtitle: `${getString('subtitle', 'mod_roadmap')} ${nextCycleIndex + 1}`
             };
             return templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then((html, js) => {
@@ -405,60 +406,66 @@ define([
         }
 
         deletePhase(node) {
-            return showDeleteConfirmModal('Are you sure you want to delete this Phase?', 'Confirm delete')
-                .then(confirmed => {
-                    if (confirmed) {
-                        const wrapper = node.closest('.phase-wrapper');
-                        if (!wrapper.length) {
-                            return null;
-                        }
-                        const phaseId = wrapper.data('phaseid');
-                        const phaseDeletes = $('#phase-deletes');
-                        phaseDeletes.val(phaseDeletes.val() + phaseId + ',');
-                        wrapper.remove();
-                        this.configSave();
-                        this.phaseColorChange($('select[name="phasecolorpattern"]'));
+            return showDeleteConfirmModal(
+                getString('confirmdeletephase', 'mod_roadmap'),
+                getString('confirmdelete', 'mod_roadmap')
+            ).then(confirmed => {
+                if (confirmed) {
+                    const wrapper = node.closest('.phase-wrapper');
+                    if (!wrapper.length) {
+                        return null;
                     }
-                    return null;
-                });
+                    const phaseId = wrapper.data('phaseid');
+                    const phaseDeletes = $('#phase-deletes');
+                    phaseDeletes.val(phaseDeletes.val() + phaseId + ',');
+                    wrapper.remove();
+                    this.configSave();
+                    this.phaseColorChange($('select[name="phasecolorpattern"]'));
+                }
+                return null;
+            });
         }
 
         deleteCycle(node) {
-            return showDeleteConfirmModal('Are you sure you want to delete this Cycle?', 'Confirm delete')
-                .then(confirmed => {
-                    if (confirmed) {
-                        const wrapper = node.closest('.cycle-wrapper');
-                        if (!wrapper.length) {
-                            return null;
-                        }
-                        const phaseContainer = node.closest('.phase-container');
-                        const cycleId = wrapper.data('cycleid');
-                        const cycleDeletes = $('#cycle-deletes');
-                        cycleDeletes.val(cycleDeletes.val() + cycleId + ',');
-                        wrapper.remove();
-                        phaseContainer.find('.phase-title').triggerHandler('change');
+            return showDeleteConfirmModal(
+                getString('confirmdeletecycle', 'mod_roadmap'),
+                getString('confirmdelete', 'mod_roadmap')
+            ).then(confirmed => {
+                if (confirmed) {
+                    const wrapper = node.closest('.cycle-wrapper');
+                    if (!wrapper.length) {
+                        return null;
                     }
-                    return null;
-                });
+                    const phaseContainer = node.closest('.phase-container');
+                    const cycleId = wrapper.data('cycleid');
+                    const cycleDeletes = $('#cycle-deletes');
+                    cycleDeletes.val(cycleDeletes.val() + cycleId + ',');
+                    wrapper.remove();
+                    phaseContainer.find('.phase-title').triggerHandler('change');
+                }
+                return null;
+            });
         }
 
         deleteStep(node) {
-            return showDeleteConfirmModal('Are you sure you want to delete this Step?', 'Confirm delete')
-                .then(confirmed => {
-                    if (confirmed) {
-                        const wrapper = node.closest('.step-wrapper');
-                        if (!wrapper.length) {
-                            return null;
-                        }
-                        const cycleContainer = node.closest('.cycle-container');
-                        const stepId = wrapper.data('stepid');
-                        const stepDeletes = $('#step-deletes');
-                        stepDeletes.val(stepDeletes.val() + stepId + ',');
-                        wrapper.remove();
-                        cycleContainer.find('.cycle-title').triggerHandler('change');
+            return showDeleteConfirmModal(
+                getString('confirmdeletestep', 'mod_roadmap'),
+                getString('confirmdelete', 'mod_roadmap')
+            ).then(confirmed => {
+                if (confirmed) {
+                    const wrapper = node.closest('.step-wrapper');
+                    if (!wrapper.length) {
+                        return null;
                     }
-                    return null;
-                });
+                    const cycleContainer = node.closest('.cycle-container');
+                    const stepId = wrapper.data('stepid');
+                    const stepDeletes = $('#step-deletes');
+                    stepDeletes.val(stepDeletes.val() + stepId + ',');
+                    wrapper.remove();
+                    cycleContainer.find('.cycle-title').triggerHandler('change');
+                }
+                return null;
+            });
         }
 
         upPhase(node) {

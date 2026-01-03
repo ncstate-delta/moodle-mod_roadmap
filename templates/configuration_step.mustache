@@ -37,7 +37,7 @@
             <a data-action="step_down_control" onclick="return false;">{{# pix }} t/down, core, Down {{/ pix }}</a>
             <a data-action="step_delete_control" onclick="return false;">{{# pix }} t/delete, core, Delete {{/ pix }}</a>
         </div>
-        <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} Untitled Step {{/ rollovertext }}</div>
+        <div class="step-header-title">{{# rollovertext }} {{ rollovertext }} {{/ rollovertext }} {{^ rollovertext }} {{#str}} untitledstep , roadmap {{/str}} {{/ rollovertext }}</div>
     </div>
     <div class="hide step-container" aria-expanded="true" role="region">
         <div class="mb-3 row fitem">
@@ -68,11 +68,11 @@
         </div>
         <div class="mb-3 row fitem step-activity-container">
             <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0">
-                <label>Completion Activities</label>
+                <label>{{#str}} completionactivities, roadmap {{/str}}</label>
             </div>
             <div class="d-flex flex-wrap align-items-start felement" style="flex-basis:min-content;">
-                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector btn btn-link p-0 ms-2" data-stepid="{{ id }}" title="Edit completion requirements">
-                    {{# pix }} i/edit, core, Edit completion requirements {{/ pix }}
+                <button type="button" id="step-{{ id }}-btn-completion-selector" class="btn_completion_selector btn btn-link p-0 ms-2" data-stepid="{{ id }}" title="{{#str}} editcompletionrequirements, roadmap {{/str}}">
+                    {{# pix }} i/edit, core, {{#str}} editcompletionrequirements, roadmap {{/str}} {{/ pix }}
                 </button>
             </div>
             <div class="col-md-7 d-flex flex-wrap align-items-start felement">
@@ -84,7 +84,7 @@
         </div>
         <div class="mb-3 row fitem">
             <div class="col-md-4 col-form-label d-flex pb-0 pe-md-0">
-                <label>Expected completed on</label>
+                <label>{{#str}} expectedcompleteon, roadmap {{/str}}</label>
             </div>
             <div class="col-md-7 d-flex flex-wrap align-items-start felement">
                 <div id="step-{{ id }}-expectedcomplete-readable" class="col-md-9">{{ completionexpectedreadable }}</div>
@@ -95,18 +95,18 @@
 
         <div id="step-{{ id }}-single-activity-link-container" class="mb-3 row fitem single-activity-link-container">
             <div class="col-md-4 col-form-label">
-                <label>Single Activity Link</label>
+                <label>{{#str}} singleactivitylink, roadmap {{/str}}</label>
             </div>
             <div class="col-md-7 d-flex flex-wrap align-items-start felement">
                 <div class="form-check mb-2">
                     <input type="checkbox" data-stepid="{{ id }}" id="step-{{ id }}-chk-single-activity-link" class="chk-single-activity-link roadmap-form-control-step form-check-input" value="1" {{#linksingleactivity}}checked{{/linksingleactivity}}>
-                    <label for="step-{{ id }}-chk-single-activity-link" class="form-check-label">If completion is tied to a single activity, also link to that activity</label>
+                    <label for="step-{{ id }}-chk-single-activity-link" class="form-check-label">{{#str}} singleactivitylinkhelp, roadmap {{/str}}</label>
                 </div>
             </div>
         </div>
         <div class="mb-3 row fitem link-to-page-container">
             <div class="col-md-4 col-form-label">
-                <label for="step-{{ id }}-single-activity-link">Link to Page</label>
+                <label for="step-{{ id }}-single-activity-link">{{#str}} linktopage, roadmap {{/str}}</label>
             </div>
             <div class="col-md-7 d-flex flex-wrap align-items-start felement"><input id="step-{{ id }}-single-activity-link" class="step-single-activity-link form-control roadmap-form-control-step" type="text" value="{{ pagelink }}"></div>
         </div>
