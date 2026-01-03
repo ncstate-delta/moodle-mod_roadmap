@@ -39,7 +39,7 @@ define([
     $,
     notification,
     templates,
-    getString,
+    Str,
     expandContract,
     learningObjectives,
     stepIconSelect,
@@ -52,7 +52,7 @@ define([
     ModalEvents
 ) => {
 
-    const showDeleteConfirmModal = (message, title = getString('confirmdelete', 'mod_roadmap')) => {
+    const showDeleteConfirmModal = (message, title = Str.get_string('confirmdelete', 'mod_roadmap')) => {
         return ModalDeleteCancel.create({
             title,
             body: message
@@ -273,8 +273,8 @@ define([
                 id: maxPhaseId + 1,
                 index: nextIndex,
                 number: nextIndex + 1,
-                title: `${getString('phase', 'mod_roadmap')} ${nextIndex + 1}`,
-                subtitle: `${getString('subtitle', 'mod_roadmap')} ${nextIndex + 1}`
+                title: Str.get_string('phase', 'mod_roadmap') + `${nextIndex + 1}`,
+                subtitle: Str.get_string('subtitle', 'mod_roadmap') + `${nextIndex + 1}`
             };
             config.phases.push(newPhase);
             roadmapConfigInput.val(JSON.stringify(config));
@@ -298,8 +298,8 @@ define([
                 id: maxCycleId + 1,
                 index: nextCycleIndex,
                 number: nextCycleIndex + 1,
-                title: `${getString('cycle', 'mod_roadmap')} ${nextCycleIndex + 1}`,
-                subtitle: `${getString('subtitle', 'mod_roadmap')} ${nextCycleIndex + 1}`
+                title: Str.get_string('cycle', 'mod_roadmap') + `${nextCycleIndex + 1}`,
+                subtitle: Str.get_string('subtitle', 'mod_roadmap') + `${nextCycleIndex + 1}`
             };
             return templates.render('mod_roadmap/configuration_cycle', newCycle)
                 .then((html, js) => {
@@ -407,8 +407,8 @@ define([
 
         deletePhase(node) {
             return showDeleteConfirmModal(
-                getString('confirmdeletephase', 'mod_roadmap'),
-                getString('confirmdelete', 'mod_roadmap')
+                Str.get_string('confirmdeletephase', 'mod_roadmap'),
+                Str.get_string('confirmdelete', 'mod_roadmap')
             ).then(confirmed => {
                 if (confirmed) {
                     const wrapper = node.closest('.phase-wrapper');
@@ -428,8 +428,8 @@ define([
 
         deleteCycle(node) {
             return showDeleteConfirmModal(
-                getString('confirmdeletecycle', 'mod_roadmap'),
-                getString('confirmdelete', 'mod_roadmap')
+                Str.get_string('confirmdeletecycle', 'mod_roadmap'),
+                Str.get_string('confirmdelete', 'mod_roadmap')
             ).then(confirmed => {
                 if (confirmed) {
                     const wrapper = node.closest('.cycle-wrapper');
@@ -449,8 +449,8 @@ define([
 
         deleteStep(node) {
             return showDeleteConfirmModal(
-                getString('confirmdeletestep', 'mod_roadmap'),
-                getString('confirmdelete', 'mod_roadmap')
+                Str.get_string('confirmdeletestep', 'mod_roadmap'),
+                Str.get_string('confirmdelete', 'mod_roadmap')
             ).then(confirmed => {
                 if (confirmed) {
                     const wrapper = node.closest('.step-wrapper');
