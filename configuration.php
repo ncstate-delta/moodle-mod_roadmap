@@ -71,7 +71,12 @@ if ($data) {
 
     $DB->update_record('roadmap', $roadmap);
 
-    redirect($returnurl, 'Configuration Saved Successfully.', null, \core\output\notification::NOTIFY_SUCCESS);
+    redirect(
+        $returnurl,
+        get_string('configurationsaved', 'roadmap'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 echo $OUTPUT->header();

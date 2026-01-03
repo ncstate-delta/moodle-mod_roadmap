@@ -53,27 +53,27 @@ class configuration extends moodleform {
         $mform->addElement('header', 'header_learningobjectives', get_string('courselearningobjectives', 'roadmap'));
 
         $displayposition = [
-            0 => 'Above Roadmap (Default)',
-            1 => 'Below Roadmap',
-            2 => 'Do Not Display CLOs',
+            0 => get_string('aboveroadmap', 'roadmap'),
+            1 => get_string('belowroadmap', 'roadmap'),
+            2 => get_string('donotdisplayclo', 'roadmap'),
         ];
         $mform->addElement('select', 'displayposition', get_string('displayposition', 'roadmap'), $displayposition);
         $mform->setDefault('displayposition', $roadmap->clodisplayposition);
         $mform->setType('displayposition', PARAM_INT);
 
         $cyclealignment = [
-            0 => 'Left (Default)',
-            1 => 'Center',
-            2 => 'Right',
+            0 => get_string('left', 'roadmap'),
+            1 => get_string('center', 'roadmap'),
+            2 => get_string('right', 'roadmap'),
         ];
         $mform->addElement('select', 'cyclealignment', get_string('cyclealignment', 'roadmap'), $cyclealignment);
         $mform->setDefault('cyclealignment', $roadmap->cloalignment);
         $mform->setType('cyclealignment', PARAM_INT);
 
         $cycledecoration = [
-            0 => 'None (Default)',
-            1 => 'Line',
-            2 => 'Bracket',
+            0 => get_string('none', 'roadmap'),
+            1 => get_string('line', 'roadmap'),
+            2 => get_string('bracket', 'roadmap'),
         ];
         $mform->addElement('select', 'cycledecoration', get_string('cycledecoration', 'roadmap'), $cycledecoration);
         $mform->setDefault('cycledecoration', $roadmap->clodecoration);

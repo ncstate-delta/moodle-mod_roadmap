@@ -324,7 +324,9 @@ function roadmap_cm_info_view(cm_info $cm) {
     if (has_capability('mod/roadmap:configure', $context)) {
         $content .= '<div>' .
             '<a class="btn btn-primary" href="' . $CFG->wwwroot .
-            '/mod/roadmap/configuration.php?id=' . $cm->id . '">' . 'Configure Roadmap</a></div>';
+            '/mod/roadmap/configuration.php?id=' . $cm->id . '">' .
+            get_string('configureroadmap', 'roadmap') .
+            '</a></div>';
     }
 
     // Add js.
