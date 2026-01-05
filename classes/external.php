@@ -151,6 +151,7 @@ class external extends external_api {
     public static function fetch_color_pattern_parameters() {
         return new external_function_parameters([
             'colorid'   => new external_value(PARAM_INT, 'Color ID'),
+            'courseid'  => new external_value(PARAM_INT, 'Course ID'),
         ]);
     }
 

@@ -48,5 +48,6 @@ export const fetchColorPattern = (colorid) => fetchMany([{
     methodname: 'mod_roadmap_fetch_color_pattern',
     args: {
         colorid: colorid,
+        courseid: moodleConfig.courseId,
     }
 }])[0];
