@@ -121,16 +121,23 @@ class external extends external_api {
      * Fetch the course modules with activity completion and expected completion time.
      *
      * @param   int     $colorid  The ID of the color set being fetched
+     * @param   int     $courseid The ID of the course currently being viewed with the roadmap.
      * @return  array             An array of hex colors as strings
      */
-    public static function fetch_color_pattern($colorid) {
+    public static function fetch_color_pattern($colorid, $courseid) {
         global $CFG;
         require_once($CFG->dirroot . '/mod/roadmap/locallib.php');
 
         $params = self::validate_parameters(self::fetch_color_pattern_parameters(), [
             'colorid'   => $colorid,
+            'courseid'  => $courseid,
         ]);
 
+        // Validate that the user has access to the course context.
+        $context = \context_course::instance($params['courseid']);
+        self::validate_context($context);
+
+        // Colors are globally defined, fetch the requested set.
         $colors = \roadmap_color_sets($params['colorid']);
 
         return $colors;
