@@ -33,6 +33,9 @@ $PAGE->set_url($url);
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'roadmap');
 require_login($course, true, $cm);
 
+$context = context_module::instance($cm->id);
+require_capability('mod/roadmap:configure', $context);
+
 $returnurl = new moodle_url('/course/view.php', ['id' => $course->id]);
 $title = get_string('roadmapconfiguration', 'mod_roadmap');
 
