@@ -39,6 +39,7 @@ $string['configureanddownloadicons'] = 'Configure and Download Icons';
 $string['configureroadmap'] = 'Configure Roadmap';
 $string['confirmdelete'] = 'Confirm delete';
 $string['confirmdeletecycle'] = 'Are you sure you want to delete this Cycle?';
+$string['confirmdeletelearningobjective'] = 'Are you sure you want to delete this Learning Objective?';
 $string['confirmdeletephase'] = 'Are you sure you want to delete this Phase?';
 $string['confirmdeletestep'] = 'Are you sure you want to delete this Step?';
 $string['courselearningobjectives'] = 'Course Learning Objectives (CLOs)';
