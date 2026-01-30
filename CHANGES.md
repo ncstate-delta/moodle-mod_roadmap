@@ -1,5 +1,10 @@
 ### Releases ###
 
+#### v1.0.2 ####
+
+- Code quality: move learning objective delete language to lang file (#28)
+- Hardening: added back require_capability checks for configure (#27)
+
 #### v1.0.1 ####
 
 - Hardening: add course context validation to color pattern fetch (#18)
