@@ -20,8 +20,8 @@
  * @copyright  2021 Steve Bader <smbader@ncsu.edu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save'],
-    function($, notification, templates, cyclesave) {
+define(['jquery', 'core/str', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save'],
+    function($, Str, notification, templates, cyclesave) {
 
         /**
          * Learning objectives config object.
@@ -148,7 +148,7 @@ define(['jquery', 'core/notification', 'core/templates', 'mod_roadmap/cycle_save
             event.preventDefault();
             event.stopPropagation();
             notification.confirm(
-                'Are you sure you want to delete this Learning Objective?',
+                Str.get_string('confirmdeletelearningobjective', 'mod_roadmap'),
                 function() {
                     var thisnode = $(event.currentTarget);
                     var loItem = thisnode.closest('.learningobjective');
