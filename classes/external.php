@@ -57,6 +57,7 @@ class external extends external_api {
 
         $context = \context_helper::instance_by_id($params['context']);
         self::validate_context($context);
+        require_capability('mod/roadmap:configure', $context);
 
         $course = \get_course($courseid);
         $activities = \roadmap_list_activities($course);
